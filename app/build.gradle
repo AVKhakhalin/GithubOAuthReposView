@@ -1,6 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
+    // Подключение плагина для работы с аннотациями (нужно для Room)
+    id 'kotlin-kapt'
+    // Подключение парселизации
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -29,15 +34,60 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    // Добавили разрешение на использование Binding
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
-
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'com.google.android.material:material:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    // Core
+    implementation libs.core.ktx
+    // Appcompat
+    implementation libs.androidx.appcompat
+    // UI
+    implementation libs.ui.material
+    implementation libs.ui.constraintlayout
+    // Test
+    implementation libs.test.support
+    testImplementation libs.test.junit
+    androidTestImplementation libs.test.extjunit
+    androidTestImplementation libs.test.espresso
+    // Lifecycle
+    implementation libs.lifecycle.extensions
+    // LiveData
+    implementation libs.lifecycle.ktx
+    // Lifecycles only (without ViewModel or LiveData)
+    implementation libs.lifecycle.runtimektx
+    implementation libs.lifecycle.process
+    implementation libs.lifecycle.java8
+    // Moxy
+    implementation libs.moxy.community
+    kapt libs.moxy.compiler
+    implementation libs.moxy.ktx
+    implementation libs.moxy.androidx
+    // Cicerony
+    implementation libs.cicerony.runtime
+    // RxJava
+    implementation libs.rxJava.android
+    implementation libs.rxJava.reactive
+    // Glide
+    implementation libs.glide.runtime
+    kapt libs.glide.compiler
+    // OkHTTP
+    implementation libs.okHTTP.runtime
+    // Retrofit
+    implementation libs.retrofit.runtime
+    implementation libs.retrofit.gson
+    implementation libs.retrofit.rxJava3
+    // Room
+    implementation libs.room.runtime
+    kapt libs.room.compiler
+    kapt libs.room.m1Support
+    implementation libs.room.rxJava3
+    // Coroutines
+    implementation libs.coroutines.android
+    // Dagger
+    implementation libs.dagger.runtime
+    kapt libs.dagger.compiler
 }
