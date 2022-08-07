@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">GithubOAuthReposView</string>
 
+    <string name="get_permission_write_read_text">Разрешение на запись и считывание данных получено</string>
+    <string name="not_get_permission_write_read_text">Разрешение на запись и считывание данных отсутствует</string>
+
     <!-- Ошибки -->
     <string name="error_wrong_view">Неверное состояние вью:</string>
 </resources>
