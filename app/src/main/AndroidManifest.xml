@@ -3,7 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.github.oauth.repositories.githuboauthreposview">
 
+    <!-- Разрешение для выхода приложения в Интернет -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Разрешения на запись информации на диск телефона -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Разрешения на запись информации на диск телефона -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!-- Включена поддержка больших файлов (largeHeap) -->
     <application
+        android:requestLegacyExternalStorage="true"
+        android:largeHeap="true"
+
         android:name=".app.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,7 +27,7 @@
         android:theme="@style/Theme.GithubOAuthReposView"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
