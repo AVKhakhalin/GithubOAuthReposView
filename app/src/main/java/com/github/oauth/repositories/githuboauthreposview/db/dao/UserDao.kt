@@ -15,7 +15,7 @@ interface UserDao {
     @Update
     fun update(user: RoomGithubUser): Completable
 
-    @Query("SELECT * FROM RoomGithubRepo")
+    @Query("SELECT * FROM RoomGithubUser")
     fun getAll(): Single<List<RoomGithubUser>>
 
     @Delete

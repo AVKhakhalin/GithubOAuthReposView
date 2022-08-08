@@ -7,7 +7,6 @@ import com.github.oauth.repositories.githuboauthreposview.app.App
 import com.github.oauth.repositories.githuboauthreposview.db.dao.CommitDao
 import com.github.oauth.repositories.githuboauthreposview.db.dao.RepoDao
 import com.github.oauth.repositories.githuboauthreposview.db.dao.UserDao
-import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubCommit
 import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubRepo
 import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubUser
 import com.github.oauth.repositories.githuboauthreposview.utils.DATABASE_NAME
@@ -16,7 +15,7 @@ import com.github.oauth.repositories.githuboauthreposview.utils.DATABASE_NAME
     entities = [
         RoomGithubUser::class,
         RoomGithubRepo::class,
-        RoomGithubCommit::class,
+//        RoomGithubCommit::class,
     ],
     version = 1
 )
