@@ -1,6 +1,7 @@
 package com.github.oauth.repositories.githuboauthreposview.model
 
 import android.os.Parcelable
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import kotlinx.android.parcel.Parcelize
 
@@ -11,9 +12,15 @@ data class GithubRepoModel(
     @Expose
     val name: String,
     @Expose
+    val description: String,
+    @Expose
     val owner: GithubRepoOwnerModel,
     @Expose
-    val forksCount: Int
+    val branches_url: String,
+    @Expose
+    val forksCount: Int,
+    @Expose
+    val watchers_count: Int
 ): Parcelable
 
 @Parcelize

@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.github.oauth.repositories.githuboauthreposview.app.App
+import com.github.oauth.repositories.githuboauthreposview.db.dao.CommitDao
 import com.github.oauth.repositories.githuboauthreposview.db.dao.RepoDao
 import com.github.oauth.repositories.githuboauthreposview.db.dao.UserDao
 import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubRepo
@@ -14,14 +15,17 @@ import com.github.oauth.repositories.githuboauthreposview.utils.DATABASE_NAME
     entities = [
         RoomGithubUser::class,
         RoomGithubRepo::class,
+//        RoomGithubCommit::class,
     ],
     version = 1
 )
-abstract class AppDatabase : RoomDatabase() {
+abstract class AppDatabase: RoomDatabase() {
 
     abstract val userDao: UserDao
 
     abstract val repositoryDao: RepoDao
+
+    abstract val commitDao: CommitDao
 
     companion object {
         val instance by lazy {
