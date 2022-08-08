@@ -1,6 +1,7 @@
 package com.github.oauth.repositories.githuboauthreposview.view.users
 
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,6 +10,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
 import com.github.oauth.repositories.githuboauthreposview.databinding.FragmentUsersBinding
@@ -34,6 +36,8 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
     lateinit var viewRepositoriesButton: Button
     // WebView
     lateinit var webView: WebView
+    // CurrentUserLogin
+    private var userLogin: String = ""
     //endregion
 
     companion object {
@@ -43,10 +47,13 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Загрузка данных из SharedPreferences
+        loadFromSharedPreferencesUserLogin()
         // Инициализация WebView и кнопок
         initWebViewAndButtons()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initWebViewAndButtons() {
         webView = binding.webView
         webView.webViewClient = object: WebViewClient() {
@@ -68,16 +75,16 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                         (requestUrl.substring(TARGET_USER_NAME_URL.length) != EMPTY_NAME_MASK) &&
                         (requestUrl.indexOf("?") == -1) &&
                         (requestUrl.indexOf("=") == -1)) {
-                        val user: String = requestUrl.substring(TARGET_USER_NAME_URL.length)
-                        Toast.makeText(requireContext(), user, Toast.LENGTH_LONG).show()
+                        userLogin = requestUrl.substring(TARGET_USER_NAME_URL.length)
                         loginButton.visibility = View.INVISIBLE
                         logoutButton.visibility = View.VISIBLE
                         viewRepositoriesButton.visibility = View.VISIBLE
                         view?.visibility = View.INVISIBLE
                         viewRepositoriesButton.text = "${requireContext().getString(
-                            R.string.github_review_text_start)}$user ${requireContext().getString(
-                            R.string.github_review_text_end)}"
-                        } else if ((requestUrl == LOGOUT_MASK_ONE) ||
+                            R.string.github_review_text_start)}$userLogin ${
+                                requireContext().getString(R.string.github_review_text_end)}"
+                        saveToSharedPreferencesUserLogin(userLogin)
+                    } else if ((requestUrl == LOGOUT_MASK_ONE) ||
                         (requestUrl == LOGOUT_MASK_TWO)) {
                         loginButton.visibility = View.VISIBLE
                         logoutButton.visibility = View.INVISIBLE
@@ -85,12 +92,16 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                         view?.visibility = View.INVISIBLE
                         viewRepositoriesButton.text =
                             requireContext().getString(R.string.github_review_text)
+                        saveToSharedPreferencesUserLogin("")
                     }
                 }
                 return super.shouldOverrideUrlLoading(view, request)
             }
         }
         logoutButton = binding.githubLogoutBtn.also {
+            if (userLogin.isNotEmpty()) {
+                it.visibility = View.VISIBLE
+            }
             it.setOnClickListener {
                 loginButton.visibility = View.INVISIBLE
                 logoutButton.visibility = View.INVISIBLE
@@ -100,12 +111,23 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
             }
         }
         viewRepositoriesButton = binding.githubReviewBtn.also {
+            if (userLogin.isNotEmpty()) {
+                it.text = "${requireContext().getString(
+                    R.string.github_review_text_start)}$userLogin ${
+                    requireContext().getString(R.string.github_review_text_end)}"
+            } else {
+                it.visibility = View.INVISIBLE
+            }
             it.setOnClickListener {
-                Toast.makeText(requireContext(), "Нажали просмотр репозитория",
+                Toast.makeText(requireContext(), "Нажали просмотр репозитория\n" +
+                    "Получение репозиториев пользователя, к сожалению, я ещё не успел сделать",
                     Toast.LENGTH_SHORT).show()
             }
         }
         loginButton = binding.githubLoginBtn.also {
+            if (userLogin.isNotEmpty()) {
+                it.visibility = View.INVISIBLE
+            }
             it.setOnClickListener {
                 loginButton.visibility = View.INVISIBLE
                 logoutButton.visibility = View.INVISIBLE
@@ -125,6 +147,26 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
     override fun onResume() {
         super.onResume()
     }
+
+    private fun saveToSharedPreferencesUserLogin(userLogin: String) {
+        val sharedPreferences: SharedPreferences =
+            requireContext().getSharedPreferences(
+                SHARED_PREFERENCES_KEY,
+                AppCompatActivity.MODE_PRIVATE
+            )
+        val sharedPreferencesEditor: SharedPreferences.Editor = sharedPreferences.edit()
+        sharedPreferencesEditor.putString(SHARED_PREFERENCES_USER_LOGIN, userLogin)
+        sharedPreferencesEditor.apply()
+    }
+
+    // Загрузка данных из SharedPreferences
+    private fun loadFromSharedPreferencesUserLogin() {
+        val sharedPreferences: SharedPreferences =
+            requireContext().getSharedPreferences(
+                SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
+        userLogin = sharedPreferences.getString(SHARED_PREFERENCES_USER_LOGIN, "").toString()
+    }
+
 
     override fun loginToGithub() {
 //        TODO("Not yet implemented")
