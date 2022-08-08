@@ -12,13 +12,19 @@ import io.reactivex.rxjava3.core.Single
 interface RepoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(user: RoomGithubRepo): Completable
+    fun insert(repo: RoomGithubRepo): Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(users: List<RoomGithubRepo>): Completable
+    fun insert(repos: List<RoomGithubRepo>): Completable
 
     @Query("SELECT * FROM RoomGithubRepo")
     fun getAll(): Single<List<RoomGithubRepo>>
+
+    @Query("SELECT * FROM RoomGithubRepo WHERE id = :repoId")
+    fun getById(repoId: String): Single<List<RoomGithubRepo>>
+
+    @Query("SELECT * FROM RoomGithubRepo WHERE name = :repoName")
+    fun getByName(repoName: String): Single<List<RoomGithubRepo>>
 
     @Query("SELECT * FROM RoomGithubRepo WHERE userId = :userId")
     fun getByUserId(userId: String): Single<List<RoomGithubRepo>>

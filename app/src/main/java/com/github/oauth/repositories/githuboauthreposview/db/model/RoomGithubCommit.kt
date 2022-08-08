@@ -8,17 +8,16 @@ import androidx.room.PrimaryKey
     foreignKeys = [
         ForeignKey(
             entity = RoomGithubRepo::class,
-            parentColumns = ["id"],
-            childColumns = ["repoId"],
+            parentColumns = ["name"],
+            childColumns = ["repoName"],
             onDelete = ForeignKey.CASCADE
         )
     ]
 )
 data class RoomGithubCommit(
-    @PrimaryKey val id: String,
-    val repoId: String,
-    val sha: String,
+    @PrimaryKey val id: String, // это sha, хеш-код коммита
+    val repoName: String,
     val message: String,
-    val name: String,
+    val authorName: String,
     val date: String
 )

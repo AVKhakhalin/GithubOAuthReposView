@@ -20,6 +20,6 @@ interface CommitDao {
     @Query("SELECT * FROM RoomGithubCommit")
     fun getAll(): Single<List<RoomGithubCommit>>
 
-    @Query("SELECT * FROM RoomGithubCommit WHERE repoId = :repoId")
-    fun getByRepoId(repoId: String): Single<List<RoomGithubCommit>>
+    @Query("SELECT * FROM RoomGithubCommit WHERE repoName = :repoName")
+    fun getByRepoId(repoName: String): Single<List<RoomGithubCommit>>
 }
