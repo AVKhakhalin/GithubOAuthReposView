@@ -9,4 +9,8 @@ class ResourcesProviderImpl @Inject constructor(
     override fun getString(id: Int): String {
         return appContext.getString(id)
     }
+
+    override fun getContext(): Context {
+        return appContext
+    }
 }

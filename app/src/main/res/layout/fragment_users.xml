@@ -22,6 +22,7 @@
         android:text="@string/github_login_btn_text"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -40,14 +41,14 @@
         android:text="@string/github_logout_btn_text"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:enabled="false"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/github_login_btn"
-        app:layout_constraintBottom_toTopOf="@id/github_review"/>
+        app:layout_constraintBottom_toTopOf="@id/github_review_btn"/>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/github_review"
+        android:id="@+id/github_review_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -59,7 +60,7 @@
         android:text="@string/github_review_text"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:enabled="false"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/github_logout_btn"
