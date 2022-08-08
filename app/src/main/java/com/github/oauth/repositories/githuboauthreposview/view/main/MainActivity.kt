@@ -5,7 +5,6 @@ import android.util.Log
 import android.widget.Toast
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
-import com.github.oauth.repositories.githuboauthreposview.databinding.ActivityMainBinding
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
 import com.github.oauth.repositories.githuboauthreposview.view.base.BackButtonListener
 import com.github.terrakok.cicerone.NavigatorHolder
