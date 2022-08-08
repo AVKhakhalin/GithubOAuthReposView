@@ -4,11 +4,13 @@
     <string name="get_permission_write_read_text">Разрешение на запись и считывание данных получено</string>
     <string name="not_get_permission_write_read_text">Разрешение на запись и считывание данных отсутствует</string>
     <string name="github_yes_internet">Сеть Интернет доступна.\nПриложение возобновляет работу</string>
-
-    <!-- Ошибки -->
-    <string name="error_wrong_view">Неверное состояние вью:</string>
     <string name="github_login_btn_text">Авторизоваться в GitHub</string>
     <string name="github_logout_btn_text">Сменить пользователя в GitHub</string>
     <string name="github_review_text">Просмотреть репозитории\nпользователя в Github</string>
+    <string name="github_review_text_start">Просмотреть репозитории\n</string>
+    <string name="github_review_text_end">в Github</string>
+
+    <!-- Ошибки -->
+    <string name="error_wrong_view">Неверное состояние вью:</string>
     <string name="github_no_internet">Сеть Интернет недоступна.\nДля работы приложения нужен выход в Интернет</string>
 </resources>
