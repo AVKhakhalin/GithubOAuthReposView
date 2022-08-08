@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="github_login_btn_drawable_padding">8dp</dimen>
+    <dimen name="github_login_btn_padding">8dp</dimen>
+    <dimen name="github_logout_btn_drawable_padding">8dp</dimen>
+    <dimen name="github_logout_btn_padding">8dp</dimen>
+    <dimen name="github_review_drawable_padding">8dp</dimen>
+    <dimen name="github_review_padding">8dp</dimen>
+    <dimen name="loading_view_width">100dp</dimen>
+    <dimen name="loading_view_height">100dp</dimen>
+</resources>
