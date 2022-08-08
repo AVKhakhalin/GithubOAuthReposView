@@ -5,6 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
+import com.github.oauth.repositories.githuboauthreposview.databinding.ActivityMainBinding
+import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
 import com.github.oauth.repositories.githuboauthreposview.view.base.BackButtonListener
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
@@ -12,7 +14,7 @@ import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
 
-class MainActivity : MvpAppCompatActivity(R.layout.activity_main), MainView {
+class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
     /** Задание переменных */ //region
     // navigatorHolder
     @Inject
@@ -52,7 +54,7 @@ class MainActivity : MvpAppCompatActivity(R.layout.activity_main), MainView {
     }
 
     fun showMessage(message: String) {
-        Toast.makeText(this@MainActivity, "$message", Toast.LENGTH_LONG).show()
-        Log.d("mylogs", "$message")
+        Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()
+        Log.d(LOG_TAG, message)
     }
 }

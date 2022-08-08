@@ -17,8 +17,7 @@ class MainPresenter @Inject constructor(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-
-//        router.replaceScreen(appScreens.usersScreen())
+        router.replaceScreen(appScreens.usersScreen())
     }
 
     fun backPressed() {
