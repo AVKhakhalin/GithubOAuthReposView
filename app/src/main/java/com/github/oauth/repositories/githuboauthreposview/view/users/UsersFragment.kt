@@ -3,7 +3,6 @@ package com.github.oauth.repositories.githuboauthreposview.view.users
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -142,10 +141,6 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
     override fun backPressed(): Boolean {
         presenter.backPressed()
         return true
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     private fun saveToSharedPreferencesUserLogin(userLogin: String) {

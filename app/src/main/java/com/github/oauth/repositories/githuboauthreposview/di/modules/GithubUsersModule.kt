@@ -1,7 +1,6 @@
 package com.github.oauth.repositories.githuboauthreposview.di.modules
 
 import com.github.oauth.repositories.githuboauthreposview.app.App
-import com.github.oauth.repositories.githuboauthreposview.db.AppDatabase
 import com.github.oauth.repositories.githuboauthreposview.di.scope.UsersScope
 import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.UsersScopeContainer
 import dagger.Module

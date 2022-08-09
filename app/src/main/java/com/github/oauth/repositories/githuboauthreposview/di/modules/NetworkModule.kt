@@ -2,6 +2,8 @@ package com.github.oauth.repositories.githuboauthreposview.di.modules
 
 import android.content.Context
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
+import com.github.oauth.repositories.githuboauthreposview.utils.BASE_API_URL
+import com.github.oauth.repositories.githuboauthreposview.utils.BASE_URL
 import com.github.oauth.repositories.githuboauthreposview.utils.connectivity.NetworkStatus
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
@@ -15,8 +17,6 @@ import retrofit2.create
 import javax.inject.Named
 import javax.inject.Singleton
 
-private const val BASE_URL = "BASE_URL"
-
 @Module
 class NetworkModule {
 
@@ -24,7 +24,7 @@ class NetworkModule {
     @Provides
     @Named(BASE_URL)
     fun baseUrl(): String {
-        return "https://api.github.com"
+        return BASE_API_URL
     }
 
     @Singleton
