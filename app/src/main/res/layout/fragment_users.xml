@@ -79,9 +79,9 @@
         android:layout_width="@dimen/loading_view_width"
         android:layout_height="@dimen/loading_view_height"
         android:layout_gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="@id/github_review_btn"
+        app:layout_constraintBottom_toBottomOf="@id/github_review_btn"
+        app:layout_constraintStart_toStartOf="@id/github_review_btn"
+        app:layout_constraintEnd_toEndOf="@id/github_review_btn"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

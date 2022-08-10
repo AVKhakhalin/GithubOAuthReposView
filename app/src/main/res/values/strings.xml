@@ -9,8 +9,12 @@
     <string name="github_review_text">Просмотреть репозитории\nпользователя в Github</string>
     <string name="github_review_text_start">Просмотреть репозитории\n</string>
     <string name="github_review_text_end">в Github</string>
+    <string name="repos_title_tools_text">Перечень репозиториев пользователя</string>
+    <string name="repos_fragment_forks_title_text">Список репозиториев\nпользователя</string>
 
     <!-- Ошибки -->
     <string name="error_wrong_view">Неверное состояние вью:</string>
     <string name="github_no_internet">Сеть Интернет недоступна.\nДля работы приложения нужен выход в Интернет</string>
+    <string name="error_not_repos_List">Ошибка, список репозиториев получить не удалось</string>
+    <string name="error_not_user_data">Ошибка, данные по текущему получить не удалось</string>
 </resources>

@@ -1,16 +1,14 @@
-package com.github.oauth.repositories.githuboauthreposview.view.users
+package com.github.oauth.repositories.githuboauthreposview.view.repos
 
 import android.util.Log
 import android.widget.Toast
 import com.github.oauth.repositories.githuboauthreposview.R
-import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.UsersScopeContainer
+import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.ReposScopeContainer
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubRepoRepository
-import com.github.oauth.repositories.githuboauthreposview.domain.GithubUserRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
-import com.github.oauth.repositories.githuboauthreposview.utils.connectivity.NetworkStatus
 import com.github.oauth.repositories.githuboauthreposview.utils.resources.ResourcesProvider
 import com.github.oauth.repositories.githuboauthreposview.view.screens.AppScreens
 import com.github.terrakok.cicerone.Router
@@ -19,52 +17,57 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import moxy.MvpPresenter
 import javax.inject.Inject
 
-class UsersPresenter @Inject constructor(
+class ReposPresenter @Inject constructor(
     private val router: Router,
-    private val usersRepository: GithubUserRepository,
+    private val repo: GithubRepoRepository,
     private val appScreens: AppScreens,
     private val userChoose: UserChooseRepository,
-    private val usersScopeContainer: UsersScopeContainer,
+    private val reposScopeContainer: ReposScopeContainer,
     private val resourcesProvider: ResourcesProvider
-): MvpPresenter<UsersView>() {
-    fun backPressed(): Boolean {
-        router.exit()
-        return true
+): MvpPresenter<ReposView>() {
+
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+
+        loadData()
     }
 
-    fun getGithubUserInfo(userLogin: String) {
-        if (userLogin.isNotEmpty()) {
-            loadData(userLogin)
-        } else userChoose.setGithubUserModel(GithubUserModel("","","",""))
-    }
-
-    fun onRepoClicked() {
-        router.navigateTo(appScreens.repoScreen())
-    }
-
-    private fun loadData(userLogin: String) {
-        Toast.makeText(resourcesProvider.getContext(), "loadData($userLogin)", Toast.LENGTH_SHORT).show()
-        usersRepository.getUser(userLogin)
+    private fun loadData() {
+        val userModel: GithubUserModel = userChoose.getGithubUserModel()
+        repo.getRepos(userModel)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { viewState.showLoading() }
             .subscribe(
-                { user ->
-                    userChoose.setGithubUserModel(user)
+                { repos ->
+                    viewState.showRepos(repos)
                     viewState.hideLoading()
-                }, { e ->
+                    userChoose.setGithubReposModel(repos)
+                }, {
                     Log.e(
                         LOG_TAG,
-                        resourcesProvider.getString(R.string.error_not_user_data), e
+                        resourcesProvider.getString(R.string.error_not_repos_List),
+                        it
                     )
                     viewState.hideLoading()
                 }
             )
     }
 
-    /** Уничтожение GithubUsersSubcomponent при уничтожении данного презентера */
+    fun onRepoClicked(repo: GithubRepoModel) {
+        userChoose.setGithubRepoModel(repo)
+        Log.d(LOG_TAG, "Выбран репозиторий ${repo.name}")
+//        router.navigateTo(appScreens.forksScreen())
+    }
+
+    fun backPressed(): Boolean {
+        router.exit()
+        return true
+    }
+
+    /** Уничтожение ReposSubcomponent при уничтожении данного презентера */
     override fun onDestroy() {
-        usersScopeContainer.destroyGithubUsersSubcomponent()
+        reposScopeContainer.destroyGithubReposSubcomponent()
         super.onDestroy()
     }
 }

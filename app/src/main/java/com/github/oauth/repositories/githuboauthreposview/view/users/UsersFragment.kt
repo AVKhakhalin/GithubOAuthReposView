@@ -77,12 +77,13 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                         userLogin = requestUrl.substring(TARGET_USER_NAME_URL.length)
                         loginButton.visibility = View.INVISIBLE
                         logoutButton.visibility = View.VISIBLE
-                        viewRepositoriesButton.visibility = View.VISIBLE
+//                        viewRepositoriesButton.visibility = View.VISIBLE
                         view?.visibility = View.INVISIBLE
                         viewRepositoriesButton.text = "${requireContext().getString(
                             R.string.github_review_text_start)}$userLogin ${
                                 requireContext().getString(R.string.github_review_text_end)}"
                         saveToSharedPreferencesUserLogin(userLogin)
+                        loginToGithub(userLogin)
                     } else if ((requestUrl == LOGOUT_MASK_ONE) ||
                         (requestUrl == LOGOUT_MASK_TWO)) {
                         loginButton.visibility = View.VISIBLE
@@ -91,7 +92,9 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                         view?.visibility = View.INVISIBLE
                         viewRepositoriesButton.text =
                             requireContext().getString(R.string.github_review_text)
+                        userLogin = ""
                         saveToSharedPreferencesUserLogin("")
+                        loginToGithub("")
                     }
                 }
                 return super.shouldOverrideUrlLoading(view, request)
@@ -118,9 +121,7 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                 it.visibility = View.INVISIBLE
             }
             it.setOnClickListener {
-                Toast.makeText(requireContext(), "Нажали просмотр репозитория\n" +
-                    "Получение репозиториев пользователя, к сожалению, я ещё не успел сделать",
-                    Toast.LENGTH_SHORT).show()
+                presenter.onRepoClicked()
             }
         }
         loginButton = binding.githubLoginBtn.also {
@@ -163,8 +164,8 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
     }
 
 
-    override fun loginToGithub() {
-//        TODO("Not yet implemented")
+    override fun loginToGithub(userLogin: String) {
+        presenter.getGithubUserInfo(userLogin)
     }
 
     override fun logoutToGithub() {
@@ -172,6 +173,18 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
     }
 
     override fun moveToRepositories() {
-//        TODO("Not yet implemented")
+        presenter.onRepoClicked()
+    }
+
+    override fun showLoading() {
+        binding.loadingView.visibility = View.VISIBLE
+        binding.githubLoginBtn.visibility = View.INVISIBLE
+        Toast.makeText(requireContext(), "showLoading()", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun hideLoading() {
+        binding.loadingView.visibility = View.GONE
+        binding.githubLoginBtn.visibility = View.VISIBLE
+        Toast.makeText(requireContext(), "hideLoading()", Toast.LENGTH_SHORT).show()
     }
 }

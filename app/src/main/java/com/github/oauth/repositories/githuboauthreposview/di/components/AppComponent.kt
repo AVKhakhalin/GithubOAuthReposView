@@ -1,9 +1,7 @@
 package com.github.oauth.repositories.githuboauthreposview.di.components
 
-import com.github.oauth.repositories.githuboauthreposview.di.modules.AppModule
-import com.github.oauth.repositories.githuboauthreposview.di.modules.CiceroneModule
-import com.github.oauth.repositories.githuboauthreposview.di.modules.DbModule
-import com.github.oauth.repositories.githuboauthreposview.di.modules.NetworkModule
+import com.github.oauth.repositories.githuboauthreposview.di.modules.*
+import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.view.main.MainActivity
 import com.github.oauth.repositories.githuboauthreposview.view.main.MainPresenter
 import dagger.Component
@@ -15,7 +13,8 @@ import javax.inject.Singleton
         CiceroneModule::class,
         AppModule::class,
         DbModule::class,
-        NetworkModule::class
+        NetworkModule::class,
+        RepositoryModule::class
     ]
 )
 
@@ -23,9 +22,11 @@ interface AppComponent {
     /** AppComponent */ //region
     fun mainPresenter(): MainPresenter
     fun injectMainActivity(mainActivity: MainActivity)
+    fun userChoose(): UserChooseRepository
     //endregion
 
     /** Subcomponents */ //region
     fun usersSubcomponent(): GithubUsersSubcomponent
+    fun reposSubcomponent(): GithubReposSubcomponent
     //endregion
 }

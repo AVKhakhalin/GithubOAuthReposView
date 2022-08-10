@@ -1,6 +1,7 @@
 package com.github.oauth.repositories.githuboauthreposview.di.modules
 
 import android.content.Context
+import com.github.oauth.repositories.githuboauthreposview.remote.BaseInterceptor.Companion.interceptor
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
 import com.github.oauth.repositories.githuboauthreposview.utils.BASE_API_URL
 import com.github.oauth.repositories.githuboauthreposview.utils.BASE_URL
@@ -10,6 +11,9 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -54,7 +58,17 @@ class NetworkModule {
             .baseUrl(baseUrl)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(createOkHttpClient(interceptor))
             .build()
+    }
+
+    private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {
+        val httpClient = OkHttpClient.Builder()
+        httpClient.addInterceptor(interceptor)
+        httpClient.addInterceptor(
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        )
+        return httpClient.build()
     }
 
     @Singleton
