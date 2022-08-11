@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single
 
 class GithubUserRetrofitImpl(
     private val retrofitService: RetrofitService,
-    private val db: AppDatabase
+    private val db: AppDatabase,
 ): GithubUserRetrofit {
     override fun getRetrofitUser(userLogin: String): Single<GithubUserModel> {
         return retrofitService.getUser(userLogin)

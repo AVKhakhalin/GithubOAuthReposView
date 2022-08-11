@@ -12,6 +12,7 @@ import com.github.oauth.repositories.githuboauthreposview.domain.retrofit.Github
 import com.github.oauth.repositories.githuboauthreposview.domain.retrofit.GithubUserRetrofitImpl
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
 import com.github.oauth.repositories.githuboauthreposview.utils.connectivity.NetworkStatus
+import com.github.oauth.repositories.githuboauthreposview.utils.resources.ResourcesProvider
 import dagger.Module
 import dagger.Provides
 
@@ -33,7 +34,7 @@ abstract class GithubUsersModule {
         @Provides
         fun usersRetrofit(
             retrofitService: RetrofitService,
-            db: AppDatabase
+            db: AppDatabase,
         ): GithubUserRetrofit {
             return GithubUserRetrofitImpl(retrofitService, db)
         }

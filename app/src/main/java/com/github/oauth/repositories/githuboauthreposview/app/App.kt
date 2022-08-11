@@ -47,7 +47,6 @@ class App: Application(), UsersScopeContainer, ReposScopeContainer {
     override fun initGithubReposSubcomponent() = appComponent.reposSubcomponent().also {
         reposSubcomponent = it
     }
-
     override fun destroyGithubReposSubcomponent() {
         reposSubcomponent = null
     }

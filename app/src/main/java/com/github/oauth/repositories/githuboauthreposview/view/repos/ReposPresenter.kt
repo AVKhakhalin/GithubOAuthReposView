@@ -1,7 +1,6 @@
 package com.github.oauth.repositories.githuboauthreposview.view.repos
 
 import android.util.Log
-import android.widget.Toast
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.ReposScopeContainer
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubRepoRepository
@@ -28,13 +27,12 @@ class ReposPresenter @Inject constructor(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-
-        loadData()
+        loadData(userChoose.getGithubUserModel().login)
     }
 
-    private fun loadData() {
+    private fun loadData(userLogin: String) {
         val userModel: GithubUserModel = userChoose.getGithubUserModel()
-        repo.getRepos(userModel)
+        repo.getRepos(userLogin)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { viewState.showLoading() }

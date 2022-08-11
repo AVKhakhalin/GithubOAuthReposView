@@ -7,6 +7,8 @@ import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.Us
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubRepoRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubUserRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
+import com.github.oauth.repositories.githuboauthreposview.domain.cache.GithubUserCache
+import com.github.oauth.repositories.githuboauthreposview.domain.cache.GithubUserCacheImpl
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
@@ -22,19 +24,16 @@ import javax.inject.Inject
 class UsersPresenter @Inject constructor(
     private val router: Router,
     private val usersRepository: GithubUserRepository,
+    private val userCache: GithubUserCache,
     private val appScreens: AppScreens,
     private val userChoose: UserChooseRepository,
     private val usersScopeContainer: UsersScopeContainer,
     private val resourcesProvider: ResourcesProvider
 ): MvpPresenter<UsersView>() {
-    fun backPressed(): Boolean {
-        router.exit()
-        return true
-    }
-
     fun getGithubUserInfo(userLogin: String) {
         if (userLogin.isNotEmpty()) {
-            loadData(userLogin)
+            userChoose.setGithubUserModel(GithubUserModel("", userLogin,"",""))
+            setUserData(userLogin)
         } else userChoose.setGithubUserModel(GithubUserModel("","","",""))
     }
 
@@ -42,8 +41,7 @@ class UsersPresenter @Inject constructor(
         router.navigateTo(appScreens.repoScreen())
     }
 
-    private fun loadData(userLogin: String) {
-        Toast.makeText(resourcesProvider.getContext(), "loadData($userLogin)", Toast.LENGTH_SHORT).show()
+    private fun setUserData(userLogin: String) {
         usersRepository.getUser(userLogin)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -51,6 +49,8 @@ class UsersPresenter @Inject constructor(
             .subscribe(
                 { user ->
                     userChoose.setGithubUserModel(user)
+                    Log.d(LOG_TAG, "${user.id}, ${user.login}, " +
+                        "${user.avatarUrl}, ${user.reposUrl}")
                     viewState.hideLoading()
                 }, { e ->
                     Log.e(
@@ -66,5 +66,10 @@ class UsersPresenter @Inject constructor(
     override fun onDestroy() {
         usersScopeContainer.destroyGithubUsersSubcomponent()
         super.onDestroy()
+    }
+
+    fun backPressed(): Boolean {
+        router.exit()
+        return true
     }
 }

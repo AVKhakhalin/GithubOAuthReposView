@@ -17,6 +17,7 @@ class BaseInterceptor private constructor(): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
         Log.d(LOG_TAG, "Response: ${response.request}")
+        Log.d(LOG_TAG, "Request: ${response.networkResponse}")
         responseCode = response.code
         return response
     }

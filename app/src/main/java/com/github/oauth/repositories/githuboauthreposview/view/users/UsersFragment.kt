@@ -8,7 +8,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
@@ -77,13 +76,12 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                         userLogin = requestUrl.substring(TARGET_USER_NAME_URL.length)
                         loginButton.visibility = View.INVISIBLE
                         logoutButton.visibility = View.VISIBLE
-//                        viewRepositoriesButton.visibility = View.VISIBLE
                         view?.visibility = View.INVISIBLE
                         viewRepositoriesButton.text = "${requireContext().getString(
                             R.string.github_review_text_start)}$userLogin ${
                                 requireContext().getString(R.string.github_review_text_end)}"
                         saveToSharedPreferencesUserLogin(userLogin)
-                        loginToGithub(userLogin)
+                        getAndSaveUserData(userLogin)
                     } else if ((requestUrl == LOGOUT_MASK_ONE) ||
                         (requestUrl == LOGOUT_MASK_TWO)) {
                         loginButton.visibility = View.VISIBLE
@@ -94,7 +92,7 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                             requireContext().getString(R.string.github_review_text)
                         userLogin = ""
                         saveToSharedPreferencesUserLogin("")
-                        loginToGithub("")
+                        getAndSaveUserData("")
                     }
                 }
                 return super.shouldOverrideUrlLoading(view, request)
@@ -135,7 +133,6 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                 webView.loadUrl(AUTHORISE_URL)
                 webView.visibility = View.VISIBLE
             }
-
         }
     }
 
@@ -161,10 +158,10 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
             requireContext().getSharedPreferences(
                 SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
         userLogin = sharedPreferences.getString(SHARED_PREFERENCES_USER_LOGIN, "").toString()
+        getAndSaveUserData(userLogin)
     }
 
-
-    override fun loginToGithub(userLogin: String) {
+    override fun getAndSaveUserData(userLogin: String) {
         presenter.getGithubUserInfo(userLogin)
     }
 
@@ -178,13 +175,11 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
 
     override fun showLoading() {
         binding.loadingView.visibility = View.VISIBLE
-        binding.githubLoginBtn.visibility = View.INVISIBLE
-        Toast.makeText(requireContext(), "showLoading()", Toast.LENGTH_SHORT).show()
+        viewRepositoriesButton.visibility = View.INVISIBLE
     }
 
     override fun hideLoading() {
-        binding.loadingView.visibility = View.GONE
-        binding.githubLoginBtn.visibility = View.VISIBLE
-        Toast.makeText(requireContext(), "hideLoading()", Toast.LENGTH_SHORT).show()
+        binding.loadingView.visibility = View.INVISIBLE
+        viewRepositoriesButton.visibility = View.VISIBLE
     }
 }

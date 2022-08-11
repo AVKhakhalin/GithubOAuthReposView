@@ -4,7 +4,6 @@ import com.github.oauth.repositories.githuboauthreposview.model.GithubBrancheMod
 import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
-import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,8 +14,8 @@ interface RetrofitService {
     @GET("/users/{user_login}")
     fun getUser(@Path("user_login") userLogin: String): Single<GithubUserModel>
 
-    @GET
-    fun getRepos(@Url url: String): Single<List<GithubRepoModel>>
+    @GET("/users/{user_login}/repos")
+    fun getRepos(@Path("user_login") userLogin: String): Single<List<GithubRepoModel>>
 
     @GET
     fun getBranches(@Url url: String): Single<List<GithubBrancheModel>>

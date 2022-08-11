@@ -9,8 +9,8 @@ import javax.inject.Singleton
 @Module
 class RepositoryModule {
 
-    @Provides
     @Singleton
+    @Provides
     fun userChoose(): UserChooseRepository {
         return UserChooseRepositoryImpl()
     }

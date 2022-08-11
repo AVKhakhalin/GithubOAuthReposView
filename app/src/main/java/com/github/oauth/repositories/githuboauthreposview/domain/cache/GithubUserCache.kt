@@ -4,5 +4,5 @@ import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
 import io.reactivex.rxjava3.core.Single
 
 interface GithubUserCache {
-    fun getCacheUser(login: String): Single<GithubUserModel>
+    fun getCacheUser(userLogin: String): Single<GithubUserModel>
 }

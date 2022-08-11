@@ -3,6 +3,7 @@ package com.github.oauth.repositories.githuboauthreposview.di.modules
 import android.content.Context
 import com.github.oauth.repositories.githuboauthreposview.remote.BaseInterceptor.Companion.interceptor
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
+import com.github.oauth.repositories.githuboauthreposview.remote.createOkHttpClient
 import com.github.oauth.repositories.githuboauthreposview.utils.BASE_API_URL
 import com.github.oauth.repositories.githuboauthreposview.utils.BASE_URL
 import com.github.oauth.repositories.githuboauthreposview.utils.connectivity.NetworkStatus
@@ -60,15 +61,6 @@ class NetworkModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(createOkHttpClient(interceptor))
             .build()
-    }
-
-    private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor(interceptor)
-        httpClient.addInterceptor(
-            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-        )
-        return httpClient.build()
     }
 
     @Singleton

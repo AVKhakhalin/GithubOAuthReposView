@@ -6,7 +6,7 @@ import moxy.viewstate.strategy.alias.AddToEndSingle
 interface UsersView: MvpView {
 
     @AddToEndSingle
-    fun loginToGithub(userLogin: String)
+    fun getAndSaveUserData(userLogin: String)
 
     @AddToEndSingle
     fun logoutToGithub()
