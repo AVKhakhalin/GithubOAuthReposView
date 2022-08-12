@@ -17,11 +17,16 @@ class GithubRepoRetrofitImpl(
                     RoomGithubRepo(it.id ?: "", it.name ?: "",
                         it.description ?: "", it.owner.id ?: "",
                         it.forksCount ?: 0,it.watchers_count ?: 0,
-                        it.owner.login ?: "", it.owner.avatarUrl  ?: "",
-                        it.branches_url ?: "")
+                        it.owner.login ?: "", it.owner.avatar_url  ?: "",
+                        cutBranches(it.branches_url))
                 }
                 db.repositoryDao.insert(dbRepos)
                     .toSingle { repos }
             }
+    }
+
+    // Обрезка концовки ссылки на ветки репозитория в строке "{/branch}"
+    private fun cutBranches(url: String?): String {
+        return url?.substring(0, url.indexOf("{/branch}")) ?: ""
     }
 }

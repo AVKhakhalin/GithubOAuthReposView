@@ -15,7 +15,7 @@ class GithubRepoCacheImpl(
                     GithubRepoModel(
                         repo.id, repo.name, repo.description,
                         GithubRepoOwnerModel(repo.userId, repo.login, repo.avatarUrl),
-                        repo.branches_url, repo.forksCount, repo.watchers
+                        repo.branchesUrl, repo.forksCount, repo.watchers
                     )
                 }
             }
