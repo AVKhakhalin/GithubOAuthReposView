@@ -14,5 +14,33 @@
     <string name="tv_repo_name_tools_text">Имя репозитория</string>
     <dimen name="repos_recycler_margin_top">50dp</dimen>
     <dimen name="repos_title_text_size">20sp</dimen>
+    <dimen name="item_commit_padding">8dp</dimen>
+    <dimen name="commit_date_margin">8dp</dimen>
+    <dimen name="commit_date_text_size">20sp</dimen>
+    <dimen name="commit_author_name_text_size">20sp</dimen>
+    <dimen name="commit_author_name_margin">8dp</dimen>
+    <dimen name="commit_hash_margin">8dp</dimen>
+    <dimen name="commit_hash_text_size">20sp</dimen>
+    <dimen name="commit_message_margin">8dp</dimen>
+    <dimen name="commit_message_text_size">20sp</dimen>
+    <dimen name="repo_user_avatar_width">100dp</dimen>
+    <dimen name="repo_user_avatar_height">100dp</dimen>
+    <dimen name="repo_user_avatar_margin">8dp</dimen>
+    <dimen name="zero_size">0dp</dimen>
+    <dimen name="repo_title_text_size">20sp</dimen>
+    <dimen name="repo_title_margin">8dp</dimen>
+    <dimen name="repo_description_text_size">20sp</dimen>
+    <dimen name="repo_description_margin">8dp</dimen>
+    <dimen name="repo_author_name_text_size">20sp</dimen>
+    <dimen name="repo_author_name_margin">8dp</dimen>
+    <dimen name="repo_forks_number_text_size">20sp</dimen>
+    <dimen name="repo_forks_number_margin">8dp</dimen>
+    <dimen name="forks_watches_text_size">20sp</dimen>
+    <dimen name="forks_watches_margin">8dp</dimen>
+    <dimen name="forks_horizontal_border_height">2dp</dimen>
+    <dimen name="forks_horizontal_border_margin">8dp</dimen>
+    <dimen name="forks_commits_title_text_size">20sp</dimen>
+    <dimen name="forks_commits_title_margin">8dp</dimen>
+    <dimen name="forks_commits_recycler_margin">8dp</dimen>
 
 </resources>

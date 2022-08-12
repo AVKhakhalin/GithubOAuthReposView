@@ -55,7 +55,7 @@ class ReposPresenter @Inject constructor(
     fun onRepoClicked(repo: GithubRepoModel) {
         userChoose.setGithubRepoModel(repo)
         Log.d(LOG_TAG, "Выбран репозиторий ${repo.name}")
-//        router.navigateTo(appScreens.forksScreen())
+        router.navigateTo(appScreens.forksScreen())
     }
 
     fun backPressed(): Boolean {

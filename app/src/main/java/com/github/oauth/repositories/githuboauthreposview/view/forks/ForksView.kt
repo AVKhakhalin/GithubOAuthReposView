@@ -1,4 +1,8 @@
 package com.github.oauth.repositories.githuboauthreposview.view.forks
 
-interface ForksView {
+import moxy.MvpView
+import moxy.viewstate.strategy.alias.AddToEndSingle
+
+@AddToEndSingle
+interface ForksView : MvpView {
 }

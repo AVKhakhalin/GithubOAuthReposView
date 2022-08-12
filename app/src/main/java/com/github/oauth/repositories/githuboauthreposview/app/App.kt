@@ -1,15 +1,13 @@
 package com.github.oauth.repositories.githuboauthreposview.app
 
 import android.app.Application
-import com.github.oauth.repositories.githuboauthreposview.di.components.AppComponent
-import com.github.oauth.repositories.githuboauthreposview.di.components.DaggerAppComponent
-import com.github.oauth.repositories.githuboauthreposview.di.components.GithubReposSubcomponent
-import com.github.oauth.repositories.githuboauthreposview.di.components.GithubUsersSubcomponent
+import com.github.oauth.repositories.githuboauthreposview.di.components.*
 import com.github.oauth.repositories.githuboauthreposview.di.modules.AppModule
+import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.ForksScopeContainer
 import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.ReposScopeContainer
 import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.UsersScopeContainer
 
-class App: Application(), UsersScopeContainer, ReposScopeContainer {
+class App: Application(), UsersScopeContainer, ReposScopeContainer, ForksScopeContainer {
     /** Исходные данные */ //region
     // appComponent
     val appComponent: AppComponent by lazy {
@@ -21,6 +19,8 @@ class App: Application(), UsersScopeContainer, ReposScopeContainer {
     var usersSubcomponent: GithubUsersSubcomponent? = null
     // reposSubcomponent
     var reposSubcomponent: GithubReposSubcomponent? = null
+    // forksSubcomponent
+    var forksSubcomponent: GithubForksSubcomponent? = null
     //endregion
 
     override fun onCreate() {
@@ -49,6 +49,16 @@ class App: Application(), UsersScopeContainer, ReposScopeContainer {
     }
     override fun destroyGithubReposSubcomponent() {
         reposSubcomponent = null
+    }
+    //endregion
+
+    /** Методы ForksScopeContainer */ //region
+    override fun initForksSubcomponent() = appComponent.forksSubcomponent().also {
+        forksSubcomponent = it
+    }
+
+    override fun destroyForksSubcomponent() {
+        forksSubcomponent = null
     }
     //endregion
 }

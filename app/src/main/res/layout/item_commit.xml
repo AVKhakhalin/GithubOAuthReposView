@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/item_commit_padding">
+
+    <TextView
+        android:id="@+id/commit_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/commit_date_margin"
+        android:textColor="@color/black"
+        android:textSize="@dimen/commit_date_text_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/commit_date_tools_text" />
+
+    <TextView
+        android:id="@+id/commit_author_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/commit_author_name_margin"
+        android:textColor="@color/black"
+        android:textSize="@dimen/commit_author_name_text_size"
+        app:layout_constraintEnd_toStartOf="@id/commit_hash"
+        app:layout_constraintStart_toEndOf="@id/commit_date"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/commit_author_name_tools_text" />
+
+    <TextView
+        android:id="@+id/commit_hash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/commit_hash_margin"
+        android:textColor="@color/black"
+        android:textIsSelectable="true"
+        android:textSize="@dimen/commit_hash_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/commit_hash_tools_text" />
+
+    <TextView
+        android:id="@+id/commit_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/commit_message_margin"
+        android:textColor="@color/black"
+        android:textIsSelectable="true"
+        android:textSize="@dimen/commit_message_text_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/commit_date"
+        tools:text="@string/commit_message_tools_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

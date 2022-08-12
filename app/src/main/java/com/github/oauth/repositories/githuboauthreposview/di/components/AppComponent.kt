@@ -28,5 +28,6 @@ interface AppComponent {
     /** Subcomponents */ //region
     fun usersSubcomponent(): GithubUsersSubcomponent
     fun reposSubcomponent(): GithubReposSubcomponent
+    fun forksSubcomponent(): GithubForksSubcomponent
     //endregion
 }

@@ -17,4 +17,14 @@
     <string name="github_no_internet">Сеть Интернет недоступна.\nДля работы приложения нужен выход в Интернет</string>
     <string name="error_not_repos_List">Ошибка, список репозиториев получить не удалось</string>
     <string name="error_not_user_data">Ошибка, данные по текущему получить не удалось</string>
+    <string name="commit_date_tools_text">Дата</string>
+    <string name="commit_author_name_tools_text">Логин автора</string>
+    <string name="commit_hash_tools_text">Хеш код</string>
+    <string name="commit_message_tools_text">Сообщение в коммите</string>
+    <string name="repo_title_tools_text">Название репозитория</string>
+    <string name="repo_description_tools_text">Описание репозитория</string>
+    <string name="repo_author_name_tools_text">Автор</string>
+    <string name="repo_forks_number_tools_text">Количество форков</string>
+    <string name="forks_watches_tools_text">Количество просмотров</string>
+    <string name="forks_commits_title_tools_text">Коммиты репозитория:</string>
 </resources>

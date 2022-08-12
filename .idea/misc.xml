@@ -7,8 +7,10 @@
         <entry key="..\:/Android/Projects/GithubOAuthReposView/app/src/main/res/drawable/github_icon.xml" value="0.1085" />
         <entry key="..\:/Android/Projects/GithubOAuthReposView/app/src/main/res/drawable/ic_github.xml" value="0.1165" />
         <entry key="..\:/Android/Projects/GithubOAuthReposView/app/src/main/res/layout/activity_main.xml" value="0.23294118300441247" />
+        <entry key="..\:/Android/Projects/GithubOAuthReposView/app/src/main/res/layout/fragment_forks.xml" value="0.17647059318516095" />
         <entry key="..\:/Android/Projects/GithubOAuthReposView/app/src/main/res/layout/fragment_repos.xml" value="0.18020833333333333" />
         <entry key="..\:/Android/Projects/GithubOAuthReposView/app/src/main/res/layout/fragment_users.xml" value="0.303125" />
+        <entry key="..\:/Android/Projects/GithubOAuthReposView/app/src/main/res/layout/item_commit.xml" value="0.303125" />
         <entry key="..\:/Android/Projects/GithubOAuthReposView/app/src/main/res/layout/item_repo.xml" value="0.303125" />
       </map>
     </option>
