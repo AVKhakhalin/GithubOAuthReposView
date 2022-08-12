@@ -8,4 +8,11 @@
     <dimen name="github_review_padding">8dp</dimen>
     <dimen name="loading_view_width">100dp</dimen>
     <dimen name="loading_view_height">100dp</dimen>
+    <dimen name="item_repo_padding">8dp</dimen>
+    <dimen name="tv_repo_name_margin_start">8dp</dimen>
+    <dimen name="tv_repo_name_text_size">20sp</dimen>
+    <string name="tv_repo_name_tools_text">Имя репозитория</string>
+    <dimen name="repos_recycler_margin_top">50dp</dimen>
+    <dimen name="repos_title_text_size">20sp</dimen>
+
 </resources>

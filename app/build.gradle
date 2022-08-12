@@ -80,6 +80,7 @@ dependencies {
     implementation libs.retrofit.runtime
     implementation libs.retrofit.gson
     implementation libs.retrofit.rxJava3
+    implementation libs.retrofit.interceptor
     // Room
     implementation libs.room.runtime
     kapt libs.room.compiler

@@ -1,9 +1,6 @@
 package com.github.oauth.repositories.githuboauthreposview.db.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubRepo
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -11,10 +8,10 @@ import io.reactivex.rxjava3.core.Single
 @Dao
 interface RepoDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Update
     fun insert(repo: RoomGithubRepo): Completable
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Update
     fun insert(repos: List<RoomGithubRepo>): Completable
 
     @Query("SELECT * FROM RoomGithubRepo")
@@ -26,6 +23,6 @@ interface RepoDao {
     @Query("SELECT * FROM RoomGithubRepo WHERE name = :repoName")
     fun getByName(repoName: String): Single<List<RoomGithubRepo>>
 
-    @Query("SELECT * FROM RoomGithubRepo WHERE userId = :userId")
-    fun getByUserId(userId: String): Single<List<RoomGithubRepo>>
+    @Query("SELECT * FROM RoomGithubRepo WHERE login = :userLogin")
+    fun getByUserLogin(userLogin: String): Single<List<RoomGithubRepo>>
 }

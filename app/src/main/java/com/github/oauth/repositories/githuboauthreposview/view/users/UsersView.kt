@@ -6,11 +6,17 @@ import moxy.viewstate.strategy.alias.AddToEndSingle
 interface UsersView: MvpView {
 
     @AddToEndSingle
-    fun loginToGithub()
+    fun getAndSaveUserData(userLogin: String)
 
     @AddToEndSingle
     fun logoutToGithub()
 
     @AddToEndSingle
     fun moveToRepositories()
+
+    @AddToEndSingle
+    fun showLoading()
+
+    @AddToEndSingle
+    fun hideLoading()
 }

@@ -61,6 +61,7 @@ ext {
     retrofit.runtime = "com.squareup.retrofit2:retrofit:$retrofitVersion"
     retrofit.gson = "com.squareup.retrofit2:converter-gson:2.7.1"
     retrofit.rxJava3 = "com.squareup.retrofit2:adapter-rxjava3:$retrofitVersion"
+    retrofit.interceptor = "com.squareup.okhttp3:logging-interceptor:$okHTTPVersion"
     // OkHTTP
     okHTTP = [:]
     libs.okHTTP = okHTTP

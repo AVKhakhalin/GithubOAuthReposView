@@ -12,10 +12,10 @@ class GithubRepoRepositoryImpl(
     private val githubRepoRetrofit: GithubRepoRetrofit,
     private val githubRepoCache: GithubRepoCache
 ): GithubRepoRepository {
-    override fun getRepos(userModel: GithubUserModel): Single<List<GithubRepoModel>> {
+    override fun getRepos(userLogin: String): Single<List<GithubRepoModel>> {
         return if (networkStatus.isOnline())
-            githubRepoRetrofit.getRetrofitRepo(userModel)
+            githubRepoRetrofit.getRetrofitRepo(userLogin)
         else
-            githubRepoCache.getCacheRepo(userModel)
+            githubRepoCache.getCacheRepo(userLogin)
     }
 }
