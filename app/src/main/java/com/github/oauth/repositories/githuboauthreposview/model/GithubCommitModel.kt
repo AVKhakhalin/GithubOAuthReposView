@@ -9,7 +9,7 @@ data class GithubCommitModel(
     @Expose
     val sha: String,
     @Expose
-    val owner: GithubCommitCommitInfoModel,
+    val owner: GithubCommitCommitInfoModel
 ): Parcelable
 
 @Parcelize
