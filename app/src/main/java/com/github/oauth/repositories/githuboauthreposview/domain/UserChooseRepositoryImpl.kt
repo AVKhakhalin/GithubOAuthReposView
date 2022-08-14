@@ -1,22 +1,24 @@
 package com.github.oauth.repositories.githuboauthreposview.domain
 
-import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
-import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoOwnerModel
-import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
-
+import com.github.oauth.repositories.githuboauthreposview.model.*
 
 class UserChooseRepositoryImpl: UserChooseRepository {
     /** Исходные данные */ //region
     // githubUserModel
     private var githubUserModel: GithubUserModel =
         GithubUserModel("", "", "", "")
-
     // githubRepoModel
     private var githubRepoModel: GithubRepoModel =
         GithubRepoModel("", "", "",
             GithubRepoOwnerModel("", "", ""),
             "", 0, 0)
     private var repos: List<GithubRepoModel> = listOf()
+    // githubCommitModel
+    private var githubCommitModel: GithubCommitModel =
+        GithubCommitModel("", GithubCommitCommitInfoModel("",
+            RoomGithubCommitInfoAuthorModel("", "")
+        ))
+    private var commits: List<GithubCommitModel> = listOf()
     //endregion
 
     //region Методы для работы с пользователем
@@ -37,6 +39,18 @@ class UserChooseRepositoryImpl: UserChooseRepository {
     }
     override fun getGithubRepoModel(): GithubRepoModel {
         return githubRepoModel
+    }
+    //endregion
+
+    //region Методы для работы с коммитами
+    override fun setGithubCommitModel(githubCommitModel: GithubCommitModel) {
+        this.githubCommitModel = githubCommitModel
+    }
+    override fun setGithubCommitsModel(commits: List<GithubCommitModel>) {
+        this.commits = commits
+    }
+    override fun getGithubCommitModel(): GithubCommitModel {
+        return githubCommitModel
     }
     //endregion
 }

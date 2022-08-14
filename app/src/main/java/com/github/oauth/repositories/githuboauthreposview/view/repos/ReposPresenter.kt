@@ -6,8 +6,9 @@ import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.Re
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubRepoRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
-import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
+import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoOwnerModel
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
+import com.github.oauth.repositories.githuboauthreposview.utils.cutBranches
 import com.github.oauth.repositories.githuboauthreposview.utils.resources.ResourcesProvider
 import com.github.oauth.repositories.githuboauthreposview.view.screens.AppScreens
 import com.github.terrakok.cicerone.Router
@@ -31,7 +32,6 @@ class ReposPresenter @Inject constructor(
     }
 
     private fun loadData(userLogin: String) {
-        val userModel: GithubUserModel = userChoose.getGithubUserModel()
         repo.getRepos(userLogin)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -53,9 +53,13 @@ class ReposPresenter @Inject constructor(
     }
 
     fun onRepoClicked(repo: GithubRepoModel) {
-        userChoose.setGithubRepoModel(repo)
-        Log.d(LOG_TAG, "Выбран репозиторий ${repo.name}")
-//        router.navigateTo(appScreens.forksScreen())
+        val correctRepo: GithubRepoModel = GithubRepoModel(repo.id, repo.name,
+            repo.description ?: "", GithubRepoOwnerModel(repo.owner.id, repo.owner.login,
+            repo.owner.avatar_url), cutBranches(repo.branches_url),
+            repo.forksCount, repo.watchers_count)
+        userChoose.setGithubRepoModel(correctRepo)
+        Log.d(LOG_TAG, "Выбран репозиторий ${correctRepo.name}")
+        router.navigateTo(appScreens.forksScreen())
     }
 
     fun backPressed(): Boolean {

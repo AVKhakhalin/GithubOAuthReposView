@@ -1,54 +1,65 @@
 package com.github.oauth.repositories.githuboauthreposview.domain.retrofit
 
-//import com.github.oauth.repositories.githuboauthreposview.db.AppDatabase
-//import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubCommit
-//import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitCommitInfoModel
-//import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
-//import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
-//import com.github.oauth.repositories.githuboauthreposview.model.RoomGithubCommitInfoAuthorModel
-//import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
-//import io.reactivex.rxjava3.core.Single
-//
-//
-//class GithubCommitRetrofitImpl(
-//    private val retrofitService: RetrofitService,
-//    private val db: AppDatabase
-//): GithubCommitRetrofit {
-//    override fun getRetrofitCommit(userModel: GithubUserModel, repoName: String
-//    ): MutableList<GithubCommitModel> {
-//        // Получение списка веток
-//        val branchesList: MutableList<String> = mutableListOf()
-//        val branchesUrl: String =
-//            "https://api.github.com/repos/${userModel.login}/$repoName/branches"
-//        retrofitService.getBranches(branchesUrl)
-//            .map { branches ->
-//                val branches = branches.map { branch ->
-//                    branch.name
-//                }
-//                branches.forEach { branchesList.add(it) }
-//            }
-//        // Получение списка коммитов для каждой ветки
-//        val commitsList: MutableList<RoomGithubCommit> = mutableListOf()
-//        branchesList.forEach { branch ->
-//            val commitsUrl: String =
-//                "https://api.github.com/repos/${userModel.login}/$repoName/commits?sha=$branch"
-//            retrofitService.getCommits(commitsUrl)
-//                .flatMap { commits ->
-//                    val dbCommits = commits.map {
-//                        RoomGithubCommit(it.sha, repoName, it.owner.message,
-//                        it.owner.author.name, it.owner.author.date)
-//                    }
-//                    dbCommits.forEach { commitsList.add(it) }
-//                    db.commitDao.insert(dbCommits)
-//                        .toSingle { commits }
-//                }
-//        }
-//        // Получение результирующего списка
-//        val githubCommitModel: MutableList<GithubCommitModel> = mutableListOf()
-//        commitsList.forEach {
-//            githubCommitModel.add(GithubCommitModel(it.id, GithubCommitCommitInfoModel(
-//                it.message, RoomGithubCommitInfoAuthorModel(it.authorName, it.date))))
-//        }
-//        return githubCommitModel
-//    }
-//}
+import android.util.Log
+import com.github.oauth.repositories.githuboauthreposview.db.AppDatabase
+import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubCommit
+import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
+import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
+import com.github.oauth.repositories.githuboauthreposview.utils.BASE_API_REPO_URL
+import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
+import com.github.oauth.repositories.githuboauthreposview.view.forks.ForksView
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
+
+class GithubCommitRetrofitImpl(
+    private val retrofitService: RetrofitService,
+    private val db: AppDatabase
+): GithubCommitRetrofit {
+    override fun getRetrofitCommit(userLogin: String, repoName: String, forksView: ForksView) {
+        // Получение списка веток
+        val branchesList: MutableList<String> = mutableListOf()
+        val branchesUrl: String =
+            "$BASE_API_REPO_URL/$userLogin/$repoName/branches"
+        Log.d(LOG_TAG, branchesUrl)
+        retrofitService.getBranches(branchesUrl)
+            .subscribeOn(Schedulers.single())
+            .map { branches ->
+                val branchesNames = branches.map { branch ->
+                    branch.name
+                }
+                branchesNames.forEach { branchesList.add(it) }
+            }
+            .subscribe({
+                //Do something on successful completion of all requests
+                var commitsList: List<GithubCommitModel> = listOf()
+
+                // Получение списка коммитов для каждой ветки
+                branchesList.forEach { branch ->
+                    val commitsUrl: String =
+                        "$BASE_API_REPO_URL/$userLogin/$repoName/commits?sha=$branch"
+                    retrofitService.getCommits(commitsUrl)
+                        .subscribeOn(Schedulers.io())
+                        .flatMap { commits ->
+                            commitsList = commits
+                            val dbCommits = commits.map {
+                                RoomGithubCommit(it.sha, repoName, it.commit.message,
+                                    it.commit.author.name, it.commit.author.date)
+                            }
+                            db.commitDao.insert(dbCommits)
+                                .toSingle { commits }
+                        }
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            //Do something on successful completion of all requests
+                            forksView.showCommits(commitsList)
+                        }) {
+                            //Do something on error completion of requests
+                            Log.d(LOG_TAG, "${it.message}")
+                        }
+                }
+            }) {
+                //Do something on error completion of requests
+                Log.d(LOG_TAG, "${it.message}")
+            }
+    }
+}

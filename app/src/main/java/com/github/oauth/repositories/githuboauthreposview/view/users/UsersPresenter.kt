@@ -24,7 +24,6 @@ import javax.inject.Inject
 class UsersPresenter @Inject constructor(
     private val router: Router,
     private val usersRepository: GithubUserRepository,
-    private val userCache: GithubUserCache,
     private val appScreens: AppScreens,
     private val userChoose: UserChooseRepository,
     private val usersScopeContainer: UsersScopeContainer,

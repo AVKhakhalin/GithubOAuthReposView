@@ -1,12 +1,19 @@
 package com.github.oauth.repositories.githuboauthreposview.domain
 
+import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
 
 interface UserChooseRepository {
+    // Данные о пользователе
     fun setGithubUserModel(githubUserModel: GithubUserModel)
     fun getGithubUserModel(): GithubUserModel
+    // Данные о репозиториях пользователя
     fun setGithubRepoModel(githubRepoModel: GithubRepoModel)
     fun setGithubReposModel(repos: List<GithubRepoModel>)
     fun getGithubRepoModel(): GithubRepoModel
+    // Данные о коммитах репозитория
+    fun setGithubCommitModel(githubCommitModel: GithubCommitModel)
+    fun setGithubCommitsModel(repos: List<GithubCommitModel>)
+    fun getGithubCommitModel(): GithubCommitModel
 }

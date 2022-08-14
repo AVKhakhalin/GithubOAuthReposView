@@ -1,5 +1,6 @@
 package com.github.oauth.repositories.githuboauthreposview.view.screens
 
+import com.github.oauth.repositories.githuboauthreposview.view.forks.ForksFragment
 import com.github.oauth.repositories.githuboauthreposview.view.repos.ReposFragment
 import com.github.oauth.repositories.githuboauthreposview.view.users.UsersFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
@@ -7,6 +8,7 @@ import com.github.terrakok.cicerone.androidx.FragmentScreen
 interface AppScreens {
     fun usersScreen(): FragmentScreen
     fun repoScreen(): FragmentScreen
+    fun forksScreen(): FragmentScreen
 }
 
 class AppScreensImpl: AppScreens {
@@ -18,5 +20,10 @@ class AppScreensImpl: AppScreens {
     /** Вызов фрагмента с репозиторием пользователя */
     override fun repoScreen() = FragmentScreen {
         ReposFragment.newInstance()
+    }
+
+    /** Вызов фрагмента с репозиторием пользователя */
+    override fun forksScreen() = FragmentScreen {
+        ForksFragment.newInstance()
     }
 }

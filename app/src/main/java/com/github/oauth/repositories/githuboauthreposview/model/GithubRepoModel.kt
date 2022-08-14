@@ -1,7 +1,6 @@
 package com.github.oauth.repositories.githuboauthreposview.model
 
 import android.os.Parcelable
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import kotlinx.android.parcel.Parcelize
 
@@ -30,5 +29,5 @@ data class GithubRepoOwnerModel(
     @Expose
     val login: String,
     @Expose
-    val avatarUrl: String
+    val avatar_url: String
 ): Parcelable
