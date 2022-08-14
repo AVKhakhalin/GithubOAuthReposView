@@ -1,52 +1,65 @@
 package com.github.oauth.repositories.githuboauthreposview.domain.retrofit
 
+import android.util.Log
 import com.github.oauth.repositories.githuboauthreposview.db.AppDatabase
 import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubCommit
 import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
-import io.reactivex.rxjava3.core.Single
+import com.github.oauth.repositories.githuboauthreposview.utils.BASE_API_REPO_URL
+import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
+import com.github.oauth.repositories.githuboauthreposview.view.forks.ForksView
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
-import java.util.concurrent.Callable
-
 
 class GithubCommitRetrofitImpl(
     private val retrofitService: RetrofitService,
     private val db: AppDatabase
 ): GithubCommitRetrofit {
-    override fun getRetrofitCommit(userLogin: String, repoName: String
-    ): Single<List<GithubCommitModel>> {
+    override fun getRetrofitCommit(userLogin: String, repoName: String, forksView: ForksView) {
         // Получение списка веток
         val branchesList: MutableList<String> = mutableListOf()
         val branchesUrl: String =
-            "https://api.github.com/repos/$userLogin/$repoName/branches"
+            "$BASE_API_REPO_URL/$userLogin/$repoName/branches"
+        Log.d(LOG_TAG, branchesUrl)
         retrofitService.getBranches(branchesUrl)
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(Schedulers.single())
             .map { branches ->
                 val branchesNames = branches.map { branch ->
                     branch.name
                 }
                 branchesNames.forEach { branchesList.add(it) }
             }
-        // Получение списка коммитов для каждой ветки
-        var commitsList: List<GithubCommitModel> = listOf()
-        branchesList.forEach { branch ->
-            val commitsUrl: String =
-                "https://api.github.com/repos/$userLogin/$repoName/commits?sha=$branch"
-            retrofitService.getCommits(commitsUrl)
-                .subscribeOn(Schedulers.io())
-                .flatMap { commits ->
-                    commitsList = commits
-                    val dbCommits = commits.map {
-                        RoomGithubCommit(it.sha, repoName, it.owner.message,
-                        it.owner.author.name, it.owner.author.date)
-                    }
-                    db.commitDao.insert(dbCommits)
-                        .toSingle { commits }
-                }
-        }
+            .subscribe({
+                //Do something on successful completion of all requests
+                var commitsList: List<GithubCommitModel> = listOf()
 
-        return Single.fromCallable(
-                Callable<List<GithubCommitModel>> { commitsList })
-                    .subscribeOn(Schedulers.io())
+                // Получение списка коммитов для каждой ветки
+                branchesList.forEach { branch ->
+                    val commitsUrl: String =
+                        "$BASE_API_REPO_URL/$userLogin/$repoName/commits?sha=$branch"
+                    retrofitService.getCommits(commitsUrl)
+                        .subscribeOn(Schedulers.io())
+                        .flatMap { commits ->
+                            commitsList = commits
+                            val dbCommits = commits.map {
+                                RoomGithubCommit(it.sha, repoName, it.commit.message,
+                                    it.commit.author.name, it.commit.author.date)
+                            }
+                            db.commitDao.insert(dbCommits)
+                                .toSingle { commits }
+                        }
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            //Do something on successful completion of all requests
+                            forksView.showCommits(commitsList)
+                        }) {
+                            //Do something on error completion of requests
+                            Log.d(LOG_TAG, "${it.message}")
+                        }
+                }
+            }) {
+                //Do something on error completion of requests
+                Log.d(LOG_TAG, "${it.message}")
+            }
     }
 }

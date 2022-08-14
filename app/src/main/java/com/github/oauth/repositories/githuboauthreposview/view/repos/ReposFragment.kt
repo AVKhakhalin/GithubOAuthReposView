@@ -19,16 +19,13 @@ class ReposFragment: MvpAppCompatFragment(R.layout.fragment_repos), ReposView, B
     /** ЗАДАНИЕ ПЕРЕМЕННЫХ */ //region
     // userChoose
     private val userChoose: UserChooseRepository = App.instance.appComponent.userChoose()
-
     // presenter
     private val presenter by moxyPresenter {
         App.instance.initGithubReposSubcomponent()
         App.instance.reposSubcomponent?.provideReposPresenter()!!
     }
-
     // binding
     private val binding by viewBinding<FragmentReposBinding>()
-
     // adapter
     private val adapter by lazy {
         ReposAdapter { presenter.onRepoClicked(it) }

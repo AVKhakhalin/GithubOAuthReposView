@@ -23,16 +23,16 @@ class ReposAdapter(
         holder.showRepo(currentList[position])
     }
 
-    inner class RepoViewHolder(private val vb: ItemRepoBinding) : RecyclerView.ViewHolder(vb.root) {
+    inner class RepoViewHolder(private val vb: ItemRepoBinding): RecyclerView.ViewHolder(vb.root) {
 
         fun showRepo(repo: GithubRepoModel) {
-            vb.root.setOnClickListener { itemClickListener(repo) }
-            vb.tvRepoName.text = repo.name
+            vb.itemRepoContainer.setOnClickListener { itemClickListener(repo) }
+            vb.repoName.text = repo.name
         }
     }
 }
 
-object GithubRepoItemCallback : DiffUtil.ItemCallback<GithubRepoModel>() {
+object GithubRepoItemCallback: DiffUtil.ItemCallback<GithubRepoModel>() {
 
     override fun areItemsTheSame(oldItem: GithubRepoModel, newItem: GithubRepoModel): Boolean {
         return oldItem == newItem

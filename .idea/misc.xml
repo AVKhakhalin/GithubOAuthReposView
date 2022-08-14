@@ -12,6 +12,7 @@
         <entry key="..\:/Android/Projects/GithubOAuthReposView/app/src/main/res/layout/fragment_users.xml" value="0.303125" />
         <entry key="..\:/Android/Projects/GithubOAuthReposView/app/src/main/res/layout/item_commit.xml" value="0.303125" />
         <entry key="..\:/Android/Projects/GithubOAuthReposView/app/src/main/res/layout/item_repo.xml" value="0.303125" />
+        <entry key="..\:/Android/SDK/platforms/android-32/data/res/drawable/progress_indeterminate_horizontal.xml" value="0.211" />
       </map>
     </option>
   </component>

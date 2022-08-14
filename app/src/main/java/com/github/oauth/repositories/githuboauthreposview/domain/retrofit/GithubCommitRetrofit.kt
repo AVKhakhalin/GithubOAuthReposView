@@ -1,10 +1,7 @@
 package com.github.oauth.repositories.githuboauthreposview.domain.retrofit
 
-import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
-import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
-import io.reactivex.rxjava3.core.Single
+import com.github.oauth.repositories.githuboauthreposview.view.forks.ForksView
 
 interface GithubCommitRetrofit {
-    fun getRetrofitCommit(userLogin: String, repoName: String
-    ): Single<List<GithubCommitModel>>
+    fun getRetrofitCommit(userLogin: String, repoName: String, forksView: ForksView)
 }

@@ -4,6 +4,7 @@ import com.github.oauth.repositories.githuboauthreposview.db.AppDatabase
 import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubRepo
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
+import com.github.oauth.repositories.githuboauthreposview.utils.cutBranches
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -25,10 +26,5 @@ class GithubRepoRetrofitImpl(
                 db.repositoryDao.insert(dbRepos)
                     .toSingle { repos }
             }
-    }
-
-    // Обрезка концовки ссылки на ветки репозитория в строке "{/branch}"
-    private fun cutBranches(url: String?): String {
-        return url?.substring(0, url.indexOf("{/branch}")) ?: ""
     }
 }

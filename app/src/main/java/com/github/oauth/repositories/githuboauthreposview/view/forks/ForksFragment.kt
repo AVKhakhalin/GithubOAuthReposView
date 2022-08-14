@@ -3,18 +3,24 @@ package com.github.oauth.repositories.githuboauthreposview.view.forks
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
 import com.github.oauth.repositories.githuboauthreposview.databinding.FragmentForksBinding
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
+import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
+import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.utils.binding.viewBinding
+import com.github.oauth.repositories.githuboauthreposview.utils.imageloader.GlideImageLoaderImpl
+import com.github.oauth.repositories.githuboauthreposview.utils.imageloader.ImageLoader
 import com.github.oauth.repositories.githuboauthreposview.view.base.BackButtonListener
 import com.github.oauth.repositories.githuboauthreposview.view.forks.adapter.ForksAdapter
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
-class ForksFragment : MvpAppCompatFragment(R.layout.fragment_forks), ForksView, BackButtonListener {
+class ForksFragment: MvpAppCompatFragment(R.layout.fragment_forks), ForksView, BackButtonListener {
     /** ЗАДАНИЕ ПЕРЕМЕННЫХ */ //region
     // binding
     private val binding by viewBinding<FragmentForksBinding>()
@@ -27,7 +33,7 @@ class ForksFragment : MvpAppCompatFragment(R.layout.fragment_forks), ForksView, 
     private val userChoose: UserChooseRepository = App.instance.appComponent.userChoose()
     // adapter
     private val adapter by lazy {
-        ForksAdapter { presenter.onRepoClicked(it) }
+        ForksAdapter { presenter.onCommitClicked(it) }
     }
     //endregion
 
@@ -39,12 +45,12 @@ class ForksFragment : MvpAppCompatFragment(R.layout.fragment_forks), ForksView, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Toast.makeText(requireContext(), "${userChoose.getGithubRepoModel().branches_url}", Toast.LENGTH_LONG).show()
+
         // Отображение общей информации по репозиторию
         showGeneralRepoInfo()
-
-        /** Установка списка репозиториев пользователя */
-        binding.forksCommitsRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.forksCommitsRecycler.adapter = adapter
+        // Установка списка коммитов в репозитории
+        setCommitsList()
     }
 
     @SuppressLint("SetTextI18n")
@@ -53,12 +59,12 @@ class ForksFragment : MvpAppCompatFragment(R.layout.fragment_forks), ForksView, 
 
         // Отображение общей информации по репозиторию
         showGeneralRepoInfo()
+        // Установка списка коммитов в репозитории
+        setCommitsList()
     }
 
     override fun backPressed(): Boolean {
-        presenter?.let { presenter ->
-            presenter.backPressed()
-        }
+        presenter.backPressed()
         return true
     }
 
@@ -69,5 +75,25 @@ class ForksFragment : MvpAppCompatFragment(R.layout.fragment_forks), ForksView, 
         binding.repoAuthorName.text = userChoose.getGithubRepoModel().owner.login
         binding.repoForksNumber.text = userChoose.getGithubRepoModel().forksCount.toString()
         binding.forksWatches.text = userChoose.getGithubRepoModel().watchers_count.toString()
+        GlideImageLoaderImpl().
+            loadInto(userChoose.getGithubUserModel().avatarUrl, binding.repoUserAvatar)
+    }
+
+    // Установка списка коммитов в репозитории
+    private fun setCommitsList() {
+        binding.forksCommitsRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.forksCommitsRecycler.adapter = adapter
+    }
+
+    override fun showLoading() {
+        binding.loadingView.visibility = View.VISIBLE
+    }
+
+    override fun hideLoading() {
+        binding.loadingView.visibility = View.INVISIBLE
+    }
+
+    override fun showCommits(commits: List<GithubCommitModel>) {
+        adapter.submitList(commits)
     }
 }

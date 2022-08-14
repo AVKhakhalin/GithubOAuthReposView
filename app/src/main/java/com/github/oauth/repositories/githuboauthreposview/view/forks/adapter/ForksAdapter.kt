@@ -1,5 +1,6 @@
 package com.github.oauth.repositories.githuboauthreposview.view.forks.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -26,12 +27,12 @@ class ForksAdapter(
     inner class ForksViewHolder(private val vb: ItemCommitBinding):
         RecyclerView.ViewHolder(vb.root) {
 
+        @SuppressLint("SetTextI18n")
         fun showCommit(commit: GithubCommitModel) {
-            vb.root.setOnClickListener { itemClickListener(commit) }
-            vb.commitDate.text = commit.owner.author.date
-            vb.commitAuthorName.text = commit.owner.author.name
+            vb.itemCommitContainer.setOnClickListener { itemClickListener(commit) }
+            vb.commitDate.text = commit.commit.author.date
             vb.commitHash.text = commit.sha
-            vb.commitMessage.text = commit.owner.message
+            vb.commitMessage.text = "${commit.commit.author.name}: ${commit.commit.message}"
         }
     }
 }
