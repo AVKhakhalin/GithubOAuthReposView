@@ -22,5 +22,5 @@ interface UserDao {
     fun delete(user: RoomGithubUser): Completable
 
     @Query("SELECT * FROM RoomGithubUser WHERE login = :userLogin LIMIT 1")
-    fun getByLogin(userLogin: String): Maybe<RoomGithubUser>
+    fun getByLogin(userLogin: String): Single<RoomGithubUser>
 }

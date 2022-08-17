@@ -8,30 +8,32 @@ import com.github.oauth.repositories.githuboauthreposview.model.RoomGithubCommit
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
 import com.github.oauth.repositories.githuboauthreposview.view.forks.ForksView
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class GithubCommitCacheImpl(
     private val db: AppDatabase
 ): GithubCommitCache {
-    override fun getCacheCommit(repoName: String, forksView: ForksView) {
-        val commitsList: MutableList<GithubCommitModel> = mutableListOf()
-        db.commitDao.getByRepoName(repoName)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { list ->
-                list.map { commit ->
-                    commitsList.add(GithubCommitModel(
+    override fun getCacheCommit(userLogin: String, repoName: String, forksView: ForksView) {
+        db.roomCommitDao.getByLoginAndRepoName(userLogin, repoName)
+            .flatMap {
+                return@flatMap Single.just(
+                    it.map { commit ->
+                    GithubCommitModel(
                         commit.id, GithubCommitCommitInfoModel(commit.message,
                             RoomGithubCommitInfoAuthorModel(commit.authorName, commit.date))
-                    ))
-                }
+                    )
+                })
             }
-            .subscribe({
-                //Do something on successful completion of all requests
-                forksView.showCommits(commitsList)
-            }) {
-                //Do something on error completion of requests
-                Log.d(LOG_TAG, "${it.message}")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ commitsList ->
+                val resultCommitsList: MutableList<GithubCommitModel> = mutableListOf()
+                commitsList.forEach { resultCommitsList.add(it) }
+                resultCommitsList.sortBy { it.commit.author.date }
+                forksView.showCommits(resultCommitsList)
+            }) { error ->
+                Log.d(LOG_TAG, "${error.message}")
             }
     }
 }

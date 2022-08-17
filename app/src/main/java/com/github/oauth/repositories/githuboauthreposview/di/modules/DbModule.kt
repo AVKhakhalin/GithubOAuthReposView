@@ -10,10 +10,11 @@ import javax.inject.Singleton
 
 @Module
 class DbModule {
-    @Singleton
     @Provides
+    @Singleton
     fun db(context: Context): AppDatabase =
         Room
             .databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+            .fallbackToDestructiveMigration()
             .build()
 }

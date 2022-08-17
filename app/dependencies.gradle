@@ -46,6 +46,8 @@ ext {
     room.compiler = "androidx.room:room-compiler:$roomVersion"
     room.m1Support = "org.xerial:sqlite-jdbc:3.34.0"
     room.rxJava3 = "androidx.room:room-rxjava3:$roomVersion"
+        // Подключение библиотеки для работы с базой данных через корутины
+    room.ktx = "androidx.room:room-ktx:$roomVersion"
     // Dagger
     dagger = [:]
     libs.dagger = dagger

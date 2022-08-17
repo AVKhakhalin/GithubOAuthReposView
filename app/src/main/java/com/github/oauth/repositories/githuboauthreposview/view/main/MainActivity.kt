@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
+import com.github.oauth.repositories.githuboauthreposview.db.AppDatabase
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
 import com.github.oauth.repositories.githuboauthreposview.view.base.BackButtonListener
 import com.github.terrakok.cicerone.NavigatorHolder
@@ -24,6 +25,8 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
     private val presenter by moxyPresenter {
         App.instance.appComponent.mainPresenter()
     }
+    @Inject
+    lateinit var db: AppDatabase
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {

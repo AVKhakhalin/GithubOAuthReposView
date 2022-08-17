@@ -14,10 +14,10 @@ class GithubUserRetrofitImpl(
     override fun getRetrofitUser(userLogin: String): Single<GithubUserModel> {
         return retrofitService.getUser(userLogin)
             .subscribeOn(Schedulers.io())
-            .map { user ->
+            .flatMap { user ->
                 val roomUser = RoomGithubUser(user.id, user.login, user.avatarUrl, user.reposUrl)
                 db.userDao.insert(roomUser)
-                user
+                    .toSingle { user }
             }
     }
 }

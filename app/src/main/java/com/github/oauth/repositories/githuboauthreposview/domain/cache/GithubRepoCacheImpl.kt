@@ -4,14 +4,12 @@ import com.github.oauth.repositories.githuboauthreposview.db.AppDatabase
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoOwnerModel
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
 
 class GithubRepoCacheImpl(
     private val db: AppDatabase
 ): GithubRepoCache {
     override fun getCacheRepo(userLogin: String): Single<List<GithubRepoModel>> {
         return db.repositoryDao.getByUserLogin(userLogin)
-            .subscribeOn(Schedulers.io())
             .map { list ->
                 list.map { repo ->
                     GithubRepoModel(

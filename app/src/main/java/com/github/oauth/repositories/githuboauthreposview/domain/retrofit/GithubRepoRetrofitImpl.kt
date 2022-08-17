@@ -23,7 +23,7 @@ class GithubRepoRetrofitImpl(
                         it.owner.login ?: "", it.owner.avatar_url  ?: "",
                         cutBranches(it.branches_url))
                 }
-                db.repositoryDao.insert(dbRepos)
+                db.repoDao.insert(dbRepos)
                     .toSingle { repos }
             }
     }

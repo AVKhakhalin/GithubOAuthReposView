@@ -8,7 +8,6 @@ import java.io.IOException
 
 /**
  * Custom interceptor to intercept basic responses and to show basic errors to the user
- * (not fully implemented)
  */
 class BaseInterceptor private constructor(): Interceptor {
     private var responseCode: Int = 0
@@ -16,9 +15,16 @@ class BaseInterceptor private constructor(): Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
-        Log.d(LOG_TAG, "Response: ${response.request}")
-        Log.d(LOG_TAG, "Request: ${response.networkResponse}")
+        Log.d(LOG_TAG, "Запрос: ${response.request}")
+        Log.d(LOG_TAG, "Ответ: ${response.networkResponse}")
+        Log.d(LOG_TAG, "Заголовок ответа: ${response.headers}")
         responseCode = response.code
+        Log.d(LOG_TAG, "Лимит запросов: ${response.headers["x-ratelimit-limit"]}")
+        Log.d(LOG_TAG, "Оставшееся количество запросов: ${response.headers["x-ratelimit-remaining"]}")
+        Log.d(LOG_TAG, "Количество использованных запросов: ${response.headers["x-ratelimit-used"]}")
+        Log.d(LOG_TAG, "Временный id: ${response.headers["x-github-request-id"]}")
+        Log.d(LOG_TAG, "Дата запроса: ${response.headers["date"]}")
+        Log.d(LOG_TAG, "Код результата запроса: ${getResponseCode()}")
         return response
     }
 

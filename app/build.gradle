@@ -86,6 +86,7 @@ dependencies {
     kapt libs.room.compiler
     kapt libs.room.m1Support
     implementation libs.room.rxJava3
+    implementation libs.room.ktx
     // Coroutines
     implementation libs.coroutines.android
     // Dagger

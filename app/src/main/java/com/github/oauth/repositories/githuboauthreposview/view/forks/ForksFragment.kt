@@ -3,18 +3,14 @@ package com.github.oauth.repositories.githuboauthreposview.view.forks
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
 import com.github.oauth.repositories.githuboauthreposview.databinding.FragmentForksBinding
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
-import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.utils.binding.viewBinding
 import com.github.oauth.repositories.githuboauthreposview.utils.imageloader.GlideImageLoaderImpl
-import com.github.oauth.repositories.githuboauthreposview.utils.imageloader.ImageLoader
 import com.github.oauth.repositories.githuboauthreposview.view.base.BackButtonListener
 import com.github.oauth.repositories.githuboauthreposview.view.forks.adapter.ForksAdapter
 import moxy.MvpAppCompatFragment
@@ -44,8 +40,6 @@ class ForksFragment: MvpAppCompatFragment(R.layout.fragment_forks), ForksView, B
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        Toast.makeText(requireContext(), "${userChoose.getGithubRepoModel().branches_url}", Toast.LENGTH_LONG).show()
 
         // Отображение общей информации по репозиторию
         showGeneralRepoInfo()

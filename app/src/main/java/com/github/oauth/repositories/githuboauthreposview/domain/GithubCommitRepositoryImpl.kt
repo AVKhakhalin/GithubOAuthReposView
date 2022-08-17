@@ -14,6 +14,6 @@ class GithubCommitRepositoryImpl(
         if (networkStatus.isOnline())
             githubCommitRetrofit.getRetrofitCommit(userLogin, repoName, forksView)
         else
-            githubCommitCache.getCacheCommit(userLogin, forksView)
+            githubCommitCache.getCacheCommit(userLogin, repoName, forksView)
     }
 }

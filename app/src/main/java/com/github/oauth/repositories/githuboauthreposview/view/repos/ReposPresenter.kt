@@ -38,6 +38,7 @@ class ReposPresenter @Inject constructor(
             .doOnSubscribe { viewState.showLoading() }
             .subscribe(
                 { repos ->
+                    Log.d(LOG_TAG, "Repos: $repos")
                     viewState.showRepos(repos)
                     viewState.hideLoading()
                     userChoose.setGithubReposModel(repos)
