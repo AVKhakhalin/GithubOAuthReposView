@@ -10,7 +10,6 @@ import com.github.oauth.repositories.githuboauthreposview.databinding.FragmentFo
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
 import com.github.oauth.repositories.githuboauthreposview.utils.binding.viewBinding
-import com.github.oauth.repositories.githuboauthreposview.utils.imageloader.GlideImageLoaderImpl
 import com.github.oauth.repositories.githuboauthreposview.view.base.BackButtonListener
 import com.github.oauth.repositories.githuboauthreposview.view.forks.adapter.ForksAdapter
 import moxy.MvpAppCompatFragment
@@ -31,11 +30,12 @@ class ForksFragment: MvpAppCompatFragment(R.layout.fragment_forks), ForksView, B
     private val adapter by lazy {
         ForksAdapter { presenter.onCommitClicked(it) }
     }
-    //endregion
-
+    // Инстанс данного фрагмента
     companion object {
         fun newInstance() = ForksFragment()
     }
+    //endregion
+
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,8 +69,7 @@ class ForksFragment: MvpAppCompatFragment(R.layout.fragment_forks), ForksView, B
         binding.repoAuthorName.text = userChoose.getGithubRepoModel().owner.login
         binding.repoForksNumber.text = userChoose.getGithubRepoModel().forksCount.toString()
         binding.forksWatches.text = userChoose.getGithubRepoModel().watchers_count.toString()
-        GlideImageLoaderImpl().
-            loadInto(userChoose.getGithubUserModel().avatarUrl, binding.repoUserAvatar)
+        presenter.loadAvatar(userChoose.getGithubUserModel().avatarUrl, binding.repoUserAvatar)
     }
 
     // Установка списка коммитов в репозитории

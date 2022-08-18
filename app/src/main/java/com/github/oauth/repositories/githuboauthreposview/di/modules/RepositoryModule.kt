@@ -1,7 +1,10 @@
 package com.github.oauth.repositories.githuboauthreposview.di.modules
 
+import android.widget.ImageView
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepositoryImpl
+import com.github.oauth.repositories.githuboauthreposview.utils.imageloader.GlideImageLoaderImpl
+import com.github.oauth.repositories.githuboauthreposview.utils.imageloader.ImageLoader
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -13,5 +16,11 @@ class RepositoryModule {
     @Provides
     fun userChoose(): UserChooseRepository {
         return UserChooseRepositoryImpl()
+    }
+
+    @Singleton
+    @Provides
+    fun glide(): ImageLoader<ImageView> {
+        return GlideImageLoaderImpl()
     }
 }
