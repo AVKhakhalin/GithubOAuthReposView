@@ -8,26 +8,15 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
 import com.github.oauth.repositories.githuboauthreposview.databinding.FragmentUsersBinding
-import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubCommit
-import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubRepo
-import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubUser
-import com.github.oauth.repositories.githuboauthreposview.db.model.RoomRepo
 import com.github.oauth.repositories.githuboauthreposview.utils.*
 import com.github.oauth.repositories.githuboauthreposview.utils.binding.viewBinding
 import com.github.oauth.repositories.githuboauthreposview.view.base.BackButtonListener
-import com.github.oauth.repositories.githuboauthreposview.view.main.MainActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.invoke
-import kotlinx.coroutines.launch
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
-import javax.inject.Inject
 
 
 class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, BackButtonListener {

@@ -14,8 +14,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 class GithubCommitCacheImpl(
     private val db: AppDatabase
 ): GithubCommitCache {
-    override fun getCacheCommit(userLogin: String, repoName: String, forksView: ForksView) {
-        db.roomCommitDao.getByLoginAndRepoName(userLogin, repoName)
+    override fun getCacheCommit(repoId: Int, forksView: ForksView) {
+        db.roomCommitDao.getByRepoId(repoId)
             .flatMap {
                 return@flatMap Single.just(
                     it.map { commit ->

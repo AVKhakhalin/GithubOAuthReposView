@@ -9,7 +9,7 @@ class UserChooseRepositoryImpl: UserChooseRepository {
         GithubUserModel("", "", "", "")
     // githubRepoModel
     private var githubRepoModel: GithubRepoModel =
-        GithubRepoModel("", "", "",
+        GithubRepoModel(-1, "", "",
             GithubRepoOwnerModel("", "", ""),
             "", 0, 0)
     private var repos: List<GithubRepoModel> = listOf()

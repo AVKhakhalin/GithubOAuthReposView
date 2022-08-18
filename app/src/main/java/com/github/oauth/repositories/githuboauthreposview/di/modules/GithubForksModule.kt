@@ -6,6 +6,7 @@ import com.github.oauth.repositories.githuboauthreposview.di.scope.ForksScope
 import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.ForksScopeContainer
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubCommitRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubCommitRepositoryImpl
+import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.cache.GithubCommitCache
 import com.github.oauth.repositories.githuboauthreposview.domain.cache.GithubCommitCacheImpl
 import com.github.oauth.repositories.githuboauthreposview.domain.retrofit.GithubCommitRetrofit
@@ -33,9 +34,10 @@ abstract class GithubForksModule {
         @Provides
         fun reposRetrofit(
             retrofitService: RetrofitService,
-            db: AppDatabase
+            db: AppDatabase,
+            userChoose: UserChooseRepository
         ): GithubCommitRetrofit {
-            return GithubCommitRetrofitImpl(retrofitService, db)
+            return GithubCommitRetrofitImpl(retrofitService, db, userChoose)
         }
 
         @ForksScope

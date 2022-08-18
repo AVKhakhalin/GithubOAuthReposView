@@ -10,9 +10,7 @@ import com.github.oauth.repositories.githuboauthreposview.utils.DATABASE_NAME
 
 @Database(
     entities = [
-        RoomGithubUser::class,
-        RoomGithubRepo::class,
-        RoomGithubCommit::class,
+        RoomUser::class,
         RoomRepo::class,
         RoomCommit::class
     ],
@@ -20,23 +18,11 @@ import com.github.oauth.repositories.githuboauthreposview.utils.DATABASE_NAME
     exportSchema = false
 )
 abstract class AppDatabase: RoomDatabase() {
-
     abstract val userDao: UserDao
-
-    abstract val repositoryDao: RepoDao
-
-    abstract val commitDao: CommitDao
-
-    abstract val repoDao: RoomRepoDao
-
-    abstract val roomCommitDao: RoomCommitDao
+    abstract val repoDao: RepoDao
+    abstract val roomCommitDao: RoomDao
 
     companion object {
-//        val instance by lazy {
-//            Room.databaseBuilder(App.instance, AppDatabase::class.java, DATABASE_NAME)
-//                .fallbackToDestructiveMigration()
-//                .build()
-//        }
         @Volatile // All threads have immediate access to this property
         private var instance: AppDatabase? = null
 

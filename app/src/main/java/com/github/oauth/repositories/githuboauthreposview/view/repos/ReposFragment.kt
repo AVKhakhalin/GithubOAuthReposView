@@ -3,25 +3,15 @@ package com.github.oauth.repositories.githuboauthreposview.view.repos
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
 import com.github.oauth.repositories.githuboauthreposview.databinding.FragmentReposBinding
-import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubCommit
-import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubRepo
-import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubUser
-import com.github.oauth.repositories.githuboauthreposview.db.model.RoomRepo
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.utils.binding.viewBinding
 import com.github.oauth.repositories.githuboauthreposview.view.base.BackButtonListener
-import com.github.oauth.repositories.githuboauthreposview.view.main.MainActivity
 import com.github.oauth.repositories.githuboauthreposview.view.repos.adapter.ReposAdapter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.invoke
-import kotlinx.coroutines.launch
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 

@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class RoomGithubUser(
+data class RoomUser(
     @NonNull
     @PrimaryKey
     val id: String,

@@ -9,7 +9,7 @@ class GithubRepoCacheImpl(
     private val db: AppDatabase
 ): GithubRepoCache {
     override fun getCacheRepo(userLogin: String): Single<List<GithubRepoModel>> {
-        return db.repositoryDao.getByUserLogin(userLogin)
+        return db.repoDao.getByUserLogin(userLogin)
             .map { list ->
                 list.map { repo ->
                     GithubRepoModel(

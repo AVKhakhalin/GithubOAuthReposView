@@ -6,10 +6,13 @@ import android.widget.Toast
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
 import com.github.oauth.repositories.githuboauthreposview.db.AppDatabase
+import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
 import com.github.oauth.repositories.githuboauthreposview.view.base.BackButtonListener
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
@@ -27,6 +30,8 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
     }
     @Inject
     lateinit var db: AppDatabase
+    @Inject
+    lateinit var retrofitService: RetrofitService
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +39,44 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
         App.instance.appComponent.injectMainActivity(this@MainActivity)
         /** Получение разрешений на запись информации */
         presenter.isStoragePermissionGranted(this@MainActivity)
+
+
+        db.userDao.getAll()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()) // Указание, что результат нужно получить в основном потоке
+            .subscribe({
+                //Do something on successful completion of all requests
+                Toast.makeText(this, "Количество пользователей: ${it.size}", Toast.LENGTH_SHORT).show()
+            }) {
+                //Do something on error completion of requests
+                Log.d(LOG_TAG, "${it.message}")
+            }
+
+        db.repoDao.getAll()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()) // Указание, что результат нужно получить в основном потоке
+            .subscribe({
+                //Do something on successful completion of all requests
+                Toast.makeText(this, "Количество репозиториев: ${it.size}", Toast.LENGTH_SHORT).show()
+                if (it.isNotEmpty()) {
+                    Toast.makeText(this, "Количество репозиториев: ${it[0].login}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }) {
+                //Do something on error completion of requests
+                Log.d(LOG_TAG, "${it.message}")
+            }
+
+        db.roomCommitDao.getAll()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()) // Указание, что результат нужно получить в основном потоке
+            .subscribe({
+                //Do something on successful completion of all requests
+                Toast.makeText(this, "Количество коммитов: ${it.size}", Toast.LENGTH_SHORT).show()
+            }) {
+                //Do something on error completion of requests
+                Log.d(LOG_TAG, "${it.message}")
+            }
     }
 
     override fun onResumeFragments() {
