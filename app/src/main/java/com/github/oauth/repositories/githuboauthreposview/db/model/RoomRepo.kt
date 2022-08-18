@@ -3,23 +3,18 @@ package com.github.oauth.repositories.githuboauthreposview.db.model
 import androidx.annotation.NonNull
 import androidx.room.*
 
-@Entity(
-    indices = [Index("name", unique = true)],
-    foreignKeys = [
-        ForeignKey(
-            entity = RoomGithubUser::class,
-            parentColumns = ["id"],
-            childColumns = ["userId"],
-            onUpdate = ForeignKey.CASCADE,
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+@Entity(foreignKeys = [
+    ForeignKey(
+        entity = RoomUser::class,
+        parentColumns = ["id"],
+        childColumns = ["userId"],
+        onDelete = ForeignKey.CASCADE
+    )]
 )
-data class RoomGithubRepo(
+data class RoomRepo(
     @NonNull
     @PrimaryKey
-    val id: String,
-    @NonNull
+    val id: Int,
     val name: String,
     val description: String,
     @NonNull

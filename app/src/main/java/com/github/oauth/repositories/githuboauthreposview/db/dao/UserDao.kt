@@ -1,26 +1,25 @@
 package com.github.oauth.repositories.githuboauthreposview.db.dao
 
 import androidx.room.*
-import com.github.oauth.repositories.githuboauthreposview.db.model.RoomGithubUser
+import com.github.oauth.repositories.githuboauthreposview.db.model.RoomUser
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 
 @Dao
 interface UserDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(user: RoomGithubUser): Completable
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(user: RoomUser): Completable
 
     @Update
-    fun update(user: RoomGithubUser): Completable
+    fun update(user: RoomUser): Completable
 
-    @Query("SELECT * FROM RoomGithubUser")
-    fun getAll(): Single<List<RoomGithubUser>>
+    @Query("SELECT * FROM RoomUser")
+    fun getAll(): Single<List<RoomUser>>
 
     @Delete
-    fun delete(user: RoomGithubUser): Completable
+    fun delete(user: RoomUser): Completable
 
-    @Query("SELECT * FROM RoomGithubUser WHERE login = :userLogin LIMIT 1")
-    fun getByLogin(userLogin: String): Maybe<RoomGithubUser>
+    @Query("SELECT * FROM RoomUser WHERE login = :userLogin LIMIT 1")
+    fun getByLogin(userLogin: String): Single<RoomUser>
 }

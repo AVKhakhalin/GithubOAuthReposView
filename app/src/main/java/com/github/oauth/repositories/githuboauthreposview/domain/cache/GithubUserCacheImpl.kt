@@ -12,9 +12,8 @@ class GithubUserCacheImpl(
         return db.userDao.getByLogin(userLogin)
             .subscribeOn(Schedulers.io())
             .map { roomModel ->
-                GithubUserModel(roomModel.id, roomModel.login,
-                    roomModel.avatarUrl, roomModel.reposUrl)
+                GithubUserModel(
+                    roomModel.id, roomModel.login, roomModel.avatarUrl, roomModel.reposUrl)
             }
-                .toSingle()
     }
 }

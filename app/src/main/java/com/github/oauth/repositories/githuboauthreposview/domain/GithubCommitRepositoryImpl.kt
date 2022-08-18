@@ -10,10 +10,10 @@ class GithubCommitRepositoryImpl(
     private val githubCommitRetrofit: GithubCommitRetrofit,
     private val githubCommitCache: GithubCommitCache
 ): GithubCommitRepository {
-    override fun getCommits(userLogin: String, repoName: String, forksView: ForksView) {
+    override fun getCommits(repoId: Int, forksView: ForksView) {
         if (networkStatus.isOnline())
-            githubCommitRetrofit.getRetrofitCommit(userLogin, repoName, forksView)
+            githubCommitRetrofit.getRetrofitCommit(repoId, forksView)
         else
-            githubCommitCache.getCacheCommit(userLogin, forksView)
+            githubCommitCache.getCacheCommit(repoId, forksView)
     }
 }

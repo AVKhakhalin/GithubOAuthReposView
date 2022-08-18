@@ -38,7 +38,9 @@ class ReposPresenter @Inject constructor(
             .doOnSubscribe { viewState.showLoading() }
             .subscribe(
                 { repos ->
-                    viewState.showRepos(repos)
+                    viewState.showRepos(repos.sortedBy { it->
+                        it.name
+                    })
                     viewState.hideLoading()
                     userChoose.setGithubReposModel(repos)
                 }, {

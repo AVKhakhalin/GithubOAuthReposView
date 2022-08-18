@@ -56,7 +56,6 @@ class App: Application(), UsersScopeContainer, ReposScopeContainer, ForksScopeCo
     override fun initForksSubcomponent() = appComponent.forksSubcomponent().also {
         forksSubcomponent = it
     }
-
     override fun destroyForksSubcomponent() {
         forksSubcomponent = null
     }

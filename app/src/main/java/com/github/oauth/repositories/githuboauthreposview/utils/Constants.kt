@@ -15,3 +15,7 @@ const val BASE_URL = "BASE_URL"
 // SharedPreferences
 const val SHARED_PREFERENCES_KEY: String = "Shared Preferences"
 const val SHARED_PREFERENCES_USER_LOGIN: String = "Shared Preferences User Login"
+// Параметры сохранения аватарки пользователя
+const val IMAGE_QUALITY: Int = 100
+const val IMAGE_FORMAT: String = "jpg"
+const val IMAGE_CACHE_FOLDER_NAME: String = "CacheAvatars"

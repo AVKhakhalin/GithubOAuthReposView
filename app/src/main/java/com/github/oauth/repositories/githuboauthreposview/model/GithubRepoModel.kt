@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class GithubRepoModel(
     @Expose
-    val id: String,
+    val id: Int,
     @Expose
     val name: String,
     @Expose
