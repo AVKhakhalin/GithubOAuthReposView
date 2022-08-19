@@ -12,6 +12,8 @@ const val EMPTY_NAME_MASK: String = "mine"
 const val LOGOUT_MASK_ONE: String = "https://github.com"
 const val LOGOUT_MASK_TWO: String = "https://github.com/"
 const val BASE_URL = "BASE_URL"
+const val URL_TO_PING: String = "https://github.com"
+const val TIME_WAIT_OKHTTP_RESPONSE: Long = 200000
 // SharedPreferences
 const val SHARED_PREFERENCES_KEY: String = "Shared Preferences"
 const val SHARED_PREFERENCES_USER_LOGIN: String = "Shared Preferences User Login"

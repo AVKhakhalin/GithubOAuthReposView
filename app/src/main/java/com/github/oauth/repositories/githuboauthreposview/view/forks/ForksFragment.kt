@@ -43,6 +43,8 @@ class ForksFragment: MvpAppCompatFragment(R.layout.fragment_forks), ForksView, B
 
         // Отображение общей информации по репозиторию
         showGeneralRepoInfo()
+        // Отображение индикатора загрузки данных о коммитах
+        showLoading()
         // Установка списка коммитов в репозитории
         setCommitsList()
     }
@@ -87,6 +89,7 @@ class ForksFragment: MvpAppCompatFragment(R.layout.fragment_forks), ForksView, B
     }
 
     override fun showCommits(commits: List<GithubCommitModel>) {
+        hideLoading()
         adapter.submitList(commits)
     }
 }
