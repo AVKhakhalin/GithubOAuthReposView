@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">GithubOAuthReposView</string>
 
+    <!-- Ошибки -->
+    <string name="error_wrong_view">\nОШИБКА:\nНеверное состояние вью:</string>
+    <string name="github_no_internet">\nОШИБКА:\nСеть Интернет стала недоступна.\nДля первичной авторизации нужен выход в Интернет</string>
+    <string name="error_not_repos_List">\nОШИБКА:\nСписок репозиториев получить не удалось</string>
+    <string name="error_not_user_data">\nОШИБКА:\nДанные по текущему пользователю получить не удалось</string>
+    <string name="no_oauth_server_error_message_text">\nОШИБКА:\nПервичный вход в приложение (или если вы вышли из своей учётной сессии) возможен только после OAuth авторизации.\nОна осуществляется через сервер разработчика.\nК сожалению, сервер сейчас выключен.\nЧтобы включить сервер, свяжитесь с разработчиком Хахалиным Андреем Владимировичем:\nтелеграмм: @avkhakhalin\ne-mail: avkhakhalin@mail.ru\nПосле включения сервера программа сразу продолжит работать.</string>
+    <string name="no_internet_error_message_text">\nОШИБКА:\nДля первичного входа в приложение (или если вы вышли из своей учётной сессии) необходим доступ к сети Интернет.\nОна сейчас отключена.\nПожалуйста, включите её и приложение продолжит свою работу.</string>
+    <string name="no_github_server_error_message_text">\nОШИБКА:\nДля первичного входа в приложение (или если вы вышли из своей учётной сессии) нужна связь со сервером github.com.\nОн сейчас недоступен.\nКак только он будет доступен, приложение продолжит свою работу.</string>
+
+    <!-- Работа -->
     <string name="get_permission_write_read_text">Разрешение на запись и считывание данных получено</string>
     <string name="not_get_permission_write_read_text">Разрешение на запись и считывание данных отсутствует</string>
     <string name="github_yes_internet">Сеть Интернет стала доступна.\nПриложение возобновляет работу</string>
@@ -20,10 +30,6 @@
     <string name="repo_forks_number_tools_text">Количество форков</string>
     <string name="forks_watches_tools_text">Количество просмотров</string>
     <string name="forks_commits_title_text">Коммиты репозитория:</string>
-
-    <!-- Ошибки -->
-    <string name="error_wrong_view">Неверное состояние вью:</string>
-    <string name="github_no_internet">Сеть Интернет стала недоступна.\nДля первичной авторизации нужен выход в Интернет</string>
-    <string name="error_not_repos_List">Ошибка, список репозиториев получить не удалось</string>
-    <string name="error_not_user_data">Ошибка, данные по текущему пользователю получить не удалось</string>
+    <string name="loading_text_text">Установка связи с сервером\nдля OAuth авторизации...</string>
+    <string name="reload_oauth_button_text">Перезапустить авторизацию OAuth</string>
 </resources>

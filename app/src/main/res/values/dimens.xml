@@ -40,5 +40,9 @@
     <dimen name="forks_commits_title_text_size">20sp</dimen>
     <dimen name="forks_commits_title_margin">8dp</dimen>
     <dimen name="forks_commits_recycler_margin">8dp</dimen>
+    <dimen name="oauth_error_message_text_size">20sp</dimen>
+    <dimen name="loading_text_text_size">20sp</dimen>
+    <dimen name="oauth_error_message_margin">8dp</dimen>
+    <dimen name="repo_name_margin_end">8dp</dimen>
 
 </resources>

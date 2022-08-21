@@ -3,6 +3,7 @@ package com.github.oauth.repositories.githuboauthreposview.view.repos
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
@@ -44,6 +45,8 @@ class ReposFragment: MvpAppCompatFragment(R.layout.fragment_repos), ReposView, B
         /** Установка списка репозиториев пользователя */
         binding.reposRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.reposRecycler.adapter = adapter
+
+        Toast.makeText(requireContext(), "${userChoose.getNumberLimitRequest()}", Toast.LENGTH_SHORT).show()
     }
 
     override fun showLoading() {

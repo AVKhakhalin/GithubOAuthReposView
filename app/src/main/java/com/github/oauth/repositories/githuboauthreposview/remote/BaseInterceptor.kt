@@ -1,16 +1,26 @@
 package com.github.oauth.repositories.githuboauthreposview.remote
 
 import android.util.Log
+import com.github.oauth.repositories.githuboauthreposview.app.App
+import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
+import com.github.oauth.repositories.githuboauthreposview.utils.LIMIT_REQUEST_TAG
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
+import com.github.oauth.repositories.githuboauthreposview.utils.REMAINING_REQUEST_TAG
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
+import javax.inject.Inject
 
 /**
  * Custom interceptor to intercept basic responses and to show basic errors to the user
  */
-class BaseInterceptor private constructor(): Interceptor {
+class BaseInterceptor: Interceptor {
+    /* Исходные данные */ //region
+    // Класс для временного хранения пользовательских данных
+    private val userChoose: UserChooseRepository = App.instance.appComponent.userChoose()
+    // Код результата запроса
     private var responseCode: Int = 0
+    //endregion
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -25,6 +35,15 @@ class BaseInterceptor private constructor(): Interceptor {
         Log.d(LOG_TAG, "Временный id: ${response.headers["x-github-request-id"]}")
         Log.d(LOG_TAG, "Дата запроса: ${response.headers["date"]}")
         Log.d(LOG_TAG, "Код результата запроса: ${getResponseCode()}")
+        // Установка лимита запросов
+        response.headers[LIMIT_REQUEST_TAG]?.let {
+            userChoose.setNumberLimitRequest(it.toInt())
+        }
+        // Установка количества оставшихся запросов
+        response.headers[REMAINING_REQUEST_TAG]?.let {
+            userChoose.setRemainingRequest(it.toInt())
+        }
+        Log.d(LOG_TAG, "ПРОВЕРКА: ${userChoose.getGithubUserModel().login}")
         return response
     }
 
@@ -47,10 +66,5 @@ class BaseInterceptor private constructor(): Interceptor {
         CLIENT_ERROR,
         SERVER_ERROR,
         UNDEFINED_ERROR
-    }
-
-    companion object {
-        val interceptor: BaseInterceptor
-            get() = BaseInterceptor()
     }
 }

@@ -1,18 +1,12 @@
 package com.github.oauth.repositories.githuboauthreposview.view.users
 
 import android.util.Log
-import android.widget.Toast
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.UsersScopeContainer
-import com.github.oauth.repositories.githuboauthreposview.domain.GithubRepoRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubUserRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
-import com.github.oauth.repositories.githuboauthreposview.domain.cache.GithubUserCache
-import com.github.oauth.repositories.githuboauthreposview.domain.cache.GithubUserCacheImpl
-import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
-import com.github.oauth.repositories.githuboauthreposview.utils.connectivity.NetworkStatus
 import com.github.oauth.repositories.githuboauthreposview.utils.resources.ResourcesProvider
 import com.github.oauth.repositories.githuboauthreposview.view.screens.AppScreens
 import com.github.terrakok.cicerone.Router
@@ -38,6 +32,10 @@ class UsersPresenter @Inject constructor(
 
     fun onRepoClicked() {
         router.navigateTo(appScreens.repoScreen())
+    }
+
+    fun reloadOAuth() {
+        router.replaceScreen(appScreens.usersScreen())
     }
 
     private fun setUserData(userLogin: String) {

@@ -12,9 +12,10 @@
 
     <TextView
         android:id="@+id/repo_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/repo_name_margin_start"
+        android:layout_marginEnd="@dimen/repo_name_margin_end"
         android:textColor="@color/black"
         android:textSize="@dimen/repo_name_text_size"
         android:textIsSelectable="true"

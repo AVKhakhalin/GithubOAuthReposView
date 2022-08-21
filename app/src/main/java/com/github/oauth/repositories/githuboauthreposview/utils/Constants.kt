@@ -12,8 +12,12 @@ const val EMPTY_NAME_MASK: String = "mine"
 const val LOGOUT_MASK_ONE: String = "https://github.com"
 const val LOGOUT_MASK_TWO: String = "https://github.com/"
 const val BASE_URL = "BASE_URL"
-const val URL_TO_PING: String = "https://github.com"
+const val URL_AUTHORISE_TO_PING: String = "http://githuboauth.ddns.net"
+const val URL_GITHUB_TO_PING: String = "https://github.com"
 const val TIME_WAIT_OKHTTP_RESPONSE: Long = 200000
+const val READ_TIMEOUT: Int = 10000
+const val LIMIT_REQUEST_TAG: String = "x-ratelimit-limit"
+const val REMAINING_REQUEST_TAG: String = "x-ratelimit-remaining"
 // SharedPreferences
 const val SHARED_PREFERENCES_KEY: String = "Shared Preferences"
 const val SHARED_PREFERENCES_USER_LOGIN: String = "Shared Preferences User Login"
@@ -21,3 +25,9 @@ const val SHARED_PREFERENCES_USER_LOGIN: String = "Shared Preferences User Login
 const val IMAGE_QUALITY: Int = 100
 const val IMAGE_FORMAT: String = "jpg"
 const val IMAGE_CACHE_FOLDER_NAME: String = "CacheAvatars"
+// Типы сообщений об ошибках
+enum class MAIN_ERRORS {
+    NO_INTERNET,
+    OAUTH_SERVER_ERROR,
+    GITHUB_SERVER_ERROR
+}

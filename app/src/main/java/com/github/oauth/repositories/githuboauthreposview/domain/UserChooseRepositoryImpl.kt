@@ -19,15 +19,16 @@ class UserChooseRepositoryImpl: UserChooseRepository {
             RoomGithubCommitInfoAuthorModel("", "")
         ))
     private var commits: List<GithubCommitModel> = listOf()
+    // Количество запросов (разрешённых и оставшихся)
+    private var numberLimitRequests: Int = -1
+    private var numberRemainingRequests: Int = -1
     //endregion
 
     //region Методы для работы с пользователем
     override fun setGithubUserModel(githubUserModel: GithubUserModel) {
         this.githubUserModel = githubUserModel
     }
-    override fun getGithubUserModel(): GithubUserModel {
-        return githubUserModel
-    }
+    override fun getGithubUserModel(): GithubUserModel = githubUserModel
     //endregion
 
     //region Методы для работы с репозиториями
@@ -37,9 +38,7 @@ class UserChooseRepositoryImpl: UserChooseRepository {
     override fun setGithubReposModel(repos: List<GithubRepoModel>) {
         this.repos = repos
     }
-    override fun getGithubRepoModel(): GithubRepoModel {
-        return githubRepoModel
-    }
+    override fun getGithubRepoModel(): GithubRepoModel = githubRepoModel
     //endregion
 
     //region Методы для работы с коммитами
@@ -49,8 +48,17 @@ class UserChooseRepositoryImpl: UserChooseRepository {
     override fun setGithubCommitsModel(commits: List<GithubCommitModel>) {
         this.commits = commits
     }
-    override fun getGithubCommitModel(): GithubCommitModel {
-        return githubCommitModel
+    override fun getGithubCommitModel(): GithubCommitModel = githubCommitModel
+    //endregion
+
+    //region Методы для работы с количеством запросов на github.com
+    override fun setNumberLimitRequest(numberLimitRequests: Int) {
+        this.numberLimitRequests = numberLimitRequests
     }
+    override fun getNumberLimitRequest(): Int = numberLimitRequests
+    override fun setRemainingRequest(numberRemainingRequests: Int) {
+        this.numberRemainingRequests = numberRemainingRequests
+    }
+    override fun getRemainingRequest(): Int = numberRemainingRequests
     //endregion
 }

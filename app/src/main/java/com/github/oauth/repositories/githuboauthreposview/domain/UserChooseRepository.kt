@@ -16,4 +16,11 @@ interface UserChooseRepository {
     fun setGithubCommitModel(githubCommitModel: GithubCommitModel)
     fun setGithubCommitsModel(repos: List<GithubCommitModel>)
     fun getGithubCommitModel(): GithubCommitModel
+    // Данные о количестве запросов на github.com
+    fun setNumberLimitRequest(numberLimitRequests: Int)
+    fun getNumberLimitRequest(): Int
+    fun setRemainingRequest(numberRemainingRequests: Int)
+    fun getRemainingRequest(): Int
+    // Данные о наличии связи сервером
+
 }
