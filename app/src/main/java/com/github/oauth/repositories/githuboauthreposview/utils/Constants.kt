@@ -18,14 +18,20 @@ const val TIME_WAIT_OKHTTP_RESPONSE: Long = 200000
 const val READ_TIMEOUT: Int = 10000
 const val LIMIT_REQUEST_TAG: String = "x-ratelimit-limit"
 const val REMAINING_REQUEST_TAG: String = "x-ratelimit-remaining"
+const val LAST_DATE_REQUEST_TAG: String = "date"
 // SharedPreferences
 const val SHARED_PREFERENCES_KEY: String = "Shared Preferences"
 const val SHARED_PREFERENCES_USER_LOGIN: String = "Shared Preferences User Login"
+const val SHARED_PREFERENCES_NUMBER_LIMIT_REQUESTS: String =
+    "Shared Preferences Number Limit Requests"
+const val SHARED_PREFERENCES_NUMBER_REMAINING_REQUESTS: String =
+    "Shared Preferences Number Remaining Requests"
+const val SHARED_PREFERENCES_LAST_DATE_REQUEST: String = "Shared Preferences Last Date Request"
 // Параметры сохранения аватарки пользователя
 const val IMAGE_QUALITY: Int = 100
 const val IMAGE_FORMAT: String = "jpg"
 const val IMAGE_CACHE_FOLDER_NAME: String = "CacheAvatars"
-// Типы сообщений об ошибках
+// Типы сообщений о критических ошибках
 enum class MAIN_ERRORS {
     NO_INTERNET,
     OAUTH_SERVER_ERROR,

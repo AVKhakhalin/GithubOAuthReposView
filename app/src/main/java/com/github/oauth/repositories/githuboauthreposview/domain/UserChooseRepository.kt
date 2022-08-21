@@ -19,8 +19,8 @@ interface UserChooseRepository {
     // Данные о количестве запросов на github.com
     fun setNumberLimitRequest(numberLimitRequests: Int)
     fun getNumberLimitRequest(): Int
-    fun setRemainingRequest(numberRemainingRequests: Int)
-    fun getRemainingRequest(): Int
-    // Данные о наличии связи сервером
-
+    fun setNumberRemainingRequest(numberRemainingRequests: Int)
+    fun getNumberRemainingRequest(): Int
+    fun setLastDateRequest(lastDateRequest: String)
+    fun getLastDateRequest(): String
 }

@@ -14,10 +14,7 @@ import com.github.oauth.repositories.githuboauthreposview.db.AppDatabase
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
-import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
-import com.github.oauth.repositories.githuboauthreposview.utils.MAIN_ERRORS
-import com.github.oauth.repositories.githuboauthreposview.utils.SHARED_PREFERENCES_KEY
-import com.github.oauth.repositories.githuboauthreposview.utils.SHARED_PREFERENCES_USER_LOGIN
+import com.github.oauth.repositories.githuboauthreposview.utils.*
 import com.github.oauth.repositories.githuboauthreposview.view.base.BackButtonListener
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
@@ -61,7 +58,8 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
         presenter.isStoragePermissionGranted(this@MainActivity)
         // Загрузка ранее сохранённых данных в SharedPreferences
         loadSavedData()
-        // Инициализации индикатора сообщений о критических ошибках
+        Toast.makeText(this, "${userChoose.getNumberLimitRequest()}\n${userChoose.getNumberRemainingRequest()}\n${userChoose.getLastDateRequest()}", Toast.LENGTH_SHORT).show()
+        // Инициализация индикатора сообщений о критических ошибках
         errorMessage = binding.criticalErrorMessage
 
         db.userDao.getAll()
@@ -112,6 +110,18 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
 
     override fun onPause() {
         super.onPause()
+        // Сохранение данных о дате и количестве оставшихся запросов
+        val sharedPreferences: SharedPreferences = this.getSharedPreferences(
+                SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
+        val sharedPreferencesEditor: SharedPreferences.Editor = sharedPreferences.edit()
+        sharedPreferencesEditor.putInt(SHARED_PREFERENCES_NUMBER_LIMIT_REQUESTS,
+            userChoose.getNumberLimitRequest())
+        sharedPreferencesEditor.putInt(SHARED_PREFERENCES_NUMBER_REMAINING_REQUESTS,
+            userChoose.getNumberRemainingRequest())
+        sharedPreferencesEditor.putString(SHARED_PREFERENCES_LAST_DATE_REQUEST,
+            userChoose.getLastDateRequest())
+        sharedPreferencesEditor.apply()
+        // Удаление навигатора
         navigatorHolder.removeNavigator()
     }
 
@@ -161,5 +171,11 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
         userChoose.setGithubUserModel(GithubUserModel("",
             sharedPreferences.getString(SHARED_PREFERENCES_USER_LOGIN, "").toString(),
             "", ""))
+        userChoose.setNumberLimitRequest(sharedPreferences.
+            getInt(SHARED_PREFERENCES_NUMBER_LIMIT_REQUESTS, -1))
+        userChoose.setNumberRemainingRequest(sharedPreferences.
+            getInt(SHARED_PREFERENCES_NUMBER_REMAINING_REQUESTS, -1))
+        userChoose.setLastDateRequest(sharedPreferences.
+            getString(SHARED_PREFERENCES_LAST_DATE_REQUEST, "").toString())
     }
 }

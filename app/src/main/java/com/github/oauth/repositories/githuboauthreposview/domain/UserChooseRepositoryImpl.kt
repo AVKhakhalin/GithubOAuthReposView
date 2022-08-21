@@ -22,6 +22,7 @@ class UserChooseRepositoryImpl: UserChooseRepository {
     // Количество запросов (разрешённых и оставшихся)
     private var numberLimitRequests: Int = -1
     private var numberRemainingRequests: Int = -1
+    private var lastDateRequest: String = ""
     //endregion
 
     //region Методы для работы с пользователем
@@ -56,9 +57,15 @@ class UserChooseRepositoryImpl: UserChooseRepository {
         this.numberLimitRequests = numberLimitRequests
     }
     override fun getNumberLimitRequest(): Int = numberLimitRequests
-    override fun setRemainingRequest(numberRemainingRequests: Int) {
+    override fun setNumberRemainingRequest(numberRemainingRequests: Int) {
         this.numberRemainingRequests = numberRemainingRequests
     }
-    override fun getRemainingRequest(): Int = numberRemainingRequests
+    override fun getNumberRemainingRequest(): Int = numberRemainingRequests
+    override fun setLastDateRequest(lastDateRequest: String) {
+        this.lastDateRequest = lastDateRequest
+    }
+    override fun getLastDateRequest(): String {
+        return lastDateRequest
+    }
     //endregion
 }

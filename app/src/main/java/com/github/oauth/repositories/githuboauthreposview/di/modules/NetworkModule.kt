@@ -59,7 +59,6 @@ class NetworkModule {
             .baseUrl(baseUrl)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
-//            .client(createOkHttpClient(interceptor(userChoose())))
             .client(createOkHttpClient(interceptor()))
             .build()
     }

@@ -3,13 +3,13 @@ package com.github.oauth.repositories.githuboauthreposview.remote
 import android.util.Log
 import com.github.oauth.repositories.githuboauthreposview.app.App
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
+import com.github.oauth.repositories.githuboauthreposview.utils.LAST_DATE_REQUEST_TAG
 import com.github.oauth.repositories.githuboauthreposview.utils.LIMIT_REQUEST_TAG
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
 import com.github.oauth.repositories.githuboauthreposview.utils.REMAINING_REQUEST_TAG
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
-import javax.inject.Inject
 
 /**
  * Custom interceptor to intercept basic responses and to show basic errors to the user
@@ -41,9 +41,14 @@ class BaseInterceptor: Interceptor {
         }
         // Установка количества оставшихся запросов
         response.headers[REMAINING_REQUEST_TAG]?.let {
-            userChoose.setRemainingRequest(it.toInt())
+            userChoose.setNumberRemainingRequest(it.toInt())
         }
-        Log.d(LOG_TAG, "ПРОВЕРКА: ${userChoose.getGithubUserModel().login}")
+        Log.d(LOG_TAG, "ПРОВЕРКА КОЛИЧЕСТВА ОСТАВШИХСЯ ЗАПРОСОВ: ${userChoose.getGithubUserModel().login}")
+        // Установка даты и времени последнего запроса
+        response.headers[LAST_DATE_REQUEST_TAG]?.let {
+            userChoose.setLastDateRequest(it.toString())
+        }
+        Log.d(LOG_TAG, "ПРОВЕРКА ДАТЫ ПОСЛЕДНЕГО ЗАПРОСА: ${userChoose.getLastDateRequest()}")
         return response
     }
 
