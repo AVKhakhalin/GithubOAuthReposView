@@ -35,7 +35,7 @@ class GithubCommitRetrofitImpl(
             .subscribeOn(Schedulers.single())
             .observeOn(Schedulers.single())
             .subscribe({
-                //Do something on successful completion of all requests
+                // Действия в случае успешной загрузке веток репозитория
                 val resultCommitsList: MutableList<GithubCommitModel> = mutableListOf()
                 val numberElaboratedBranches: AtomicInteger = AtomicInteger(0)
                 val uniqueElements: MutableSet<GithubCommitModel> = mutableSetOf()
@@ -64,21 +64,28 @@ class GithubCommitRetrofitImpl(
                         .subscribeOn(Schedulers.single())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            //Do something on successful completion of all requests
+                            // Действия при успешной загрузке коммитов
                             if (numberElaboratedBranches.incrementAndGet() == branchesList.size) {
-                                resultCommitsList.sortBy { it->
+                                // Сохранение признака загрузки информации
+                                // о коммитах для данного репозитория с сайта github.com
+                                userChoose.setIsCommitModelsUpdated(repoId)
+                                // Сортировка полученного списка коммитов по дате
+                                resultCommitsList.sortBy {
                                     it.commit.author.date
                                 }
+                                // Отображение полученных коммитов
                                 forksView.showCommits(resultCommitsList)
                             }
                         }) {
-                            //Do something on error completion of requests
-                            Log.d(LOG_TAG, "ОШИБКА КОММИТА 1: ${it.message}, Ошибка в userChoose: ${userChoose.getResponseCode()}")
+                            // Действия при ошибке в запросе коммитов
+                            Log.d(LOG_TAG, "ОШИБКА КОММИТА 1: ${it.message}, " +
+                                "Ошибка в userChoose: ${userChoose.getResponseCode()}")
                         }
                 }
             }) {
-                //Do something on error completion of requests
-                Log.d(LOG_TAG, "ОШИБКА КОММИТА 2: ${it.message}, Ошибка в userChoose: ${userChoose.getResponseCode()}")
+                // Действия при ошибке в запросах веток репозитория
+                Log.d(LOG_TAG, "ОШИБКА КОММИТА 2: ${it.message}, " +
+                    "Ошибка в userChoose: ${userChoose.getResponseCode()}")
             }
     }
 }

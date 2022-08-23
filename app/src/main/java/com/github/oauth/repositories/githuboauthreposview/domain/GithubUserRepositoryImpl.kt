@@ -13,7 +13,7 @@ class GithubUserRepositoryImpl(
     private val userChoose: UserChooseRepository
 ): GithubUserRepository {
     override fun getUser(login: String): Single<GithubUserModel> {
-        return if (networkStatus.isOnline())
+        return if ((networkStatus.isOnline()) && (!userChoose.getIsUserModelUpdated()))
             githubUserRetrofit.getRetrofitUser(login)
         else
             githubUserCache.getCacheUser(login)

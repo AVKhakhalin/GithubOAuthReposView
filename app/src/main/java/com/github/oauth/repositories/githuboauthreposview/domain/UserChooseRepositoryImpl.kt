@@ -30,6 +30,11 @@ class UserChooseRepositoryImpl: UserChooseRepository {
     private var numberRemainingRequests: Int = -1
     private var responseCode: ServerResponseStatusCode = ServerResponseStatusCode.SUCCESS
     private var requestsTimesList: CopyOnWriteArrayList<Long> = CopyOnWriteArrayList<Long>()
+    // Информация об обновлении имеющихся данных с сервера github.com
+    private var isUserModelUpdated: Boolean = false
+    private var isRepoModelListUpdated: Boolean = false
+    private var isCommitModelsUpdated: CopyOnWriteArrayList<CommitModelUpdated> =
+        CopyOnWriteArrayList<CommitModelUpdated>()
     //endregion
 
     //region Методы для работы с пользователем
@@ -72,33 +77,18 @@ class UserChooseRepositoryImpl: UserChooseRepository {
         this.responseCode = responseCode
     }
     override fun getResponseCode(): ServerResponseStatusCode = responseCode
-//    @Synchronized
     override fun setRequestTime(requestTime: Long) {
-        // Блок, синхронизированный с другими потоками
-//        synchronized(this) {
-            requestsTimesList.add(requestTime)
-            if (requestsTimesList.size > numberLimitRequests) {
-                getActualRequestsTimesList().forEachIndexed { index, it ->
-                    if (index == 0) requestsTimesList.clear()
-                    requestsTimesList.add(it)
-                }
+        requestsTimesList.add(requestTime)
+        if (requestsTimesList.size > numberLimitRequests) {
+            getActualRequestsTimesList().forEachIndexed { index, it ->
+                if (index == 0) requestsTimesList.clear()
+                requestsTimesList.add(it)
             }
-//        }
+        }
     }
-//    @Synchronized
     override fun getActualRequestsTimesList(): List<Long> {
-        // Блок, синхронизированный с другими потоками
-//        synchronized(this) {
-            val result = requestsTimesList.takeLastWhile { it > Date().time - MILLISECONDS_IN_HOUR }
-            Log.d(LOG_TAG, "   ДО СЕЛЕКЦИИ: $requestsTimesList")
-            Log.d(LOG_TAG, "ПОСЛЕ СЕЛЕКЦИИ: $result")
-    //        val result: MutableList<Long> = mutableListOf()
-    //        requestsTimesList.forEach {
-    //            if (it > Date().time - MILLISECONDS_IN_HOUR)
-    //                result.add(it)
-    //        }
-            return result
-//        }
+        val result = requestsTimesList.takeLastWhile { it > Date().time - MILLISECONDS_IN_HOUR }
+        return result
     }
 
     override fun getWaitingTime(): Pair<String, String> {
@@ -128,6 +118,53 @@ class UserChooseRepositoryImpl: UserChooseRepository {
             }
             Pair(if (waitingMinutes >= 0) waitingMinutes else 0,
                 if (waitingMilliseconds >= 0) waitingMilliseconds else 0)
+        }
+    }
+    //endregion
+
+    //region Информация об обновлении имеющихся данных с сервера github.com
+    override fun getIsUserModelUpdated(): Boolean {
+        return isUserModelUpdated
+    }
+    override fun setIsUserModelUpdated(isUserModelUpdated: Boolean) {
+        this.isUserModelUpdated = isUserModelUpdated
+    }
+    override fun getIsRepoModelListUpdated(): Boolean {
+        return isRepoModelListUpdated
+    }
+    override fun setIsRepoModelListUpdated(isRepoModelListUpdated: Boolean) {
+        this.isRepoModelListUpdated = isRepoModelListUpdated
+    }
+    override fun getIsCommitModelsUpdated(repoId: Int): Boolean {
+        var result: Boolean = false
+        if (isCommitModelsUpdated.size == 0) {
+            repos.forEach {
+                isCommitModelsUpdated.
+                    add(CommitModelUpdated(it.id, false))
+            }
+        } else {
+            for(index in 0 until isCommitModelsUpdated.size) {
+                if (isCommitModelsUpdated[index].repoId == repoId) {
+                    result = isCommitModelsUpdated[index].isCommitModelUpdated
+                    break
+                }
+            }
+        }
+        return result
+    }
+    override fun setIsCommitModelsUpdated(repoId: Int) {
+        if (isCommitModelsUpdated.size == 0) {
+            repos.forEach {
+                isCommitModelsUpdated.
+                add(CommitModelUpdated(it.id, it.id == repoId))
+            }
+        } else {
+            for(index in 0 until isCommitModelsUpdated.size) {
+                if (isCommitModelsUpdated[index].repoId == repoId) {
+                    isCommitModelsUpdated[index].isCommitModelUpdated = true
+                    break
+                }
+            }
         }
     }
     //endregion

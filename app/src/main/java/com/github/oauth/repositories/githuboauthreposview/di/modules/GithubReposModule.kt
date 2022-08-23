@@ -35,9 +35,10 @@ abstract class GithubReposModule {
         @Provides
         fun reposRetrofit(
             retrofitService: RetrofitService,
-            db: AppDatabase
+            db: AppDatabase,
+            userChoose: UserChooseRepository
         ): GithubRepoRetrofit {
-            return GithubRepoRetrofitImpl(retrofitService, db)
+            return GithubRepoRetrofitImpl(retrofitService, db, userChoose)
         }
 
         @ReposScope

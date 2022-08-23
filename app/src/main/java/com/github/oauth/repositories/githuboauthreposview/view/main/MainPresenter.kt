@@ -150,8 +150,8 @@ class MainPresenter @Inject constructor(
                     // Случай появления сети после её отключения,
                     // когда авторизация ещё не состоялась
                     } else if ((!isGoToUsersScreen) &&
-                            (userChoose.getGithubUserModel().login.isEmpty()) &&
-                            (resultPingAuthorise) && (resultPingGithub))  {
+                        (userChoose.getGithubUserModel().login.isEmpty()) &&
+                        (resultPingAuthorise) && (resultPingGithub))  {
                             withContext(Dispatchers.Main) {
                             // Переход на окно с выбором пользователя (авторизацией пользователя)
                             router.replaceScreen(appScreens.usersScreen())
@@ -182,10 +182,14 @@ class MainPresenter @Inject constructor(
                             isGoToUsersScreen = false
                         }
                     // Случай, когда исчерпаны все разрешённые бесплатные запросы
-                    } else if ((userChoose.getResponseCode() ==
-                        ServerResponseStatusCode.CLIENT_ERROR) &&
-                        (userChoose.getWaitingMinutes().first != 0L)) {
+//                    } else if ((userChoose.getResponseCode() ==
+//                        ServerResponseStatusCode.CLIENT_ERROR) &&
+//                        (userChoose.getWaitingMinutes().first != 0L)) {
+                    } else if (userChoose.getResponseCode() ==
+                        ServerResponseStatusCode.CLIENT_ERROR) {
                         // Отображение сообщения о том, что все разрешённые запросы закончились
+                        // и нужно подождать, чтобы появилась возможность
+                        // отправлять новые запросы на github.com
                         withContext(Dispatchers.Main) {
                             (view as MainActivity).showErrorMessage(MAIN_ERRORS.CLIENT_ERROR)
                             isGoToUsersScreen = false
@@ -194,6 +198,17 @@ class MainPresenter @Inject constructor(
                     } else {
                         withContext(Dispatchers.Main) {
                             (view as MainActivity).hideErrorMessage()
+                            // Если пользователь ещё не авторизовался,
+                            // то переход на страницу с его авторизацией
+                            if ((!isGoToUsersScreen) &&
+                                (userChoose.getGithubUserModel().login.isEmpty()) &&
+                                (resultPingAuthorise) && (resultPingGithub)) {
+                                // Переход на окно с выбором пользователя (авторизацией пользователя)
+                                router.replaceScreen(appScreens.usersScreen())
+                                (view as MainActivity).hideErrorMessage()
+                                isOnline = true
+                                isGoToUsersScreen = true
+                            }
                         }
                     }
                 } else {

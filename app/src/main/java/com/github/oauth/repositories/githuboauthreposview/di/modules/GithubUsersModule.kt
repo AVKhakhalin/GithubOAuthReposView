@@ -38,8 +38,9 @@ abstract class GithubUsersModule {
         fun usersRetrofit(
             retrofitService: RetrofitService,
             db: AppDatabase,
+            userChoose: UserChooseRepository
         ): GithubUserRetrofit {
-            return GithubUserRetrofitImpl(retrofitService, db)
+            return GithubUserRetrofitImpl(retrofitService, db, userChoose)
         }
 
         @UsersScope

@@ -3,6 +3,7 @@ package com.github.oauth.repositories.githuboauthreposview.domain.retrofit
 import android.util.Log
 import com.github.oauth.repositories.githuboauthreposview.db.AppDatabase
 import com.github.oauth.repositories.githuboauthreposview.db.model.RoomRepo
+import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
@@ -13,7 +14,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 class GithubRepoRetrofitImpl(
     private val retrofitService: RetrofitService,
-    private val db: AppDatabase
+    private val db: AppDatabase,
+    private val userChoose: UserChooseRepository
 ): GithubRepoRetrofit {
     override fun getRetrofitRepo(userLogin: String): Single<List<GithubRepoModel>> {
         return retrofitService.getRepos(userLogin)
@@ -25,12 +27,14 @@ class GithubRepoRetrofitImpl(
                         it.owner.login ?: "", it.owner.avatar_url  ?: "",
                         cutBranches(it.branches_url))
                 }
+                userChoose.setIsRepoModelListUpdated(true)
                 db.repoDao.insert(dbRepos)
                 .toSingle { repos }
             }
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
+                // Действия в случае ошибки в получении списка репозиториев
                 Log.d(LOG_TAG, "ОШИБКА РЕПОЗИТОРИЯ: ${it.message}")
             }
     }

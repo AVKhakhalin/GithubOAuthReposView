@@ -12,7 +12,7 @@ class GithubCommitRepositoryImpl(
     private val userChoose: UserChooseRepository
 ): GithubCommitRepository {
     override fun getCommits(repoId: Int, forksView: ForksView) {
-        if (networkStatus.isOnline())
+        if ((networkStatus.isOnline()) && (!userChoose.getIsCommitModelsUpdated(repoId)))
             githubCommitRetrofit.getRetrofitCommit(repoId, forksView)
         else
             githubCommitCache.getCacheCommit(repoId, forksView)

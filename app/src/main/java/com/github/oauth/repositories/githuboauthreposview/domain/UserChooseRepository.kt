@@ -1,6 +1,7 @@
 package com.github.oauth.repositories.githuboauthreposview.domain
 
 import android.widget.Toast
+import com.github.oauth.repositories.githuboauthreposview.model.CommitModelUpdated
 import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
@@ -32,4 +33,11 @@ interface UserChooseRepository {
     fun getActualRequestsTimesList(): List<Long>
     fun getWaitingTime(): Pair<String, String>
     fun getWaitingMinutes(): Pair<Long, Long>
+    // Информация об обновлении имеющихся данных с сервера github.com
+    fun getIsUserModelUpdated(): Boolean
+    fun setIsUserModelUpdated(isUserModelUpdated: Boolean)
+    fun getIsRepoModelListUpdated(): Boolean
+    fun setIsRepoModelListUpdated(isRepoModelListUpdated: Boolean)
+    fun getIsCommitModelsUpdated(repoId: Int): Boolean
+    fun setIsCommitModelsUpdated(repoId: Int)
 }

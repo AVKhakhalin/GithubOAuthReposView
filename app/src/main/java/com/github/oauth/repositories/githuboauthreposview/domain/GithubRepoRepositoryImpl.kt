@@ -13,7 +13,7 @@ class GithubRepoRepositoryImpl(
     private val userChoose: UserChooseRepository
 ): GithubRepoRepository {
     override fun getRepos(userLogin: String): Single<List<GithubRepoModel>> {
-        return if (networkStatus.isOnline()) {
+        return if ((networkStatus.isOnline()) && (!userChoose.getIsRepoModelListUpdated())) {
             githubRepoRetrofit.getRetrofitRepo(userLogin)
         } else {
             githubRepoCache.getCacheRepo(userLogin)
