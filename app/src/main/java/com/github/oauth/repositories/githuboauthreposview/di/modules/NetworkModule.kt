@@ -1,7 +1,9 @@
 package com.github.oauth.repositories.githuboauthreposview.di.modules
 
 import android.content.Context
-import com.github.oauth.repositories.githuboauthreposview.remote.BaseInterceptor.Companion.interceptor
+import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
+import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepositoryImpl
+import com.github.oauth.repositories.githuboauthreposview.remote.BaseInterceptor
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
 import com.github.oauth.repositories.githuboauthreposview.remote.createOkHttpClient
 import com.github.oauth.repositories.githuboauthreposview.utils.BASE_API_URL
@@ -13,8 +15,6 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -59,7 +59,7 @@ class NetworkModule {
             .baseUrl(baseUrl)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .client(createOkHttpClient(interceptor))
+            .client(createOkHttpClient(interceptor()))
             .build()
     }
 
@@ -67,5 +67,17 @@ class NetworkModule {
     @Provides
     fun networkStatus(context: Context): NetworkStatus {
         return NetworkStatus(context)
+    }
+
+    @Singleton
+    @Provides
+    fun interceptor(): Interceptor {
+        return BaseInterceptor()
+    }
+
+    @Singleton
+    @Provides
+    fun userChoose(): UserChooseRepository {
+        return UserChooseRepositoryImpl()
     }
 }

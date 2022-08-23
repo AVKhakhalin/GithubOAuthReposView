@@ -26,15 +26,16 @@ class GithubCommitRetrofitImpl(
                 userChoose.getGithubRepoModel().name}/branches"
         Log.d(LOG_TAG, branchesUrl)
         retrofitService.getBranches(branchesUrl)
-            .subscribeOn(Schedulers.single())
             .map { branches ->
                 val branchesNames = branches.map { branch ->
                     branch.name
                 }
                 branchesNames.forEach { branchesList.add(it) }
             }
+            .subscribeOn(Schedulers.single())
+            .observeOn(Schedulers.single())
             .subscribe({
-                //Do something on successful completion of all requests
+                // Действия в случае успешной загрузке веток репозитория
                 val resultCommitsList: MutableList<GithubCommitModel> = mutableListOf()
                 val numberElaboratedBranches: AtomicInteger = AtomicInteger(0)
                 val uniqueElements: MutableSet<GithubCommitModel> = mutableSetOf()
@@ -57,27 +58,37 @@ class GithubCommitRetrofitImpl(
                                     prevNumbers = uniqueElements.size
                                 }
                             }
+                            // Удаление старых данных о коммитах для текущего репозитория
+                            db.roomCommitDao.deleteByRepoId(repoId)
+                            // Добавление новых данных о коммитах для текущего репозитория
                             db.roomCommitDao.insert(dbCommits)
                                 .toSingle { commits }
                         }
                         .subscribeOn(Schedulers.single())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            //Do something on successful completion of all requests
+                            // Действия при успешной загрузке коммитов
                             if (numberElaboratedBranches.incrementAndGet() == branchesList.size) {
-                                resultCommitsList.sortBy { it->
+                                // Сохранение признака загрузки информации
+                                // о коммитах для данного репозитория с сайта github.com
+                                userChoose.setIsCommitModelsUpdated(repoId)
+                                // Сортировка полученного списка коммитов по дате
+                                resultCommitsList.sortBy {
                                     it.commit.author.date
                                 }
+                                // Отображение полученных коммитов
                                 forksView.showCommits(resultCommitsList)
                             }
                         }) {
-                            //Do something on error completion of requests
-                            Log.d(LOG_TAG, "${it.message}")
+                            // Действия при ошибке в запросе коммитов
+                            Log.d(LOG_TAG, "ОШИБКА КОММИТА 1: ${it.message}, " +
+                                "Ошибка в userChoose: ${userChoose.getResponseCode()}")
                         }
                 }
             }) {
-                //Do something on error completion of requests
-                Log.d(LOG_TAG, "${it.message}")
+                // Действия при ошибке в запросах веток репозитория
+                Log.d(LOG_TAG, "ОШИБКА КОММИТА 2: ${it.message}, " +
+                    "Ошибка в userChoose: ${userChoose.getResponseCode()}")
             }
     }
 }

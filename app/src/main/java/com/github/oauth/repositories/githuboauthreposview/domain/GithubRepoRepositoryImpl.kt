@@ -9,10 +9,11 @@ import io.reactivex.rxjava3.core.Single
 class GithubRepoRepositoryImpl(
     private val networkStatus: NetworkStatus,
     private val githubRepoRetrofit: GithubRepoRetrofit,
-    private val githubRepoCache: GithubRepoCache
+    private val githubRepoCache: GithubRepoCache,
+    private val userChoose: UserChooseRepository
 ): GithubRepoRepository {
     override fun getRepos(userLogin: String): Single<List<GithubRepoModel>> {
-        return if (networkStatus.isOnline()) {
+        return if ((networkStatus.isOnline()) && (!userChoose.getIsRepoModelListUpdated())) {
             githubRepoRetrofit.getRetrofitRepo(userLogin)
         } else {
             githubRepoCache.getCacheRepo(userLogin)

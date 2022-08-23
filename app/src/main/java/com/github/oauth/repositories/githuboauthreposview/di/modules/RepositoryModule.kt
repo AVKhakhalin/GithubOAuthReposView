@@ -14,12 +14,6 @@ class RepositoryModule {
 
     @Singleton
     @Provides
-    fun userChoose(): UserChooseRepository {
-        return UserChooseRepositoryImpl()
-    }
-
-    @Singleton
-    @Provides
     fun glide(): ImageLoader<ImageView> {
         return GlideImageLoaderImpl()
     }

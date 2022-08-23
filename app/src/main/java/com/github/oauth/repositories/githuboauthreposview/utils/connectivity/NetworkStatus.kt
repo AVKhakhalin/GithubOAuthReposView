@@ -9,10 +9,10 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 class NetworkStatus(context: Context) {
-
+    /* Исходные данные */ //region
     private val networkSubject: BehaviorSubject<Boolean> = BehaviorSubject.create()
-
     private val connectivityManager = context.getSystemService<ConnectivityManager>()
+    //endregion
 
     fun getNetworkSubject(): Observable<Boolean> {
         return networkSubject
@@ -25,7 +25,7 @@ class NetworkStatus(context: Context) {
 
         connectivityManager?.registerNetworkCallback(
             request,
-            object : ConnectivityManager.NetworkCallback() {
+            object: ConnectivityManager.NetworkCallback() {
                 /** Сеть есть уже сейчас */
                 override fun onAvailable(network: Network) {
                     networkSubject.onNext(true)

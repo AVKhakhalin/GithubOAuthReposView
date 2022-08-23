@@ -66,19 +66,33 @@
         app:layout_constraintTop_toBottomOf="@id/github_logout_btn"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/reload_oauth_button"
+        android:text="@string/reload_oauth_button_text"
+        android:textAllCaps="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <WebView
         android:id="@+id/web_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/zero_size"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reload_oauth_button"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ProgressBar
         android:id="@+id/loading_view"
-        android:visibility="gone"
         android:layout_width="@dimen/loading_view_width"
         android:layout_height="@dimen/loading_view_height"
         android:layout_gravity="center"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="@id/github_review_btn"
         app:layout_constraintBottom_toBottomOf="@id/github_review_btn"
         app:layout_constraintStart_toStartOf="@id/github_review_btn"

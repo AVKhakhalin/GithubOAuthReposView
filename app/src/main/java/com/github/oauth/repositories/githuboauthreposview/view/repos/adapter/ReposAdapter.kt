@@ -27,6 +27,7 @@ class ReposAdapter(
 
         fun showRepo(repo: GithubRepoModel) {
             vb.itemRepoContainer.setOnClickListener { itemClickListener(repo) }
+            vb.repoName.setOnClickListener { itemClickListener(repo) }
             vb.repoName.text = repo.name
         }
     }

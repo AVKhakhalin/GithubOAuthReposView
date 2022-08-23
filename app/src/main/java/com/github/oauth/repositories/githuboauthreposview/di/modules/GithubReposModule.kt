@@ -6,6 +6,7 @@ import com.github.oauth.repositories.githuboauthreposview.di.scope.ReposScope
 import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.ReposScopeContainer
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubRepoRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubRepoRepositoryImpl
+import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.cache.GithubRepoCache
 import com.github.oauth.repositories.githuboauthreposview.domain.cache.GithubRepoCacheImpl
 import com.github.oauth.repositories.githuboauthreposview.domain.retrofit.GithubRepoRetrofit
@@ -23,18 +24,21 @@ abstract class GithubReposModule {
         fun reposRepo(
             networkStatus: NetworkStatus,
             githubRepoRetrofit: GithubRepoRetrofit,
-            githubRepoCache: GithubRepoCache
+            githubRepoCache: GithubRepoCache,
+            userChoose: UserChooseRepository
         ): GithubRepoRepository {
-            return GithubRepoRepositoryImpl(networkStatus, githubRepoRetrofit, githubRepoCache)
+            return GithubRepoRepositoryImpl(networkStatus, githubRepoRetrofit,
+                githubRepoCache, userChoose)
         }
 
         @ReposScope
         @Provides
         fun reposRetrofit(
             retrofitService: RetrofitService,
-            db: AppDatabase
+            db: AppDatabase,
+            userChoose: UserChooseRepository
         ): GithubRepoRetrofit {
-            return GithubRepoRetrofitImpl(retrofitService, db)
+            return GithubRepoRetrofitImpl(retrofitService, db, userChoose)
         }
 
         @ReposScope

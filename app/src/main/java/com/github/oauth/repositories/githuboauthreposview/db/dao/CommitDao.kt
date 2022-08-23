@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 
 @Dao
-interface RoomDao {
+interface CommitDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(commit: RoomCommit): Completable
@@ -19,6 +19,9 @@ interface RoomDao {
 
     @Query("SELECT * FROM RoomCommit")
     fun getAll(): Single<List<RoomCommit>>
+
+    @Query("DELETE FROM RoomCommit WHERE repoId = :repoId")
+    fun deleteByRepoId(repoId: Int): Completable
 
     @Delete
     fun delete(commit: RoomCommit): Completable

@@ -38,10 +38,8 @@ class ReposPresenter @Inject constructor(
             .doOnSubscribe { viewState.showLoading() }
             .subscribe(
                 { repos ->
-                    viewState.showRepos(repos.sortedBy { it->
-                        it.name
-                    })
                     viewState.hideLoading()
+                    viewState.showRepos(repos.sortedBy { it.name })
                     userChoose.setGithubReposModel(repos)
                 }, {
                     Log.e(
@@ -57,7 +55,7 @@ class ReposPresenter @Inject constructor(
     fun onRepoClicked(repo: GithubRepoModel) {
         val correctRepo: GithubRepoModel = GithubRepoModel(repo.id, repo.name,
             repo.description ?: "", GithubRepoOwnerModel(repo.owner.id, repo.owner.login,
-            repo.owner.avatar_url), cutBranches(repo.branches_url),
+                repo.owner.avatar_url), cutBranches(repo.branches_url),
             repo.forksCount, repo.watchers_count)
         userChoose.setGithubRepoModel(correctRepo)
         Log.d(LOG_TAG, "Выбран репозиторий ${correctRepo.name}")

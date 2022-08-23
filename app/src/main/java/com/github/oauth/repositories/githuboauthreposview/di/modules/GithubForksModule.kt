@@ -25,9 +25,11 @@ abstract class GithubForksModule {
         fun commitsRepo(
             networkStatus: NetworkStatus,
             githubCommitRetrofit: GithubCommitRetrofit,
-            githubCommitCache: GithubCommitCache
+            githubCommitCache: GithubCommitCache,
+            userChoose: UserChooseRepository
         ): GithubCommitRepository {
-            return GithubCommitRepositoryImpl(networkStatus, githubCommitRetrofit, githubCommitCache)
+            return GithubCommitRepositoryImpl(networkStatus, githubCommitRetrofit,
+                githubCommitCache, userChoose)
         }
 
         @ForksScope

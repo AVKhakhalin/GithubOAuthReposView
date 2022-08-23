@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
 import com.github.oauth.repositories.githuboauthreposview.databinding.FragmentUsersBinding
+import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.utils.*
 import com.github.oauth.repositories.githuboauthreposview.utils.binding.viewBinding
 import com.github.oauth.repositories.githuboauthreposview.view.base.BackButtonListener
@@ -29,13 +30,16 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
     // binding
     private val binding by viewBinding<FragmentUsersBinding>()
     // Кнопки
+    lateinit var reloadOAuthButton: Button
     lateinit var loginButton: Button
     lateinit var logoutButton: Button
     lateinit var viewRepositoriesButton: Button
     // WebView
     lateinit var webView: WebView
+    // userChoose
+    private val userChoose: UserChooseRepository = App.instance.appComponent.userChoose()
     // CurrentUserLogin
-    private var userLogin: String = ""
+    private var userLogin: String = userChoose.getGithubUserModel().login
     //endregion
 
     companion object {
@@ -45,8 +49,8 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Загрузка данных из SharedPreferences
-        loadFromSharedPreferencesUserLogin()
+        // Получение обновлённых данных о пользователе
+        getAndSaveUserData(userLogin)
         // Инициализация WebView и кнопок
         initWebViewAndButtons()
     }
@@ -76,6 +80,7 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                         userLogin = requestUrl.substring(TARGET_USER_NAME_URL.length)
                         loginButton.visibility = View.INVISIBLE
                         logoutButton.visibility = View.VISIBLE
+                        reloadOAuthButton.visibility = View.GONE
                         view?.visibility = View.INVISIBLE
                         viewRepositoriesButton.text = "${requireContext().getString(
                             R.string.github_review_text_start)}$userLogin ${
@@ -86,6 +91,7 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                         (requestUrl == LOGOUT_MASK_TWO)) {
                         loginButton.visibility = View.VISIBLE
                         logoutButton.visibility = View.INVISIBLE
+                        reloadOAuthButton.visibility = View.GONE
                         viewRepositoriesButton.visibility = View.INVISIBLE
                         view?.visibility = View.INVISIBLE
                         viewRepositoriesButton.text =
@@ -98,6 +104,11 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                 return super.shouldOverrideUrlLoading(view, request)
             }
         }
+        reloadOAuthButton = binding.reloadOauthButton.also {
+            it.setOnClickListener {
+                presenter.reloadOAuth()
+            }
+        }
         logoutButton = binding.githubLogoutBtn.also {
             if (userLogin.isNotEmpty()) {
                 it.visibility = View.VISIBLE
@@ -108,6 +119,7 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                 viewRepositoriesButton.visibility = View.INVISIBLE
                 webView.loadUrl(LOGOUT_GITHUB)
                 webView.visibility = View.VISIBLE
+                reloadOAuthButton.visibility = View.VISIBLE
             }
         }
         viewRepositoriesButton = binding.githubReviewBtn.also {
@@ -132,6 +144,7 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
                 viewRepositoriesButton.visibility = View.INVISIBLE
                 webView.loadUrl(AUTHORISE_URL)
                 webView.visibility = View.VISIBLE
+                reloadOAuthButton.visibility = View.VISIBLE
             }
         }
     }
@@ -144,23 +157,13 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
     private fun saveToSharedPreferencesUserLogin(userLogin: String) {
         val sharedPreferences: SharedPreferences =
             requireContext().getSharedPreferences(
-                SHARED_PREFERENCES_KEY,
-                AppCompatActivity.MODE_PRIVATE
-            )
+                SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
         val sharedPreferencesEditor: SharedPreferences.Editor = sharedPreferences.edit()
         sharedPreferencesEditor.putString(SHARED_PREFERENCES_USER_LOGIN, userLogin)
         sharedPreferencesEditor.apply()
     }
 
-    // Загрузка данных из SharedPreferences
-    private fun loadFromSharedPreferencesUserLogin() {
-        val sharedPreferences: SharedPreferences =
-            requireContext().getSharedPreferences(
-                SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
-        userLogin = sharedPreferences.getString(SHARED_PREFERENCES_USER_LOGIN, "").toString()
-        getAndSaveUserData(userLogin)
-    }
-
+    // Получение обновлённых данных о пользователе
     override fun getAndSaveUserData(userLogin: String) {
         presenter.getGithubUserInfo(userLogin)
     }
