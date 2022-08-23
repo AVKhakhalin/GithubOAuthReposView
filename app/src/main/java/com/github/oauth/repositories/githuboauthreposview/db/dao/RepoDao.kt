@@ -17,6 +17,9 @@ interface RepoDao {
     @Query("SELECT * FROM RoomRepo")
     fun getAll(): Single<List<RoomRepo>>
 
+    @Query("DELETE FROM RoomRepo WHERE login = :userLogin")
+    fun deleteByUserLogin(userLogin: String): Completable
+
     @Query("SELECT * FROM RoomRepo WHERE id = :repoId")
     fun getById(repoId: String): Single<List<RoomRepo>>
 

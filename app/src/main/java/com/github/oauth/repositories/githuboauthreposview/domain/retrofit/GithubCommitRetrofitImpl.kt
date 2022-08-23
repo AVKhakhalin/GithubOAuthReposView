@@ -58,6 +58,9 @@ class GithubCommitRetrofitImpl(
                                     prevNumbers = uniqueElements.size
                                 }
                             }
+                            // Удаление старых данных о коммитах для текущего репозитория
+                            db.roomCommitDao.deleteByRepoId(repoId)
+                            // Добавление новых данных о коммитах для текущего репозитория
                             db.roomCommitDao.insert(dbCommits)
                                 .toSingle { commits }
                         }

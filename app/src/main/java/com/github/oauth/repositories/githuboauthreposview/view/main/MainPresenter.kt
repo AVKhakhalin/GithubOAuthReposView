@@ -182,11 +182,9 @@ class MainPresenter @Inject constructor(
                             isGoToUsersScreen = false
                         }
                     // Случай, когда исчерпаны все разрешённые бесплатные запросы
-//                    } else if ((userChoose.getResponseCode() ==
-//                        ServerResponseStatusCode.CLIENT_ERROR) &&
-//                        (userChoose.getWaitingMinutes().first != 0L)) {
-                    } else if (userChoose.getResponseCode() ==
-                        ServerResponseStatusCode.CLIENT_ERROR) {
+                    } else if ((userChoose.getResponseCode() ==
+                        ServerResponseStatusCode.CLIENT_ERROR) &&
+                        (userChoose.getWaitingMinutes().first != 0L)) {
                         // Отображение сообщения о том, что все разрешённые запросы закончились
                         // и нужно подождать, чтобы появилась возможность
                         // отправлять новые запросы на github.com

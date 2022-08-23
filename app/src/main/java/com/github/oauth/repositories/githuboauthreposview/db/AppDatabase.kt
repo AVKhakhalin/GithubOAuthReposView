@@ -20,7 +20,7 @@ import com.github.oauth.repositories.githuboauthreposview.utils.DATABASE_NAME
 abstract class AppDatabase: RoomDatabase() {
     abstract val userDao: UserDao
     abstract val repoDao: RepoDao
-    abstract val roomCommitDao: RoomDao
+    abstract val roomCommitDao: CommitDao
 
     companion object {
         @Volatile // All threads have immediate access to this property

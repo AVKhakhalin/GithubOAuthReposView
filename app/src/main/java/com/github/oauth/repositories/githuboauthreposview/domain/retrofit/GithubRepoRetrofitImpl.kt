@@ -27,7 +27,11 @@ class GithubRepoRetrofitImpl(
                         it.owner.login ?: "", it.owner.avatar_url  ?: "",
                         cutBranches(it.branches_url))
                 }
+                // Установка признака обновления информации о репозиториях пользователя
                 userChoose.setIsRepoModelListUpdated(true)
+                // Удаление старой информации о репозиториях пользователя
+                db.repoDao.deleteByUserLogin(userLogin)
+                // Добавление новой информации о репозиториях пользователя
                 db.repoDao.insert(dbRepos)
                 .toSingle { repos }
             }
