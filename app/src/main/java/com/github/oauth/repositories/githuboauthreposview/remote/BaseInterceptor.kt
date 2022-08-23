@@ -1,12 +1,10 @@
 package com.github.oauth.repositories.githuboauthreposview.remote
 
+import android.annotation.SuppressLint
 import android.util.Log
 import com.github.oauth.repositories.githuboauthreposview.app.App
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
-import com.github.oauth.repositories.githuboauthreposview.utils.LAST_DATE_REQUEST_TAG
-import com.github.oauth.repositories.githuboauthreposview.utils.LIMIT_REQUEST_TAG
-import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
-import com.github.oauth.repositories.githuboauthreposview.utils.REMAINING_REQUEST_TAG
+import com.github.oauth.repositories.githuboauthreposview.utils.*
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
@@ -22,6 +20,7 @@ class BaseInterceptor: Interceptor {
     private var responseCode: Int = 0
     //endregion
 
+    @SuppressLint("SimpleDateFormat")
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
@@ -43,12 +42,12 @@ class BaseInterceptor: Interceptor {
         response.headers[REMAINING_REQUEST_TAG]?.let {
             userChoose.setNumberRemainingRequest(it.toInt())
         }
-        Log.d(LOG_TAG, "ПРОВЕРКА КОЛИЧЕСТВА ОСТАВШИХСЯ ЗАПРОСОВ: ${userChoose.getGithubUserModel().login}")
-        // Установка даты и времени последнего запроса
+        // Установка времени последнего запроса
         response.headers[LAST_DATE_REQUEST_TAG]?.let {
-            userChoose.setLastDateRequest(it.toString())
+            userChoose.setRequestTime(convertStringDateToDate(it))
         }
-        Log.d(LOG_TAG, "ПРОВЕРКА ДАТЫ ПОСЛЕДНЕГО ЗАПРОСА: ${userChoose.getLastDateRequest()}")
+        // Установка кода результата запроса
+        userChoose.setResponseCode(getResponseCode())
         return response
     }
 
@@ -62,14 +61,5 @@ class BaseInterceptor: Interceptor {
             5 -> statusCode = ServerResponseStatusCode.SERVER_ERROR
         }
         return statusCode
-    }
-
-    enum class ServerResponseStatusCode {
-        INFO,
-        SUCCESS,
-        REDIRECTION,
-        CLIENT_ERROR,
-        SERVER_ERROR,
-        UNDEFINED_ERROR
     }
 }

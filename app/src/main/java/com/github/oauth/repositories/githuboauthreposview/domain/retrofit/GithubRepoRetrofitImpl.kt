@@ -1,10 +1,13 @@
 package com.github.oauth.repositories.githuboauthreposview.domain.retrofit
 
+import android.util.Log
 import com.github.oauth.repositories.githuboauthreposview.db.AppDatabase
 import com.github.oauth.repositories.githuboauthreposview.db.model.RoomRepo
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
+import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
 import com.github.oauth.repositories.githuboauthreposview.utils.cutBranches
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -26,5 +29,9 @@ class GithubRepoRetrofitImpl(
                 .toSingle { repos }
             }
             .subscribeOn(Schedulers.single())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError {
+                Log.d(LOG_TAG, "ОШИБКА РЕПОЗИТОРИЯ: ${it.message}")
+            }
     }
 }

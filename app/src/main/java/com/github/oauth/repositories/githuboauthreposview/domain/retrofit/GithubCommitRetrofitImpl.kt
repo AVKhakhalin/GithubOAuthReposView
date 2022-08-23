@@ -26,13 +26,14 @@ class GithubCommitRetrofitImpl(
                 userChoose.getGithubRepoModel().name}/branches"
         Log.d(LOG_TAG, branchesUrl)
         retrofitService.getBranches(branchesUrl)
-            .subscribeOn(Schedulers.single())
             .map { branches ->
                 val branchesNames = branches.map { branch ->
                     branch.name
                 }
                 branchesNames.forEach { branchesList.add(it) }
             }
+            .subscribeOn(Schedulers.single())
+            .observeOn(Schedulers.single())
             .subscribe({
                 //Do something on successful completion of all requests
                 val resultCommitsList: MutableList<GithubCommitModel> = mutableListOf()
@@ -72,12 +73,12 @@ class GithubCommitRetrofitImpl(
                             }
                         }) {
                             //Do something on error completion of requests
-                            Log.d(LOG_TAG, "${it.message}")
+                            Log.d(LOG_TAG, "ОШИБКА КОММИТА 1: ${it.message}, Ошибка в userChoose: ${userChoose.getResponseCode()}")
                         }
                 }
             }) {
                 //Do something on error completion of requests
-                Log.d(LOG_TAG, "${it.message}")
+                Log.d(LOG_TAG, "ОШИБКА КОММИТА 2: ${it.message}, Ошибка в userChoose: ${userChoose.getResponseCode()}")
             }
     }
 }

@@ -29,21 +29,24 @@ class MainPresenter @Inject constructor(
     private val resourcesProvider: ResourcesProvider,
     private val userChoose: UserChooseRepository
 ): MvpPresenter<MainView>() {
+    /* Исходные данные */ // region
+    // Scope для корутин
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    //endregion
 
     override fun attachView(view: MainView?) {
         super.attachView(view)
         // Запуск постоянной проверки наличия сети
         restoreAppAfterNetworkOnline(view)
-        GlobalScope.launch(Dispatchers.IO) {
-            // Заходим в приложение, если в предыдущей сессии работы успешно автризовались
+        coroutineScope.launch(Dispatchers.IO) {
+            // Заходим в приложение, если в предыдущей сессии работы успешно авторизовались
             if (userChoose.getGithubUserModel().login.isNotEmpty()) {
                 withContext(Dispatchers.Main) {
                     router.replaceScreen(appScreens.usersScreen())
-                    (view as MainActivity).hideOAuthErrorMessage()
+                    (view as MainActivity).hideErrorMessage()
                 }
             } else {
-                val resultPingAuthorise: Boolean =
-                    pingResult(URL_AUTHORISE_TO_PING, false)
+                val resultPingAuthorise: Boolean = pingResult(URL_AUTHORISE_TO_PING, false)
                 val resultPingGithub: Boolean = pingResult(URL_GITHUB_TO_PING, true)
                 // Переход на окно с авторизацией,
                 // в случае наличия сети Интернет при старте приложения
@@ -51,24 +54,24 @@ class MainPresenter @Inject constructor(
                     (resultPingAuthorise) && (resultPingGithub))
                     withContext(Dispatchers.Main) {
                         router.replaceScreen(appScreens.usersScreen())
-                        (view as MainActivity).hideOAuthErrorMessage()
+                        (view as MainActivity).hideErrorMessage()
                     }
-                // Вывод сообщения об отсутсвии сети Интернет
+                // Вывод сообщения об отсутствии сети Интернет
                 else if (!networkStatus.isOnline()) {
                     withContext(Dispatchers.Main) {
-                        (view as MainActivity).showOAuthErrorMessage(MAIN_ERRORS.NO_INTERNET)
+                        (view as MainActivity).showErrorMessage(MAIN_ERRORS.NO_INTERNET)
                     }
                 }
-                // Вывод сообщения об отсутсвии доступа к серверу OAuth
+                // Вывод сообщения об отсутствии доступа к серверу OAuth
                 else if (!resultPingAuthorise) {
                     withContext(Dispatchers.Main) {
-                        (view as MainActivity).showOAuthErrorMessage(MAIN_ERRORS.OAUTH_SERVER_ERROR)
+                        (view as MainActivity).showErrorMessage(MAIN_ERRORS.OAUTH_SERVER_ERROR)
                     }
-                }
-                // Вывод сообщения об отсутсвии доступа к серверу github.com
-                else if (!resultPingGithub) {
+                // Вывод сообщения об отсутствии доступа к серверу github.com
+                } else if (!resultPingGithub) {
                     withContext(Dispatchers.Main) {
-                        (view as MainActivity).showOAuthErrorMessage(MAIN_ERRORS.GITHUB_SERVER_ERROR)
+                        (view as MainActivity).
+                            showErrorMessage(MAIN_ERRORS.GITHUB_SERVER_ERROR)
                     }
                 }
             }
@@ -120,7 +123,7 @@ class MainPresenter @Inject constructor(
     private fun restoreAppAfterNetworkOnline(view: MainView?) {
         var isOnline: Boolean = networkStatus.isOnline()
         var isGoToUsersScreen: Boolean = false
-        GlobalScope.launch(Dispatchers.IO) {
+        coroutineScope.launch(Dispatchers.IO) {
             while(true) {
                 if (networkStatus.isOnline()) {
                     val resultPingAuthorise: Boolean =
@@ -139,7 +142,7 @@ class MainPresenter @Inject constructor(
                             if (userChoose.getGithubUserModel().login.isEmpty()) {
                                 // Переход на окно с выбором пользователя (авторизацией пользователя)
                                 router.replaceScreen(appScreens.usersScreen())
-                                (view as MainActivity).hideOAuthErrorMessage()
+                                (view as MainActivity).hideErrorMessage()
                                 isGoToUsersScreen = true
                             }
                             isOnline = true
@@ -152,7 +155,7 @@ class MainPresenter @Inject constructor(
                             withContext(Dispatchers.Main) {
                             // Переход на окно с выбором пользователя (авторизацией пользователя)
                             router.replaceScreen(appScreens.usersScreen())
-                            (view as MainActivity).hideOAuthErrorMessage()
+                            (view as MainActivity).hideErrorMessage()
                             isOnline = true
                             isGoToUsersScreen = true
                         }
@@ -164,7 +167,7 @@ class MainPresenter @Inject constructor(
                         // что сервер для OAuth авторизации выключен
                         withContext(Dispatchers.Main) {
                             (view as MainActivity).
-                                showOAuthErrorMessage(MAIN_ERRORS.OAUTH_SERVER_ERROR)
+                                showErrorMessage(MAIN_ERRORS.OAUTH_SERVER_ERROR)
                             isGoToUsersScreen = false
                         }
                     // Случай появления сети после её отключения,
@@ -175,8 +178,22 @@ class MainPresenter @Inject constructor(
                         // что сервер github.com выключен
                         withContext(Dispatchers.Main) {
                             (view as MainActivity).
-                                showOAuthErrorMessage(MAIN_ERRORS.GITHUB_SERVER_ERROR)
+                                showErrorMessage(MAIN_ERRORS.GITHUB_SERVER_ERROR)
                             isGoToUsersScreen = false
+                        }
+                    // Случай, когда исчерпаны все разрешённые бесплатные запросы
+                    } else if ((userChoose.getResponseCode() ==
+                        ServerResponseStatusCode.CLIENT_ERROR) &&
+                        (userChoose.getWaitingMinutes().first != 0L)) {
+                        // Отображение сообщения о том, что все разрешённые запросы закончились
+                        withContext(Dispatchers.Main) {
+                            (view as MainActivity).showErrorMessage(MAIN_ERRORS.CLIENT_ERROR)
+                            isGoToUsersScreen = false
+                        }
+                    // Скрытие сообщения об ошибках
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            (view as MainActivity).hideErrorMessage()
                         }
                     }
                 } else {
@@ -189,6 +206,7 @@ class MainPresenter @Inject constructor(
                                     resourcesProvider.getString(R.string.github_no_internet),
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                (view as MainActivity).hideErrorMessage()
                                 isOnline = false
                             }
                         } else {
@@ -196,7 +214,7 @@ class MainPresenter @Inject constructor(
                             // что для OAuth авторизации нужен Интернет
                             withContext(Dispatchers.Main) {
                                 (view as MainActivity).
-                                showOAuthErrorMessage(MAIN_ERRORS.NO_INTERNET)
+                                showErrorMessage(MAIN_ERRORS.NO_INTERNET)
                                 isOnline = false
                             }
                         }

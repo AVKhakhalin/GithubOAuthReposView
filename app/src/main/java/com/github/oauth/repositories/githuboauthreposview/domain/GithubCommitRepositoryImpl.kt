@@ -8,7 +8,8 @@ import com.github.oauth.repositories.githuboauthreposview.view.forks.ForksView
 class GithubCommitRepositoryImpl(
     private val networkStatus: NetworkStatus,
     private val githubCommitRetrofit: GithubCommitRetrofit,
-    private val githubCommitCache: GithubCommitCache
+    private val githubCommitCache: GithubCommitCache,
+    private val userChoose: UserChooseRepository
 ): GithubCommitRepository {
     override fun getCommits(repoId: Int, forksView: ForksView) {
         if (networkStatus.isOnline())

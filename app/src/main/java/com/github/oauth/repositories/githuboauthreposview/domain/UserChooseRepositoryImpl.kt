@@ -1,6 +1,12 @@
 package com.github.oauth.repositories.githuboauthreposview.domain
 
+import android.util.Log
 import com.github.oauth.repositories.githuboauthreposview.model.*
+import com.github.oauth.repositories.githuboauthreposview.utils.*
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.TimeUnit
 
 class UserChooseRepositoryImpl: UserChooseRepository {
     /** Исходные данные */ //region
@@ -20,9 +26,10 @@ class UserChooseRepositoryImpl: UserChooseRepository {
         ))
     private var commits: List<GithubCommitModel> = listOf()
     // Количество запросов (разрешённых и оставшихся)
-    private var numberLimitRequests: Int = -1
+    private var numberLimitRequests: Int = DEFAULT_NUMBER_GITHUB_LIMIT_REQUEST
     private var numberRemainingRequests: Int = -1
-    private var lastDateRequest: String = ""
+    private var responseCode: ServerResponseStatusCode = ServerResponseStatusCode.SUCCESS
+    private var requestsTimesList: CopyOnWriteArrayList<Long> = CopyOnWriteArrayList<Long>()
     //endregion
 
     //region Методы для работы с пользователем
@@ -61,11 +68,67 @@ class UserChooseRepositoryImpl: UserChooseRepository {
         this.numberRemainingRequests = numberRemainingRequests
     }
     override fun getNumberRemainingRequest(): Int = numberRemainingRequests
-    override fun setLastDateRequest(lastDateRequest: String) {
-        this.lastDateRequest = lastDateRequest
+    override fun setResponseCode(responseCode: ServerResponseStatusCode) {
+        this.responseCode = responseCode
     }
-    override fun getLastDateRequest(): String {
-        return lastDateRequest
+    override fun getResponseCode(): ServerResponseStatusCode = responseCode
+//    @Synchronized
+    override fun setRequestTime(requestTime: Long) {
+        // Блок, синхронизированный с другими потоками
+//        synchronized(this) {
+            requestsTimesList.add(requestTime)
+            if (requestsTimesList.size > numberLimitRequests) {
+                getActualRequestsTimesList().forEachIndexed { index, it ->
+                    if (index == 0) requestsTimesList.clear()
+                    requestsTimesList.add(it)
+                }
+            }
+//        }
+    }
+//    @Synchronized
+    override fun getActualRequestsTimesList(): List<Long> {
+        // Блок, синхронизированный с другими потоками
+//        synchronized(this) {
+            val result = requestsTimesList.takeLastWhile { it > Date().time - MILLISECONDS_IN_HOUR }
+            Log.d(LOG_TAG, "   ДО СЕЛЕКЦИИ: $requestsTimesList")
+            Log.d(LOG_TAG, "ПОСЛЕ СЕЛЕКЦИИ: $result")
+    //        val result: MutableList<Long> = mutableListOf()
+    //        requestsTimesList.forEach {
+    //            if (it > Date().time - MILLISECONDS_IN_HOUR)
+    //                result.add(it)
+    //        }
+            return result
+//        }
+    }
+
+    override fun getWaitingTime(): Pair<String, String> {
+        val minutesAndMilliseconds: Pair<Long, Long> = getWaitingMinutes()
+        val futureTime: String = SimpleDateFormat(FORMAT_FUTURE_TIME,
+            Locale(LOCALE_LANGUAGE_DATE_FORMAT)).
+        format(Date().time + minutesAndMilliseconds.second)
+        return Pair(setCorrectMinutes(minutesAndMilliseconds.first), futureTime)
+    }
+
+    override fun getWaitingMinutes(): Pair<Long, Long> {
+        var waitingMilliseconds: Long = 0L
+        var waitingMinutes: Long = 0L
+        return if (requestsTimesList.size == 0) {
+            Pair(0L, 0L)
+        } else {
+            if (requestsTimesList[0] < requestsTimesList[requestsTimesList.size - 1]) {
+                waitingMilliseconds = MILLISECONDS_IN_HOUR - (Date().time - requestsTimesList[0])
+                waitingMinutes = TimeUnit.MINUTES.convert(
+                    waitingMilliseconds, TimeUnit.MILLISECONDS)
+
+            } else {
+                waitingMilliseconds = MILLISECONDS_IN_HOUR -
+                        (Date().time - requestsTimesList[requestsTimesList.size - 1])
+                waitingMinutes = TimeUnit.MINUTES.convert(
+                    waitingMilliseconds, TimeUnit.MILLISECONDS)
+            }
+            Pair(if (waitingMinutes >= 0) waitingMinutes else 0,
+                if (waitingMilliseconds >= 0) waitingMilliseconds else 0)
+        }
     }
     //endregion
 }

@@ -6,6 +6,7 @@ import com.github.oauth.repositories.githuboauthreposview.di.scope.UsersScope
 import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.UsersScopeContainer
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubUserRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubUserRepositoryImpl
+import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.cache.GithubUserCache
 import com.github.oauth.repositories.githuboauthreposview.domain.cache.GithubUserCacheImpl
 import com.github.oauth.repositories.githuboauthreposview.domain.retrofit.GithubUserRetrofit
@@ -25,9 +26,11 @@ abstract class GithubUsersModule {
         fun usersRepo(
             networkStatus: NetworkStatus,
             githubUserRetrofit: GithubUserRetrofit,
-            githubUsersCache: GithubUserCache
+            githubUsersCache: GithubUserCache,
+            userChoose: UserChooseRepository
         ): GithubUserRepository {
-            return GithubUserRepositoryImpl(networkStatus, githubUserRetrofit, githubUsersCache)
+            return GithubUserRepositoryImpl(networkStatus, githubUserRetrofit,
+                githubUsersCache, userChoose)
         }
 
         @UsersScope

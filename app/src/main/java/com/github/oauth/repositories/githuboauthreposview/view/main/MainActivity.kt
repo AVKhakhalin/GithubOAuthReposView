@@ -1,5 +1,6 @@
 package com.github.oauth.repositories.githuboauthreposview.view.main
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -46,7 +47,7 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
     // userChoose
     private val userChoose: UserChooseRepository = App.instance.appComponent.userChoose()
     // Индикатор критических сообщений об ошибках
-    lateinit var errorMessage: TextView
+    private lateinit var errorMessage: TextView
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +59,6 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
         presenter.isStoragePermissionGranted(this@MainActivity)
         // Загрузка ранее сохранённых данных в SharedPreferences
         loadSavedData()
-        Toast.makeText(this, "${userChoose.getNumberLimitRequest()}\n${userChoose.getNumberRemainingRequest()}\n${userChoose.getLastDateRequest()}", Toast.LENGTH_SHORT).show()
         // Инициализация индикатора сообщений о критических ошибках
         errorMessage = binding.criticalErrorMessage
 
@@ -112,14 +112,18 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
         super.onPause()
         // Сохранение данных о дате и количестве оставшихся запросов
         val sharedPreferences: SharedPreferences = this.getSharedPreferences(
-                SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
+            SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
         val sharedPreferencesEditor: SharedPreferences.Editor = sharedPreferences.edit()
         sharedPreferencesEditor.putInt(SHARED_PREFERENCES_NUMBER_LIMIT_REQUESTS,
             userChoose.getNumberLimitRequest())
         sharedPreferencesEditor.putInt(SHARED_PREFERENCES_NUMBER_REMAINING_REQUESTS,
             userChoose.getNumberRemainingRequest())
-        sharedPreferencesEditor.putString(SHARED_PREFERENCES_LAST_DATE_REQUEST,
-            userChoose.getLastDateRequest())
+        val requestsTimesList: List<Long> = userChoose.getActualRequestsTimesList()
+        sharedPreferencesEditor.putInt(SHARED_PREFERENCES_REQUESTS_TIMES_NUMBER,
+            requestsTimesList.size)
+        userChoose.getActualRequestsTimesList().forEachIndexed { index, it ->
+            sharedPreferencesEditor.putLong("$SHARED_PREFERENCES_REQUEST_TIME$index", it)
+        }
         sharedPreferencesEditor.apply()
         // Удаление навигатора
         navigatorHolder.removeNavigator()
@@ -140,7 +144,8 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
     }
 
     // Отобразить сообщение об ошибке, если выключен сервер для OAuth авторизации
-    fun showOAuthErrorMessage(mainError: MAIN_ERRORS) {
+    @SuppressLint("SetTextI18n")
+    fun showErrorMessage(mainError: MAIN_ERRORS) {
         when(mainError) {
             MAIN_ERRORS.OAUTH_SERVER_ERROR -> {
                 errorMessage.text = resources.getString(R.string.no_oauth_server_error_message_text)
@@ -151,13 +156,23 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
             MAIN_ERRORS.GITHUB_SERVER_ERROR -> {
                 errorMessage.text = resources.getString(R.string.no_github_server_error_message_text)
             }
+            MAIN_ERRORS.CLIENT_ERROR -> {
+                errorMessage.text =
+                    "${resources.getString(R.string.client_error_message_text_first)}${
+                    userChoose.getNumberLimitRequest()} ${resources.getString(
+                    R.string.client_error_message_text_middle)} ${
+                    userChoose.getWaitingTime().first}${resources.getString(
+                        R.string.client_error_message_text_last)} ${
+                        userChoose.getWaitingTime().second}${resources.getString(
+                        R.string.client_error_message_text_last_one)}"
+            }
         }
         binding.criticalErrorMessageContainer.visibility = View.VISIBLE
         binding.loadingText.visibility = View.INVISIBLE
         binding.loadingView.visibility = View.INVISIBLE
     }
     // Спрятать сообщение об ошибке, если включен сервер для OAuth авторизации
-    fun hideOAuthErrorMessage() {
+    fun hideErrorMessage() {
         binding.criticalErrorMessageContainer.visibility = View.GONE
         binding.loadingText.visibility = View.GONE
         binding.loadingView.visibility = View.GONE
@@ -166,8 +181,7 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
     // Загрузка ранее сохранённых данных в SharedPreferences
     private fun loadSavedData() {
         val sharedPreferences: SharedPreferences =
-            this.getSharedPreferences(
-                SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
+            this.getSharedPreferences(SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
         userChoose.setGithubUserModel(GithubUserModel("",
             sharedPreferences.getString(SHARED_PREFERENCES_USER_LOGIN, "").toString(),
             "", ""))
@@ -175,7 +189,11 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
             getInt(SHARED_PREFERENCES_NUMBER_LIMIT_REQUESTS, -1))
         userChoose.setNumberRemainingRequest(sharedPreferences.
             getInt(SHARED_PREFERENCES_NUMBER_REMAINING_REQUESTS, -1))
-        userChoose.setLastDateRequest(sharedPreferences.
-            getString(SHARED_PREFERENCES_LAST_DATE_REQUEST, "").toString())
+        val requestsTimesNumber: Int = sharedPreferences.
+            getInt(SHARED_PREFERENCES_REQUESTS_TIMES_NUMBER, 0)
+        repeat(requestsTimesNumber) { index ->
+            userChoose.setRequestTime(sharedPreferences.
+                getLong("$SHARED_PREFERENCES_REQUEST_TIME$index", 0))
+        }
     }
 }

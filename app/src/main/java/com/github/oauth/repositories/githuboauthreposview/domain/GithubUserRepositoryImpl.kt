@@ -9,7 +9,8 @@ import io.reactivex.rxjava3.core.Single
 class GithubUserRepositoryImpl(
     private val networkStatus: NetworkStatus,
     private val githubUserRetrofit: GithubUserRetrofit,
-    private val githubUserCache: GithubUserCache
+    private val githubUserCache: GithubUserCache,
+    private val userChoose: UserChooseRepository
 ): GithubUserRepository {
     override fun getUser(login: String): Single<GithubUserModel> {
         return if (networkStatus.isOnline())
