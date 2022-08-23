@@ -34,6 +34,8 @@ interface UserChooseRepository {
     fun getWaitingTime(): Pair<String, String>
     fun getWaitingMinutes(): Pair<Long, Long>
     // Информация об обновлении имеющихся данных с сервера github.com
+    fun getIsAvatarUpdated(): Boolean
+    fun setIsAvatarUpdated(isAvatarUpdated: Boolean)
     fun getIsUserModelUpdated(): Boolean
     fun setIsUserModelUpdated(isUserModelUpdated: Boolean)
     fun getIsRepoModelListUpdated(): Boolean

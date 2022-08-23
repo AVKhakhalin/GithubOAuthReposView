@@ -9,10 +9,7 @@ import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.Fo
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubCommitRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
-import com.github.oauth.repositories.githuboauthreposview.utils.IMAGE_CACHE_FOLDER_NAME
-import com.github.oauth.repositories.githuboauthreposview.utils.IMAGE_FORMAT
-import com.github.oauth.repositories.githuboauthreposview.utils.IMAGE_QUALITY
-import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
+import com.github.oauth.repositories.githuboauthreposview.utils.*
 import com.github.oauth.repositories.githuboauthreposview.utils.connectivity.NetworkStatus
 import com.github.oauth.repositories.githuboauthreposview.utils.imageloader.ImageLoader
 import com.github.oauth.repositories.githuboauthreposview.utils.resources.ResourcesProvider
@@ -64,7 +61,10 @@ class ForksPresenter @Inject constructor(
     }
 
     fun loadAvatar(url: String, container: ImageView) {
-        if (networkStatus.isOnline()) {
+        if ((networkStatus.isOnline() &&
+            (userChoose.getResponseCode() != ServerResponseStatusCode.CLIENT_ERROR)) &&
+            (userChoose.getNumberRemainingRequest() > 0) &&
+            (!userChoose.getIsAvatarUpdated())) {
             glide.loadInto(url, container)
             file = File(
                 "${resourcesProvider.getContext().
@@ -92,6 +92,8 @@ class ForksPresenter @Inject constructor(
                         .get(), file
                 )
             }
+            // Сохранение признака обновления аватара пользователя
+            userChoose.setIsAvatarUpdated(true)
         } else {
             file = File(
                 "${resourcesProvider.getContext().

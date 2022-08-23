@@ -31,6 +31,7 @@ class UserChooseRepositoryImpl: UserChooseRepository {
     private var responseCode: ServerResponseStatusCode = ServerResponseStatusCode.SUCCESS
     private var requestsTimesList: CopyOnWriteArrayList<Long> = CopyOnWriteArrayList<Long>()
     // Информация об обновлении имеющихся данных с сервера github.com
+    private var isAvatarUpdated: Boolean = false
     private var isUserModelUpdated: Boolean = false
     private var isRepoModelListUpdated: Boolean = false
     private var isCommitModelsUpdated: CopyOnWriteArrayList<CommitModelUpdated> =
@@ -123,15 +124,15 @@ class UserChooseRepositoryImpl: UserChooseRepository {
     //endregion
 
     //region Информация об обновлении имеющихся данных с сервера github.com
-    override fun getIsUserModelUpdated(): Boolean {
-        return isUserModelUpdated
+    override fun getIsAvatarUpdated(): Boolean = isAvatarUpdated
+    override fun setIsAvatarUpdated(isAvatarUpdated: Boolean) {
+        this.isAvatarUpdated = isAvatarUpdated
     }
+    override fun getIsUserModelUpdated(): Boolean = isUserModelUpdated
     override fun setIsUserModelUpdated(isUserModelUpdated: Boolean) {
         this.isUserModelUpdated = isUserModelUpdated
     }
-    override fun getIsRepoModelListUpdated(): Boolean {
-        return isRepoModelListUpdated
-    }
+    override fun getIsRepoModelListUpdated(): Boolean = isRepoModelListUpdated
     override fun setIsRepoModelListUpdated(isRepoModelListUpdated: Boolean) {
         this.isRepoModelListUpdated = isRepoModelListUpdated
     }
