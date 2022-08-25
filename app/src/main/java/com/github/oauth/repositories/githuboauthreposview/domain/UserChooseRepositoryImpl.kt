@@ -1,6 +1,5 @@
 package com.github.oauth.repositories.githuboauthreposview.domain
 
-import android.util.Log
 import com.github.oauth.repositories.githuboauthreposview.model.*
 import com.github.oauth.repositories.githuboauthreposview.utils.*
 import java.text.SimpleDateFormat
@@ -13,6 +12,8 @@ class UserChooseRepositoryImpl: UserChooseRepository {
     // githubUserModel
     private var githubUserModel: GithubUserModel =
         GithubUserModel("", "", "", "")
+    // token
+    private var token: String = ""
     // githubRepoModel
     private var githubRepoModel: GithubRepoModel =
         GithubRepoModel(-1, "", "",
@@ -43,6 +44,15 @@ class UserChooseRepositoryImpl: UserChooseRepository {
         this.githubUserModel = githubUserModel
     }
     override fun getGithubUserModel(): GithubUserModel = githubUserModel
+    //endregion
+
+    //region Методы работы с токеном
+    override fun setToken(token: String) {
+        this.token = token
+    }
+    override fun getToken(): String {
+        return token
+    }
     //endregion
 
     //region Методы для работы с репозиториями

@@ -39,6 +39,7 @@ class UsersPresenter @Inject constructor(
     }
 
     private fun setUserData(userLogin: String) {
+        // Получение пользовательских данных с сайта github.com
         usersRepository.getUser(userLogin)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -55,6 +56,22 @@ class UsersPresenter @Inject constructor(
                         resourcesProvider.getString(R.string.error_not_user_data), e
                     )
                     viewState.hideLoading()
+                }
+            )
+        // Получение токена пользователя с сервера OAuth
+        usersRepository.getToken(userLogin)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { viewState.showLoading() }
+            .subscribe(
+                { token ->
+                    userChoose.setToken(token)
+                    Log.d(LOG_TAG, "Token: $token")
+                }, { e ->
+                    Log.e(
+                        LOG_TAG,
+                        "ОШИБКА: Токен не получен", e
+                    )
                 }
             )
     }

@@ -18,4 +18,12 @@ class GithubUserRepositoryImpl(
         else
             githubUserCache.getCacheUser(login)
     }
+
+    override fun getToken(login: String): Single<String> {
+        return if ((networkStatus.isOnline()) && (login.isNotEmpty()))
+            githubUserRetrofit.getRetrofitToken(login)
+        else
+            // TODO: Доделать кеш токена
+            githubUserRetrofit.getRetrofitToken(login)
+    }
 }

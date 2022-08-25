@@ -5,21 +5,27 @@ import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitMode
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
 import io.reactivex.rxjava3.core.Single
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Url
+import retrofit2.http.*
 
 interface RetrofitService {
+
+    @GET
+    fun getToken(@Url url: String): Single<String>
 
     @GET("/users/{user_login}")
     fun getUser(@Path("user_login") userLogin: String): Single<GithubUserModel>
 
+//    @GET("/user/repos")
     @GET("/users/{user_login}/repos")
-    fun getRepos(@Path("user_login") userLogin: String): Single<List<GithubRepoModel>>
+    fun getRepos(@Header("access_token") accessToken: String,
+                 @Path("user_login") userLogin: String): Single<List<GithubRepoModel>>
+//                 ): Single<List<GithubRepoModel>>
 
     @GET
-    fun getBranches(@Url url: String): Single<List<GithubBrancheModel>>
+    fun getBranches(@Header("access_token") accessToken: String,
+                    @Url url: String): Single<List<GithubBrancheModel>>
 
     @GET
-    fun getCommits(@Url url: String): Single<List<GithubCommitModel>>
+    fun getCommits(@Header("access_token") accessToken: String,
+                   @Url url: String): Single<List<GithubCommitModel>>
 }

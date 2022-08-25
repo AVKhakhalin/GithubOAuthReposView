@@ -5,7 +5,9 @@ const val BASE_API_URL: String = "https://api.github.com"
 const val BASE_API_REPO_URL: String = "https://api.github.com/repos"
 const val LOG_TAG: String = "mylogs"
 const val DELAY_TIME: Long = 2000L
-const val AUTHORISE_URL: String = "https://github.com/login/oauth/authorize?client_id=a3c530e1e2f03aeb3bdf&redirect_uri=http://githuboauth.ddns.net/custom/oauth-github.php&scope=user&response_type=code&state="
+// Установка scope на доступ к закрытым и открытым репозиториям
+const val AUTHORISE_URL: String = "https://github.com/login/oauth/authorize?client_id=a3c530e1e2f03aeb3bdf&scope=repo"
+const val BASE_TOKEN_URL: String = "http://githuboauth.ddns.net/success/result.php?login="
 const val TARGET_USER_NAME_URL: String = "https://gist.github.com/"
 const val LOGOUT_GITHUB: String = "https://github.com/logout"
 const val EMPTY_NAME_MASK: String = "mine"

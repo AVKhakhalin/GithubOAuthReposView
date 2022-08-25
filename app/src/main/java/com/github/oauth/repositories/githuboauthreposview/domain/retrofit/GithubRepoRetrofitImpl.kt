@@ -18,7 +18,8 @@ class GithubRepoRetrofitImpl(
     private val userChoose: UserChooseRepository
 ): GithubRepoRetrofit {
     override fun getRetrofitRepo(userLogin: String): Single<List<GithubRepoModel>> {
-        return retrofitService.getRepos(userLogin)
+//        return retrofitService.getRepos(userChoose.getToken(), userLogin)
+        return retrofitService.getRepos(userChoose.getToken(), userLogin)
             .flatMap { repos ->
                 val dbRepos = repos.map {
                     RoomRepo(it.id, it.name ?: "",
