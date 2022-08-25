@@ -5,4 +5,5 @@ import io.reactivex.rxjava3.core.Single
 
 interface GithubUserRepository {
     fun getUser(login: String): Single<GithubUserModel>
+    fun getToken(login: String): Single<String>
 }

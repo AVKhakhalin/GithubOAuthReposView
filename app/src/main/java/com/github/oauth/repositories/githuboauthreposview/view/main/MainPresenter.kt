@@ -37,7 +37,7 @@ class MainPresenter @Inject constructor(
     override fun attachView(view: MainView?) {
         super.attachView(view)
         // Запуск постоянной проверки наличия сети
-        restoreAppAfterNetworkOnline(view)
+//        restoreAppAfterNetworkOnline(view)
         coroutineScope.launch(Dispatchers.IO) {
             // Заходим в приложение, если в предыдущей сессии работы успешно авторизовались
             if (userChoose.getGithubUserModel().login.isNotEmpty()) {

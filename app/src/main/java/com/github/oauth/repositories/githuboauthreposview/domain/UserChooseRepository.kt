@@ -14,6 +14,9 @@ interface UserChooseRepository {
     // Данные о пользователе
     fun setGithubUserModel(githubUserModel: GithubUserModel)
     fun getGithubUserModel(): GithubUserModel
+    // Данные о токене
+    fun setToken(token: String)
+    fun getToken(): String
     // Данные о репозиториях пользователя
     fun setGithubRepoModel(githubRepoModel: GithubRepoModel)
     fun setGithubReposModel(repos: List<GithubRepoModel>)

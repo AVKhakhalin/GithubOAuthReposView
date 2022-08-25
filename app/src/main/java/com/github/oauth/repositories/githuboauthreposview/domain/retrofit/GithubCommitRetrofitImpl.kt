@@ -24,8 +24,7 @@ class GithubCommitRetrofitImpl(
         val branchesUrl: String =
             "$BASE_API_REPO_URL/${userChoose.getGithubUserModel().login}/${
                 userChoose.getGithubRepoModel().name}/branches"
-        Log.d(LOG_TAG, branchesUrl)
-        retrofitService.getBranches(branchesUrl)
+        retrofitService.getBranches(userChoose.getToken(), branchesUrl)
             .map { branches ->
                 val branchesNames = branches.map { branch ->
                     branch.name
@@ -44,7 +43,7 @@ class GithubCommitRetrofitImpl(
                     val commitsUrl: String =
                         "$BASE_API_REPO_URL/${userChoose.getGithubUserModel().login}/${
                             userChoose.getGithubRepoModel().name}/commits?sha=$branch"
-                    retrofitService.getCommits(commitsUrl)
+                    retrofitService.getCommits(userChoose.getToken(), commitsUrl)
                         .flatMap { commits ->
                             val dbCommits = commits.map {
                                 RoomCommit(it.sha, repoId, it.commit.message,
