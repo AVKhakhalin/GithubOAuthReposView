@@ -6,7 +6,6 @@ import com.github.oauth.repositories.githuboauthreposview.db.model.RoomUser
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
-import com.github.oauth.repositories.githuboauthreposview.utils.BASE_API_REPO_URL
 import com.github.oauth.repositories.githuboauthreposview.utils.BASE_TOKEN_URL
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers

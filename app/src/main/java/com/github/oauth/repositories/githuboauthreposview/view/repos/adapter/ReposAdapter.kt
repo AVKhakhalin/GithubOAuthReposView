@@ -26,8 +26,7 @@ class ReposAdapter(
     inner class RepoViewHolder(private val vb: ItemRepoBinding): RecyclerView.ViewHolder(vb.root) {
 
         fun showRepo(repo: GithubRepoModel) {
-            vb.itemRepoContainer.setOnClickListener { itemClickListener(repo) }
-            vb.repoName.setOnClickListener { itemClickListener(repo) }
+            vb.itemClickContainer.setOnClickListener { itemClickListener(repo) }
             vb.repoName.text = repo.name
         }
     }

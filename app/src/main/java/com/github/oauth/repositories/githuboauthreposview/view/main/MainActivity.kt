@@ -11,16 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.app.App
 import com.github.oauth.repositories.githuboauthreposview.databinding.ActivityMainBinding
-import com.github.oauth.repositories.githuboauthreposview.db.AppDatabase
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
-import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
 import com.github.oauth.repositories.githuboauthreposview.utils.*
 import com.github.oauth.repositories.githuboauthreposview.view.base.BackButtonListener
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
@@ -36,12 +32,6 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
     private val presenter by moxyPresenter {
         App.instance.appComponent.mainPresenter()
     }
-    // Db
-    @Inject
-    lateinit var db: AppDatabase
-    // Retrofit
-    @Inject
-    lateinit var retrofitService: RetrofitService
     // Binding
     private lateinit var binding: ActivityMainBinding
     // userChoose
@@ -62,43 +52,6 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
         // Инициализация индикатора сообщений о критических ошибках
         errorMessage = binding.criticalErrorMessage
 
-        db.userDao.getAll()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()) // Указание, что результат нужно получить в основном потоке
-            .subscribe({
-                //Do something on successful completion of all requests
-                Toast.makeText(this, "Количество пользователей: ${it.size}", Toast.LENGTH_SHORT).show()
-            }) {
-                //Do something on error completion of requests
-                Log.d(LOG_TAG, "${it.message}")
-            }
-
-        db.repoDao.getAll()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()) // Указание, что результат нужно получить в основном потоке
-            .subscribe({
-                //Do something on successful completion of all requests
-                Toast.makeText(this, "Количество репозиториев: ${it.size}", Toast.LENGTH_SHORT).show()
-                if (it.isNotEmpty()) {
-                    Toast.makeText(this, "Количество репозиториев: ${it[0].login}", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }) {
-                //Do something on error completion of requests
-                Log.d(LOG_TAG, "${it.message}")
-            }
-
-        db.roomCommitDao.getAll()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()) // Указание, что результат нужно получить в основном потоке
-            .subscribe({
-                //Do something on successful completion of all requests
-                Toast.makeText(this, "Количество коммитов: ${it.size}", Toast.LENGTH_SHORT).show()
-            }) {
-                //Do something on error completion of requests
-                Log.d(LOG_TAG, "${it.message}")
-            }
-
         // Отображение содержимого окна
         setContentView(binding.root)
     }
@@ -111,20 +64,7 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
     override fun onPause() {
         super.onPause()
         // Сохранение данных о дате и количестве оставшихся запросов
-        val sharedPreferences: SharedPreferences = this.getSharedPreferences(
-            SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
-        val sharedPreferencesEditor: SharedPreferences.Editor = sharedPreferences.edit()
-        sharedPreferencesEditor.putInt(SHARED_PREFERENCES_NUMBER_LIMIT_REQUESTS,
-            userChoose.getNumberLimitRequest())
-        sharedPreferencesEditor.putInt(SHARED_PREFERENCES_NUMBER_REMAINING_REQUESTS,
-            userChoose.getNumberRemainingRequest())
-        val requestsTimesList: List<Long> = userChoose.getActualRequestsTimesList()
-        sharedPreferencesEditor.putInt(SHARED_PREFERENCES_REQUESTS_TIMES_NUMBER,
-            requestsTimesList.size)
-        userChoose.getActualRequestsTimesList().forEachIndexed { index, it ->
-            sharedPreferencesEditor.putLong("$SHARED_PREFERENCES_REQUEST_TIME$index", it)
-        }
-        sharedPreferencesEditor.apply()
+        saveToSharedPreferences()
         // Удаление навигатора
         navigatorHolder.removeNavigator()
     }
@@ -159,11 +99,13 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
             MAIN_ERRORS.CLIENT_ERROR -> {
                 errorMessage.text =
                     "${resources.getString(R.string.client_error_message_text_first)}${
-                    userChoose.getNumberLimitRequest()} ${resources.getString(
+                    userChoose.getNumberLimitRequest()} ${
+                        resources.getString(
                     R.string.client_error_message_text_middle)} ${
                     userChoose.getWaitingTime().first}${resources.getString(
                         R.string.client_error_message_text_last)} ${
-                        userChoose.getWaitingTime().second}${resources.getString(
+                        userChoose.getWaitingTime().second}${
+                            resources.getString(
                         R.string.client_error_message_text_last_one)}"
             }
         }
@@ -195,5 +137,25 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
             userChoose.setRequestTime(sharedPreferences.
                 getLong("$SHARED_PREFERENCES_REQUEST_TIME$index", 0))
         }
+        userChoose.setToken(sharedPreferences.getString(SHARED_PREFERENCES_AC_TOK, "").toString())
+    }
+
+    // Сохранение данных о дате и количестве оставшихся запросов
+    private fun saveToSharedPreferences() {
+        val sharedPreferences: SharedPreferences = this.getSharedPreferences(
+            SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
+        val sharedPreferencesEditor: SharedPreferences.Editor = sharedPreferences.edit()
+        sharedPreferencesEditor.putInt(SHARED_PREFERENCES_NUMBER_LIMIT_REQUESTS,
+            userChoose.getNumberLimitRequest())
+        sharedPreferencesEditor.putInt(SHARED_PREFERENCES_NUMBER_REMAINING_REQUESTS,
+            userChoose.getNumberRemainingRequest())
+        val requestsTimesList: List<Long> = userChoose.getActualRequestsTimesList()
+        sharedPreferencesEditor.putInt(SHARED_PREFERENCES_REQUESTS_TIMES_NUMBER,
+            requestsTimesList.size)
+        userChoose.getActualRequestsTimesList().forEachIndexed { index, it ->
+            sharedPreferencesEditor.putLong("$SHARED_PREFERENCES_REQUEST_TIME$index", it)
+        }
+        sharedPreferencesEditor.putString(SHARED_PREFERENCES_AC_TOK, userChoose.getToken())
+        sharedPreferencesEditor.apply()
     }
 }

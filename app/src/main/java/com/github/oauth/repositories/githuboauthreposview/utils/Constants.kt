@@ -36,6 +36,7 @@ const val SHARED_PREFERENCES_NUMBER_REMAINING_REQUESTS: String =
 const val SHARED_PREFERENCES_REQUESTS_TIMES_NUMBER: String =
     "Shared Preferences Requests Times Number"
 const val SHARED_PREFERENCES_REQUEST_TIME: String = "Shared Preferences Request Time_"
+const val SHARED_PREFERENCES_AC_TOK: String = "Shared Preferences Ac Tok"
 // Параметры сохранения аватарки пользователя
 const val IMAGE_QUALITY: Int = 100
 const val IMAGE_FORMAT: String = "jpg"

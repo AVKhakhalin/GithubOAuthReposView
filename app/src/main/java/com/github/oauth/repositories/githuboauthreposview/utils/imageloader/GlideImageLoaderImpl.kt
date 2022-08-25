@@ -3,7 +3,6 @@ package com.github.oauth.repositories.githuboauthreposview.utils.imageloader
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.github.oauth.repositories.githuboauthreposview.utils.connectivity.NetworkStatus
 
 class GlideImageLoaderImpl: ImageLoader<ImageView> {
 

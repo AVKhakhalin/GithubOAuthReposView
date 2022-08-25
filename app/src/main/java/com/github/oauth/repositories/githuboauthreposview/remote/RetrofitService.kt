@@ -5,7 +5,10 @@ import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitMode
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
 import io.reactivex.rxjava3.core.Single
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Path
+import retrofit2.http.Url
 
 interface RetrofitService {
 
