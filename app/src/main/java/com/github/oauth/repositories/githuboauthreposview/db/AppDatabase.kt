@@ -4,8 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.github.oauth.repositories.githuboauthreposview.db.dao.*
-import com.github.oauth.repositories.githuboauthreposview.db.model.*
+import com.github.oauth.repositories.githuboauthreposview.db.dao.CommitDao
+import com.github.oauth.repositories.githuboauthreposview.db.dao.RepoDao
+import com.github.oauth.repositories.githuboauthreposview.db.dao.UserDao
+import com.github.oauth.repositories.githuboauthreposview.db.model.RoomCommit
+import com.github.oauth.repositories.githuboauthreposview.db.model.RoomRepo
+import com.github.oauth.repositories.githuboauthreposview.db.model.RoomUser
 import com.github.oauth.repositories.githuboauthreposview.utils.DATABASE_NAME
 
 @Database(

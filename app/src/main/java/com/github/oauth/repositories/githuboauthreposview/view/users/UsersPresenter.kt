@@ -66,7 +66,6 @@ class UsersPresenter @Inject constructor(
             .subscribe(
                 { token ->
                     userChoose.setToken(token)
-                    Log.d(LOG_TAG, "Token: $token")
                 }, { e ->
                     Log.e(
                         LOG_TAG,

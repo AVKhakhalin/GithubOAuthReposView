@@ -27,10 +27,11 @@ abstract class GithubUsersModule {
             networkStatus: NetworkStatus,
             githubUserRetrofit: GithubUserRetrofit,
             githubUsersCache: GithubUserCache,
-            userChoose: UserChooseRepository
+            userChoose: UserChooseRepository,
+            resourcesProvider: ResourcesProvider
         ): GithubUserRepository {
             return GithubUserRepositoryImpl(networkStatus, githubUserRetrofit,
-                githubUsersCache, userChoose)
+                githubUsersCache, userChoose, resourcesProvider)
         }
 
         @UsersScope

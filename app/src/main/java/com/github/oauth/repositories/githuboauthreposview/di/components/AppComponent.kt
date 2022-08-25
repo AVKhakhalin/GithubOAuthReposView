@@ -2,7 +2,6 @@ package com.github.oauth.repositories.githuboauthreposview.di.components
 
 import com.github.oauth.repositories.githuboauthreposview.di.modules.*
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
-import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepositoryImpl
 import com.github.oauth.repositories.githuboauthreposview.view.main.MainActivity
 import com.github.oauth.repositories.githuboauthreposview.view.main.MainPresenter
 import dagger.Component

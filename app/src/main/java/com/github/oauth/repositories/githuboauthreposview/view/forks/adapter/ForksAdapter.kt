@@ -29,7 +29,7 @@ class ForksAdapter(
 
         @SuppressLint("SetTextI18n")
         fun showCommit(commit: GithubCommitModel) {
-            vb.itemCommitContainer.setOnClickListener { itemClickListener(commit) }
+            vb.itemClickContainer.setOnClickListener { itemClickListener(commit) }
             vb.commitDate.text = commit.commit.author.date
             vb.commitHash.text = commit.sha
             vb.commitMessage.text = "${commit.commit.author.name}: ${commit.commit.message}"

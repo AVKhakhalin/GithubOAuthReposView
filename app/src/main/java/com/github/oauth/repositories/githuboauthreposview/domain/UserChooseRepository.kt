@@ -1,14 +1,9 @@
 package com.github.oauth.repositories.githuboauthreposview.domain
 
-import android.widget.Toast
-import com.github.oauth.repositories.githuboauthreposview.model.CommitModelUpdated
 import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
-import com.github.oauth.repositories.githuboauthreposview.remote.BaseInterceptor
 import com.github.oauth.repositories.githuboauthreposview.utils.ServerResponseStatusCode
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 interface UserChooseRepository {
     // Данные о пользователе
