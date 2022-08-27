@@ -30,7 +30,7 @@ class ForksFragment: MvpAppCompatFragment(R.layout.fragment_forks), ForksView, B
     private val adapter by lazy {
         ForksAdapter { presenter.onCommitClicked(it) }
     }
-    // Инстанс данного фрагмента
+    // Инстанс фрагмента
     companion object {
         fun newInstance() = ForksFragment()
     }
@@ -65,12 +65,22 @@ class ForksFragment: MvpAppCompatFragment(R.layout.fragment_forks), ForksView, B
     }
 
     // Отображение общей информации по репозиторию
+    @SuppressLint("SetTextI18n")
     private fun showGeneralRepoInfo() {
-        binding.repoTitle.text = userChoose.getGithubRepoModel().name
-        binding.repoDescription.text = userChoose.getGithubRepoModel().description
-        binding.repoAuthorName.text = userChoose.getGithubRepoModel().owner.login
-        binding.repoForksNumber.text = userChoose.getGithubRepoModel().forksCount.toString()
-        binding.forksWatches.text = userChoose.getGithubRepoModel().watchers_count.toString()
+        binding.repoTitle.text = "${requireContext().getString(R.string.repo_title_tools_text)}: ${
+            userChoose.getGithubRepoModel().name}"
+        if (userChoose.getGithubRepoModel().description.isNotEmpty())
+            binding.repoDescription.text = "${requireContext().getString(
+            R.string.repo_description_tools_text)}: ${userChoose.getGithubRepoModel().description}"
+        else
+            binding.repoDescription.text =
+                requireContext().getString(R.string.no_repo_description_text)
+        binding.repoAuthorName.text = "${requireContext().getString(
+            R.string.repo_author_name_tools_text)}: ${userChoose.getGithubRepoModel().owner.login}"
+        binding.repoForksNumber.text = "${requireContext().getString(
+            R.string.repo_forks_number_tools_text)}: ${userChoose.getGithubRepoModel().forksCount}"
+        binding.forksWatches.text = "${requireContext().getString(
+            R.string.forks_watches_tools_text)}: ${userChoose.getGithubRepoModel().watchers_count}"
         presenter.loadAvatar(userChoose.getGithubUserModel().avatarUrl, binding.repoUserAvatar)
     }
 

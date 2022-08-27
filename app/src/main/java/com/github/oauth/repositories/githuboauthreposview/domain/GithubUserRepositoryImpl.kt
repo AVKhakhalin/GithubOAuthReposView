@@ -24,7 +24,7 @@ class GithubUserRepositoryImpl(
 
     override fun getUser(login: String): Single<GithubUserModel> {
         return if ((networkStatus.isOnline()) && (!userChoose.getIsUserModelUpdated()))
-            githubUserRetrofit.getRetrofitUser(login)
+            githubUserRetrofit.getRetrofitUser(userChoose.getToken(), login)
         else
             githubUserCache.getCacheUser(login)
     }

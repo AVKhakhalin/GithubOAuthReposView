@@ -5,6 +5,7 @@
 
     <!-- Разрешение для выхода приложения в Интернет -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Разрешение загружать страницы из Интернета -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Разрешения на запись информации на диск телефона -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -35,5 +36,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
