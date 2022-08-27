@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.oauth.repositories.githuboauthreposview.databinding.ItemCommitBinding
 import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
+import com.github.oauth.repositories.githuboauthreposview.utils.convertStringDateToUsefulDateString
 
 class ForksAdapter(
     private val itemClickListener: (GithubCommitModel) -> Unit,
@@ -29,8 +30,8 @@ class ForksAdapter(
 
         @SuppressLint("SetTextI18n")
         fun showCommit(commit: GithubCommitModel) {
-            vb.itemClickContainer.setOnClickListener { itemClickListener(commit) }
-            vb.commitDate.text = commit.commit.author.date
+            vb.itemCommitContainer.setOnClickListener { itemClickListener(commit) }
+            vb.commitDate.text = convertStringDateToUsefulDateString(commit.commit.author.date)
             vb.commitHash.text = commit.sha
             if (commit.commit.author.name.isNotEmpty()) {
                 vb.commitMessage.text = "${commit.commit.author.name}: ${commit.commit.message}"

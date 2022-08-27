@@ -44,7 +44,7 @@ class BaseInterceptor: Interceptor {
         }
         // Установка времени последнего запроса
         response.headers[LAST_DATE_REQUEST_TAG]?.let {
-            userChoose.setRequestTime(convertStringDateToDate(it))
+            userChoose.setRequestTime(convertStringDateToMillisec(it))
         }
         // Установка кода результата запроса
         userChoose.setResponseCode(getResponseCode())
