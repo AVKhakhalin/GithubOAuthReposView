@@ -41,9 +41,9 @@ class UsersPresenter @Inject constructor(
     private fun setUserData(userLogin: String) {
         // Получение пользовательских данных с сайта github.com
         usersRepository.getUser(userLogin)
+            .doOnSubscribe { viewState.showLoading() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { viewState.showLoading() }
             .subscribe(
                 { user ->
                     userChoose.setGithubUserModel(user)
@@ -59,20 +59,22 @@ class UsersPresenter @Inject constructor(
                 }
             )
         // Получение токена пользователя с сервера OAuth
-        usersRepository.getToken(userLogin)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { viewState.showLoading() }
-            .subscribe(
-                { token ->
-                    userChoose.setToken(token)
-                }, { e ->
-                    Log.e(
-                        LOG_TAG,
-                        "ОШИБКА: Токен не получен", e
-                    )
-                }
-            )
+        if (userChoose.getToken().isEmpty()) {
+            usersRepository.getToken(userLogin)
+                .doOnSubscribe { viewState.showLoading() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { token ->
+                        userChoose.setToken(token)
+                    }, { e ->
+                        Log.e(
+                            LOG_TAG,
+                            resourcesProvider.getString(R.string.error_token_not_get), e
+                        )
+                    }
+                )
+        }
     }
 
     /** Уничтожение GithubUsersSubcomponent при уничтожении данного презентера */

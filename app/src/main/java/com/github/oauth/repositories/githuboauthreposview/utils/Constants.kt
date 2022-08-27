@@ -6,7 +6,7 @@ const val BASE_API_REPO_URL: String = "https://api.github.com/repos"
 const val LOG_TAG: String = "mylogs"
 const val DELAY_TIME: Long = 2000L
 // Установка scope на доступ к закрытым и открытым репозиториям
-const val AUTHORISE_URL: String = "https://github.com/login/oauth/authorize?client_id=a3c530e1e2f03aeb3bdf&scope=repo"
+const val AUTHORISE_URL: String = "https://github.com/login/oauth/authorize?client_id=a3c530e1e2f03aeb3bdf&scope=repo%20user"
 const val BASE_TOKEN_URL: String = "http://githuboauth.ddns.net/success/result.php?login="
 const val TARGET_USER_NAME_URL: String = "https://gist.github.com/"
 const val LOGOUT_GITHUB: String = "https://github.com/logout"
@@ -26,6 +26,11 @@ const val MILLISECONDS_IN_HOUR: Long = 3600000L
 const val DEFAULT_NUMBER_GITHUB_LIMIT_REQUEST: Int = 60
 const val FORMAT_FUTURE_TIME: String = "HH:mm"
 const val LOCALE_LANGUAGE_DATE_FORMAT: String = "en"
+const val TOKEN_NAME: String = "Token"
+const val BRANCH_NAME: String = "branch"
+const val BRANCHES_NAME: String = "branches"
+const val COMMITS_NAME: String = "commits"
+const val SHA_NAME: String = "sha"
 // SharedPreferences
 const val SHARED_PREFERENCES_KEY: String = "Shared Preferences"
 const val SHARED_PREFERENCES_USER_LOGIN: String = "Shared Preferences User Login"

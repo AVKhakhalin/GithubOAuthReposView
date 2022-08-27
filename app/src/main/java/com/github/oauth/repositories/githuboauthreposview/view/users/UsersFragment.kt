@@ -55,9 +55,17 @@ class UsersFragment: MvpAppCompatFragment(R.layout.fragment_users), UsersView, B
         initWebViewAndButtons()
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "SetJavaScriptEnabled")
     private fun initWebViewAndButtons() {
         webView = binding.webView
+        // Очистка кеша
+        webView.clearCache(true)
+        // Удаление истории
+        webView.clearHistory()
+        // Включение JavaScript для корректной работы авторизации в WebView
+        webView.settings.javaScriptEnabled = true
+        webView.settings.javaScriptCanOpenWindowsAutomatically = true
+        webView.settings.domStorageEnabled = true
         webView.webViewClient = object: WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 view.loadUrl(url)

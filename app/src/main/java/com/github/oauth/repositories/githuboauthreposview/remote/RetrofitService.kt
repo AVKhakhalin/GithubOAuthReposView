@@ -5,30 +5,38 @@ import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitMode
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
 import io.reactivex.rxjava3.core.Single
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
-import retrofit2.http.Url
+import retrofit2.http.*
 
 interface RetrofitService {
 
+    // TOKEN -------------------------------------------------
+    @Headers("Accept: application/vnd.github+json")
     @GET
     fun getToken(@Url url: String): Single<String>
 
+    // USERS -------------------------------------------------
+    @Headers("Accept: application/vnd.github+json")
     @GET("/users/{user_login}")
-    fun getUser(@Path("user_login") userLogin: String): Single<GithubUserModel>
+    fun getUser(@Header("access_token") accessToken: String,
+                @Path("user_login") userLogin: String
+    ): Single<GithubUserModel>
 
-//    @GET("/user/repos")
-    @GET("/users/{user_login}/repos")
-    fun getRepos(@Header("access_token") accessToken: String,
-                 @Path("user_login") userLogin: String): Single<List<GithubRepoModel>>
-//                 ): Single<List<GithubRepoModel>>
+    // REPOS -------------------------------------------------
+    @Headers("Accept: application/vnd.github+json")
+    @GET("/user/repos?visibility=all")
+    fun getRepos(@Header("Authorization") accessToken: String,
+     ): Single<List<GithubRepoModel>>
 
+    // BRANCHES -------------------------------------------------
+    @Headers("Accept: application/vnd.github+json")
     @GET
-    fun getBranches(@Header("access_token") accessToken: String,
+    fun getBranches(@Header("Authorization") accessToken: String,
                     @Url url: String): Single<List<GithubBrancheModel>>
 
+    // COMMITS -------------------------------------------------
+    @Headers("Accept: application/vnd.github+json")
     @GET
-    fun getCommits(@Header("access_token") accessToken: String,
-                   @Url url: String): Single<List<GithubCommitModel>>
+    fun getCommits(@Header("Authorization") accessToken: String,
+                   @Url url: String
+    ): Single<List<GithubCommitModel>>
 }

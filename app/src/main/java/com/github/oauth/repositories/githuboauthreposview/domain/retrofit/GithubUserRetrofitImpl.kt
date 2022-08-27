@@ -17,8 +17,8 @@ class GithubUserRetrofitImpl(
     private val db: AppDatabase,
     private val userChoose: UserChooseRepository
 ): GithubUserRetrofit {
-    override fun getRetrofitUser(userLogin: String): Single<GithubUserModel> {
-        return retrofitService.getUser(userLogin)
+    override fun getRetrofitUser(token: String, userLogin: String): Single<GithubUserModel> {
+        return retrofitService.getUser(token, userLogin)
             .flatMap { user ->
                 val roomUser = RoomUser(user.id, user.login, user.avatarUrl, user.reposUrl)
                 // Установка признака обновления данных
@@ -31,7 +31,7 @@ class GithubUserRetrofitImpl(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
                 // Действия в случае ошибки в получении информации о пользователе
-                Log.d(LOG_TAG, "ОШИБКА ПОЛЬЗОВАТЕЛЯ: ${it.message}")
+                Log.d(LOG_TAG, "ОШИБКА ПОЛУЧЕНИЯ ЛОГИНА ПОЛЬЗОВАТЕЛЯ: ${it.message}")
             }
     }
 

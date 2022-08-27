@@ -13,6 +13,7 @@ import com.github.oauth.repositories.githuboauthreposview.domain.retrofit.Github
 import com.github.oauth.repositories.githuboauthreposview.domain.retrofit.GithubCommitRetrofitImpl
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
 import com.github.oauth.repositories.githuboauthreposview.utils.connectivity.NetworkStatus
+import com.github.oauth.repositories.githuboauthreposview.utils.resources.ResourcesProvider
 import dagger.Module
 import dagger.Provides
 
@@ -37,9 +38,10 @@ abstract class GithubForksModule {
         fun reposRetrofit(
             retrofitService: RetrofitService,
             db: AppDatabase,
-            userChoose: UserChooseRepository
+            userChoose: UserChooseRepository,
+            resourcesProvider: ResourcesProvider
         ): GithubCommitRetrofit {
-            return GithubCommitRetrofitImpl(retrofitService, db, userChoose)
+            return GithubCommitRetrofitImpl(retrofitService, db, userChoose, resourcesProvider)
         }
 
         @ForksScope

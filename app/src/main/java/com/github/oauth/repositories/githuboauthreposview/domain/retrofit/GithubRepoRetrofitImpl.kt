@@ -7,6 +7,7 @@ import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepos
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.remote.RetrofitService
 import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
+import com.github.oauth.repositories.githuboauthreposview.utils.TOKEN_NAME
 import com.github.oauth.repositories.githuboauthreposview.utils.cutBranches
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
@@ -18,7 +19,7 @@ class GithubRepoRetrofitImpl(
     private val userChoose: UserChooseRepository
 ): GithubRepoRetrofit {
     override fun getRetrofitRepo(userLogin: String): Single<List<GithubRepoModel>> {
-        return retrofitService.getRepos(userChoose.getToken(), userLogin)
+        return retrofitService.getRepos("$TOKEN_NAME ${userChoose.getToken()}")
             .flatMap { repos ->
                 val dbRepos = repos.map {
                     RoomRepo(it.id, it.name ?: "",

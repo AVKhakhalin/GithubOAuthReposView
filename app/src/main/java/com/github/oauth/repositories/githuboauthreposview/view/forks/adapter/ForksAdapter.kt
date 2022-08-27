@@ -32,7 +32,11 @@ class ForksAdapter(
             vb.itemClickContainer.setOnClickListener { itemClickListener(commit) }
             vb.commitDate.text = commit.commit.author.date
             vb.commitHash.text = commit.sha
-            vb.commitMessage.text = "${commit.commit.author.name}: ${commit.commit.message}"
+            if (commit.commit.author.name.isNotEmpty()) {
+                vb.commitMessage.text = "${commit.commit.author.name}: ${commit.commit.message}"
+            } else {
+                vb.commitMessage.text = ""
+            }
         }
     }
 }

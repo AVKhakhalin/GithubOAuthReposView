@@ -13,6 +13,7 @@
     <string name="client_error_message_text_middle">запросов в час.\nВ настоящее время вы его исчерпали или вам не хватает оставшегося количества запросов для получения информации с сервера github.com.\nПопробуйте выполнить запрос через, приблизительно,\n</string>
     <string name="client_error_message_text_last">,\nв</string>
     <string name="client_error_message_text_last_one">\n\nили поработайте без сети,\nс кешем данных.</string>
+    <string name="error_token_not_get">\nОШИБКА:\nТокен не получен.</string>
 
     <!-- Работа -->
     <string name="get_permission_write_read_text">Разрешение на запись и считывание данных получено</string>
@@ -36,4 +37,5 @@
     <string name="forks_commits_title_text">Коммиты репозитория:</string>
     <string name="loading_text_text">Установка связи с сервером\nдля OAuth авторизации…</string>
     <string name="reload_oauth_button_text">Перезапустить авторизацию OAuth</string>
+    <string name="no_commits">Нет коммитов в репозитории</string>
 </resources>
