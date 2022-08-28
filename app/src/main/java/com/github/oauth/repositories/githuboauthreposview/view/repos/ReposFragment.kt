@@ -45,8 +45,6 @@ class ReposFragment: MvpAppCompatFragment(R.layout.fragment_repos), ReposView, B
         /** Установка списка репозиториев пользователя */
         binding.reposRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.reposRecycler.adapter = adapter
-
-        Toast.makeText(requireContext(), "${userChoose.getNumberLimitRequest()}", Toast.LENGTH_SHORT).show()
     }
 
     override fun showLoading() {
