@@ -12,7 +12,6 @@
     <dimen name="repo_name_margin_start">8dp</dimen>
     <dimen name="repo_name_text_size">18sp</dimen>
     <string name="repo_name_tools_text">Имя репозитория</string>
-    <dimen name="repos_recycler_margin_top">50dp</dimen>
     <dimen name="repos_title_text_size">18sp</dimen>
     <dimen name="item_commit_padding">8dp</dimen>
     <dimen name="commit_date_margin">8dp</dimen>
@@ -44,5 +43,6 @@
     <dimen name="loading_text_text_size">18sp</dimen>
     <dimen name="oauth_error_message_margin">8dp</dimen>
     <dimen name="repo_name_margin_end">8dp</dimen>
+    <dimen name="horizontal_border_elevation">5dp</dimen>
 
 </resources>
