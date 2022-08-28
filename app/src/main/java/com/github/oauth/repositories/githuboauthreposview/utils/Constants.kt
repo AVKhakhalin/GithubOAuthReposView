@@ -32,10 +32,17 @@ const val TOKEN_NAME: String = "Token"
 const val BRANCH_NAME: String = "branch"
 const val BRANCHES_NAME: String = "branches"
 const val COMMITS_NAME: String = "commits"
+const val PAGE_NAME: String = "page"
+const val PER_PAGE_NAME: String = "per_page"
 const val SHA_NAME: String = "sha"
+const val NUMBER_RESULTS_ON_PAGE: Int = 100
+const val START_ID: Int = -1
 // SharedPreferences
 const val SHARED_PREFERENCES_KEY: String = "Shared Preferences"
 const val SHARED_PREFERENCES_USER_LOGIN: String = "Shared Preferences User Login"
+const val SHARED_PREFERENCES_USER_ID: String = "Shared Preferences User ID"
+const val SHARED_PREFERENCES_USER_AVATAR_URL: String = "Shared Preferences User Avatar URL"
+const val SHARED_PREFERENCES_USER_REPO_URL: String = "Shared Preferences User Repo URL"
 const val SHARED_PREFERENCES_NUMBER_LIMIT_REQUESTS: String =
     "Shared Preferences Number Limit Requests"
 const val SHARED_PREFERENCES_NUMBER_REMAINING_REQUESTS: String =

@@ -8,8 +8,8 @@ import androidx.room.PrimaryKey
 data class RoomUser(
     @NonNull
     @PrimaryKey
-    val id: String,
+    val id: Int,
     val login: String,
     val avatarUrl: String,
-    val reposUrl: String,
+    val reposUrl: String
 )

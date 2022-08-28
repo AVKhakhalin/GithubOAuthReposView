@@ -28,9 +28,12 @@ class GithubCommitRetrofitImpl(
         val branchesList: MutableList<String> = mutableListOf()
         val branchesUrl: String =
             "$BASE_API_REPO_URL/${userChoose.getGithubUserModel().login}/${
-                userChoose.getGithubRepoModel().name}/$BRANCHES_NAME"
-        retrofitService.getBranches("$TOKEN_NAME ${userChoose.getToken()}", branchesUrl)
+            userChoose.getGithubRepoModel().name
+            }/$BRANCHES_NAME?$PAGE_NAME=1&$PER_PAGE_NAME=$NUMBER_RESULTS_ON_PAGE"
+            retrofitService.getBranches("$TOKEN_NAME ${userChoose.getToken()}",
+            branchesUrl)
             .map { branches ->
+                // Получение списка веток в репозитории
                 val branchesNames = branches.map { branch ->
                     branch.name
                 }
@@ -49,8 +52,9 @@ class GithubCommitRetrofitImpl(
                     branchesList.forEach { branch ->
                         val commitsUrl: String =
                             "$BASE_API_REPO_URL/${userChoose.getGithubUserModel().login}/${
-                                userChoose.getGithubRepoModel().name
-                            }/$COMMITS_NAME?$SHA_NAME=$branch"
+                            userChoose.getGithubRepoModel().name
+                            }/$COMMITS_NAME?$SHA_NAME=$branch&" +
+                            "$PAGE_NAME=1&$PER_PAGE_NAME=$NUMBER_RESULTS_ON_PAGE"
                         retrofitService.getCommits(
                             "$TOKEN_NAME ${userChoose.getToken()}", commitsUrl)
                             .flatMap { commits ->
@@ -114,7 +118,7 @@ class GithubCommitRetrofitImpl(
             }) {
                 // Действия при ошибке в запросах веток репозитория
                 Log.d(LOG_TAG, "ОШИБКА КОММИТА 2: ${it.message}, " +
-                    "Ошибка в userChoose: ${userChoose.getResponseCode()}")
+                        "Ошибка в userChoose: ${userChoose.getResponseCode()}")
             }
     }
 }
