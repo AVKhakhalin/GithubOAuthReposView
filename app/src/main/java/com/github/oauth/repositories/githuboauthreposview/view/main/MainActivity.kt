@@ -124,9 +124,11 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
     private fun loadSavedData() {
         val sharedPreferences: SharedPreferences =
             this.getSharedPreferences(SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
-        userChoose.setGithubUserModel(GithubUserModel("",
+        userChoose.setGithubUserModel(GithubUserModel(
+            sharedPreferences.getInt(SHARED_PREFERENCES_USER_ID, START_ID),
             sharedPreferences.getString(SHARED_PREFERENCES_USER_LOGIN, "").toString(),
-            "", ""))
+            sharedPreferences.getString(SHARED_PREFERENCES_USER_AVATAR_URL, "").toString(),
+            sharedPreferences.getString(SHARED_PREFERENCES_USER_REPO_URL, "").toString()))
         userChoose.setNumberLimitRequest(sharedPreferences.
             getInt(SHARED_PREFERENCES_NUMBER_LIMIT_REQUESTS, -1))
         userChoose.setNumberRemainingRequest(sharedPreferences.
@@ -135,7 +137,7 @@ class MainActivity: MvpAppCompatActivity(R.layout.activity_main), MainView {
             getInt(SHARED_PREFERENCES_REQUESTS_TIMES_NUMBER, 0)
         repeat(requestsTimesNumber) { index ->
             userChoose.setRequestTime(sharedPreferences.
-                getLong("$SHARED_PREFERENCES_REQUEST_TIME$index", 0))
+            getLong("$SHARED_PREFERENCES_REQUEST_TIME$index", 0L))
         }
         userChoose.setToken(sharedPreferences.getString(SHARED_PREFERENCES_AC_TOK, "").toString())
     }

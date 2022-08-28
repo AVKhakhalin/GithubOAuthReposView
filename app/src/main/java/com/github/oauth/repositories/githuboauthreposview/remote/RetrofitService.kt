@@ -4,6 +4,8 @@ import com.github.oauth.repositories.githuboauthreposview.model.GithubBrancheMod
 import com.github.oauth.repositories.githuboauthreposview.model.GithubCommitModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubRepoModel
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
+import com.github.oauth.repositories.githuboauthreposview.utils.NUMBER_RESULTS_ON_PAGE
+import com.github.oauth.repositories.githuboauthreposview.utils.PER_PAGE_NAME
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.*
 
@@ -23,9 +25,9 @@ interface RetrofitService {
 
     // REPOS -------------------------------------------------
     @Headers("Accept: application/vnd.github+json")
-    @GET("/user/repos?visibility=all")
+    @GET("/user/repos?visibility=all&$PER_PAGE_NAME=$NUMBER_RESULTS_ON_PAGE")
     fun getRepos(@Header("Authorization") accessToken: String,
-     ): Single<List<GithubRepoModel>>
+    ): Single<List<GithubRepoModel>>
 
     // BRANCHES -------------------------------------------------
     @Headers("Accept: application/vnd.github+json")

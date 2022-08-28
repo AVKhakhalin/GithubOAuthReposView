@@ -11,12 +11,12 @@ class UserChooseRepositoryImpl: UserChooseRepository {
     /** Исходные данные */ //region
     // githubUserModel
     private var githubUserModel: GithubUserModel =
-        GithubUserModel("", "", "", "")
+        GithubUserModel(START_ID, "", "", "")
     // token
     private var token: String = ""
     // githubRepoModel
     private var githubRepoModel: GithubRepoModel =
-        GithubRepoModel(-1, "", "",
+        GithubRepoModel(START_ID, "", "",
             GithubRepoOwnerModel("", "", ""),
             "", 0, 0)
     private var repos: List<GithubRepoModel> = listOf()
@@ -44,6 +44,9 @@ class UserChooseRepositoryImpl: UserChooseRepository {
         this.githubUserModel = githubUserModel
     }
     override fun getGithubUserModel(): GithubUserModel = githubUserModel
+    override fun getUserId(): Int {
+        return githubUserModel.id
+    }
     //endregion
 
     //region Методы работы с токеном

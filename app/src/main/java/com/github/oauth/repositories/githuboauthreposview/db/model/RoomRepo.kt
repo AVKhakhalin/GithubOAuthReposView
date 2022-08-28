@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
     ForeignKey(
         entity = RoomUser::class,
         parentColumns = ["id"],
-        childColumns = ["userId"],
+        childColumns = ["observerId"],
         onDelete = ForeignKey.CASCADE
     )]
 )
@@ -20,12 +20,13 @@ data class RoomRepo(
     val id: Int,
     val name: String,
     val description: String,
-    @NonNull
-    @ColumnInfo(index = true)
     val userId: String,
     val forksCount: Int,
     val watchers: Int,
     val login: String,
     val avatarUrl: String,
-    val branchesUrl: String
+    val branchesUrl: String,
+    @NonNull
+    @ColumnInfo(index = true)
+    val observerId: Int
 )

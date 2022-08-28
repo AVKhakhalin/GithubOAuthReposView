@@ -1,12 +1,14 @@
 package com.github.oauth.repositories.githuboauthreposview.view.users
 
+import android.content.SharedPreferences
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.github.oauth.repositories.githuboauthreposview.R
 import com.github.oauth.repositories.githuboauthreposview.di.scope.containers.UsersScopeContainer
 import com.github.oauth.repositories.githuboauthreposview.domain.GithubUserRepository
 import com.github.oauth.repositories.githuboauthreposview.domain.UserChooseRepository
 import com.github.oauth.repositories.githuboauthreposview.model.GithubUserModel
-import com.github.oauth.repositories.githuboauthreposview.utils.LOG_TAG
+import com.github.oauth.repositories.githuboauthreposview.utils.*
 import com.github.oauth.repositories.githuboauthreposview.utils.resources.ResourcesProvider
 import com.github.oauth.repositories.githuboauthreposview.view.screens.AppScreens
 import com.github.terrakok.cicerone.Router
@@ -25,9 +27,9 @@ class UsersPresenter @Inject constructor(
 ): MvpPresenter<UsersView>() {
     fun getGithubUserInfo(userLogin: String) {
         if (userLogin.isNotEmpty()) {
-            userChoose.setGithubUserModel(GithubUserModel("", userLogin,"",""))
+            userChoose.setGithubUserModel(GithubUserModel(START_ID, userLogin,"",""))
             setUserData(userLogin)
-        } else userChoose.setGithubUserModel(GithubUserModel("","","",""))
+        } else userChoose.setGithubUserModel(GithubUserModel(START_ID,"","",""))
     }
 
     fun onRepoClicked() {
@@ -47,6 +49,7 @@ class UsersPresenter @Inject constructor(
             .subscribe(
                 { user ->
                     userChoose.setGithubUserModel(user)
+                    saveUserModelToSharedPreferences(user)
                     Log.d(LOG_TAG, "${user.id}, ${user.login}, " +
                         "${user.avatarUrl}, ${user.reposUrl}")
                     viewState.hideLoading()
@@ -86,5 +89,15 @@ class UsersPresenter @Inject constructor(
     fun backPressed(): Boolean {
         router.exit()
         return true
+    }
+
+    private fun saveUserModelToSharedPreferences(user: GithubUserModel) {
+        val sharedPreferences: SharedPreferences = resourcesProvider.getContext().
+            getSharedPreferences(SHARED_PREFERENCES_KEY, AppCompatActivity.MODE_PRIVATE)
+        val sharedPreferencesEditor: SharedPreferences.Editor = sharedPreferences.edit()
+        sharedPreferencesEditor.putInt(SHARED_PREFERENCES_USER_ID, user.id)
+        sharedPreferencesEditor.putString(SHARED_PREFERENCES_USER_AVATAR_URL, user.avatarUrl)
+        sharedPreferencesEditor.putString(SHARED_PREFERENCES_USER_REPO_URL, user.reposUrl)
+        sharedPreferencesEditor.apply()
     }
 }
