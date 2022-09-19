@@ -19,10 +19,11 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <View
-        android:id="@+id/horizontal_border"
+        android:id="@+id/top_horizontal_border"
         android:layout_width="match_parent"
         android:layout_height="@dimen/horizontal_border_height"
-        android:layout_margin="@dimen/horizontal_border_margin"
+        android:layout_marginTop="@dimen/horizontal_border_margin_top"
+        android:layout_marginBottom="@dimen/horizontal_border_margin_bottom"
         android:background="@color/black"
         android:elevation="@dimen/horizontal_border_elevation"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,11 +33,12 @@
         android:id="@+id/repos_recycler"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/zero_size"
+        android:scrollbars="vertical"
         tools:listitem="@layout/item_repo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/horizontal_border"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/top_horizontal_border"
+        app:layout_constraintBottom_toTopOf="@id/pagination_container"/>
 
     <ProgressBar
         android:id="@+id/loading_view"
@@ -48,4 +50,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/repos_title"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pagination_container"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <View
+            android:id="@+id/bottom_horizontal_border"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/horizontal_border_height"
+            android:background="@color/black"
+            android:elevation="@dimen/horizontal_border_elevation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/arrow_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_arrow_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/arrow_forward"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/arrow_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_arrow_forward"
+            app:layout_constraintStart_toEndOf="@id/arrow_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,10 +17,14 @@ interface UserChooseRepository {
     fun setGithubRepoModel(githubRepoModel: GithubRepoModel)
     fun setGithubReposModel(repos: List<GithubRepoModel>)
     fun getGithubRepoModel(): GithubRepoModel
+    fun setGithubReposPageIndex(reposPageIndex: Int)
+    fun getGithubReposPageIndex(): Int
     // Данные о коммитах репозитория
     fun setGithubCommitModel(githubCommitModel: GithubCommitModel)
     fun setGithubCommitsModel(repos: List<GithubCommitModel>)
     fun getGithubCommitModel(): GithubCommitModel
+    fun setGithubCommitsPageIndex(CommitsPageIndex: Int)
+    fun getGithubCommitsPageIndex(): Int
     // Данные о количестве запросов на github.com
     fun setNumberLimitRequest(numberLimitRequests: Int)
     fun getNumberLimitRequest(): Int

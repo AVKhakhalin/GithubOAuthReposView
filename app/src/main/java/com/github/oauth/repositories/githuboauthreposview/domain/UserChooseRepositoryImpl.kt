@@ -20,12 +20,14 @@ class UserChooseRepositoryImpl: UserChooseRepository {
             GithubRepoOwnerModel("", "", ""),
             "", 0, 0)
     private var repos: List<GithubRepoModel> = listOf()
+    private var reposPageIndex: Int = 0
     // githubCommitModel
     private var githubCommitModel: GithubCommitModel =
         GithubCommitModel("", GithubCommitCommitInfoModel("",
             RoomGithubCommitInfoAuthorModel("", "")
         ))
     private var commits: List<GithubCommitModel> = listOf()
+    private var commitsPageIndex: Int = 0
     // Количество запросов (разрешённых и оставшихся)
     private var numberLimitRequests: Int = DEFAULT_NUMBER_GITHUB_LIMIT_REQUEST
     private var numberRemainingRequests: Int = -1
@@ -66,6 +68,10 @@ class UserChooseRepositoryImpl: UserChooseRepository {
         this.repos = repos
     }
     override fun getGithubRepoModel(): GithubRepoModel = githubRepoModel
+    override fun setGithubReposPageIndex(reposPageIndex: Int) {
+        this.reposPageIndex = reposPageIndex
+    }
+    override fun getGithubReposPageIndex(): Int = reposPageIndex
     //endregion
 
     //region Методы для работы с коммитами
@@ -76,6 +82,10 @@ class UserChooseRepositoryImpl: UserChooseRepository {
         this.commits = commits
     }
     override fun getGithubCommitModel(): GithubCommitModel = githubCommitModel
+    override fun setGithubCommitsPageIndex(commitsPageIndex: Int) {
+        this.commitsPageIndex = commitsPageIndex
+    }
+    override fun getGithubCommitsPageIndex(): Int = commitsPageIndex
     //endregion
 
     //region Методы для работы с количеством запросов на github.com
